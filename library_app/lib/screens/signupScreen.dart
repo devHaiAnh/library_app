@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:library_app/screens/signinScreen.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -32,22 +33,18 @@ class _SignUpPageState extends State<SignUpPage> {
             top: 0,
             left: 0,
             right: 0,
-            child: Opacity(
-              opacity: 0.9,
-              child: Container(
-                height: screenHeight * 0.5,
-                child: Image.network(
-                  background,
-                  fit: BoxFit.cover,
-                ),
+            child: Container(
+              height: screenHeight * 0.5,
+              child: Image.network(
+                background,
+                fit: BoxFit.cover,
               ),
             ),
           ),
           // appbar
           Positioned(
             top: screenHeight * 0.1,
-            left: screenWidth * 0.1,
-            right: screenWidth * 0.1,
+            left: screenWidth * 0.08,
             child: Container(
               height: screenHeight * 0.3,
               child: Column(
@@ -85,7 +82,7 @@ class _SignUpPageState extends State<SignUpPage> {
             left: 0,
             right: 0,
             child: Container(
-              height: screenHeight * 0.6,
+              height: screenHeight * 0.67,
               padding: EdgeInsets.all(screenWidth * 0.08),
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -133,7 +130,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(height: screenHeight * 0.005),
                   TextField(
                     controller: _email,
-                    autofocus: true,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: "Email",
@@ -176,6 +172,33 @@ class _SignUpPageState extends State<SignUpPage> {
                               color: Colors.white,
                               fontSize: 18,
                               fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignInPage()));
+                    },
+                    child: Container(
+                      height: screenHeight * 0.05,
+                      child: Center(
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: "You are a member? ",
+                                  style: TextStyle(color: Colors.black)),
+                              TextSpan(
+                                text: "Sign in here",
+                                style: TextStyle(color: Colors.purple),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

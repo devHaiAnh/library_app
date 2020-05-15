@@ -34,14 +34,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             top: 0,
             left: 0,
             right: 0,
-            child: Opacity(
-              opacity: 0.9,
-              child: Container(
-                height: screenHeight * 0.5,
-                child: Image.network(
-                  background,
-                  fit: BoxFit.cover,
-                ),
+            child: Container(
+              height: screenHeight * 0.5,
+              child: Image.network(
+                background,
+                fit: BoxFit.cover,
               ),
             ),
           ),

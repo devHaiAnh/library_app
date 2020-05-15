@@ -23,19 +23,15 @@ class _FirstPageState extends State<FirstPage> {
             left: 0,
             right: 0,
             bottom: 0,
-            child: Opacity(
-              opacity: 0.9,
-              child: Image.network(
-                background,
-                fit: BoxFit.cover,
-              ),
+            child: Image.network(
+              background,
+              fit: BoxFit.cover,
             ),
           ),
           // appbar
           Positioned(
             top: screenHeight * 0.1,
-            left: screenWidth * 0.1,
-            right: screenWidth * 0.1,
+            left: screenWidth * 0.08,
             child: Container(
               height: screenHeight * 0.3,
               child: Column(
