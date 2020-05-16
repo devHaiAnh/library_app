@@ -63,66 +63,65 @@ class _FirstPageState extends State<FirstPage> {
               ),
             ),
           ),
-          // button
+          // contain
           Positioned(
             bottom: 0,
             left: screenWidth * 0.1,
             right: screenWidth * 0.1,
+            child: containPage(screenHeight, context),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget containPage(double screenHeight, BuildContext context) {
+    return Container(
+      height: screenHeight * 0.35,
+      child: Column(
+        children: <Widget>[
+          InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SignUpPage()));
+            },
             child: Container(
-              height: screenHeight * 0.35,
-              child: Column(
-                children: <Widget>[
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignUpPage()));
-                    },
-                    child: Container(
-                      height: screenHeight * 0.08,
-                      decoration: BoxDecoration(
-                          color: Colors.purple,
-                          borderRadius: BorderRadius.circular(24)),
-                      child: Center(
-                        child: Text(
-                          "Sign up",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.03),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignInPage()));
-                    },
-                    child: Container(
-                      height: screenHeight * 0.08,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(24)),
-                      child: Center(
-                        child: Text(
-                          "Sign in",
-                          style: TextStyle(
-                              color: Colors.purple,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+              height: screenHeight * 0.08,
+              decoration: BoxDecoration(
+                  color: Colors.purple,
+                  borderRadius: BorderRadius.circular(24)),
+              child: Center(
+                child: Text(
+                  "Sign up",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
             ),
-          )
+          ),
+          SizedBox(height: screenHeight * 0.03),
+          InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SignInPage()));
+            },
+            child: Container(
+              height: screenHeight * 0.08,
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(24)),
+              child: Center(
+                child: Text(
+                  "Sign in",
+                  style: TextStyle(
+                      color: Colors.purple,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

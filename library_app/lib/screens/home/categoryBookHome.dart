@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:library_app/model/bookHome.dart';
 import 'package:library_app/model/categoryHome.dart';
 import 'package:library_app/screens/bookScreen.dart';
+import 'package:library_app/screens/widget/appbarApp.dart';
 
 class CategoryBookHomePage extends StatefulWidget {
   // CategoryBookHomePage({Key key, this.index}) : super(key: key);
@@ -63,30 +64,15 @@ class _CategoryBookHomePageState extends State<CategoryBookHomePage>
           ),
           // appbar
           Positioned(
-            top: 0,
-            left: screenWidth * 0.05,
-            right: screenWidth * 0.05,
-            child: SafeArea(
-              top: true,
-              left: true,
-              right: true,
-              child: Container(
-                height: screenHeight * 0.08,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(Icons.arrow_back_ios),
-                    ),
-                    Container()
-                  ],
-                ),
-              ),
-            ),
-          ),
+              top: 0,
+              left: screenWidth * 0.05,
+              right: screenWidth * 0.05,
+              child: AppBarApp(
+                buttonBack: 1,
+                width: screenWidth,
+                height: screenHeight,
+                title: "Categories",
+              )),
           // tabbar
           Positioned(
             top: screenHeight * 0.1,
@@ -109,80 +95,90 @@ class _CategoryBookHomePageState extends State<CategoryBookHomePage>
                   tabs: myTabs),
             ),
           ),
-          // tabview
+          // contain
           Positioned(
             bottom: 0,
             left: 0,
             right: 0,
-            child: Container(
-              height: screenHeight * 0.8,
-              padding: EdgeInsets.all(screenWidth * 0.05),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 6,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  )),
-              child: Column(
-                children: <Widget>[
-                  // search
-                  Container(
-                    height: screenHeight * 0.07,
-                    width: screenWidth,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.only(top: screenHeight * 0.01),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          size: 23,
-                        ),
-                        hintText: "Search here",
-                        hintStyle:
-                            TextStyle(fontSize: 15, color: Colors.grey[800]),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(32),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  // contain
-                  Container(
-                      width: screenWidth,
-                      height: screenHeight * 0.64,
-                      child: TabBarView(controller: _controller, children: [
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                        gridViewWG(screenWidth, screenHeight, bookList),
-                      ])),
-                ],
-              ),
-            ),
+            child: containPage(screenHeight, screenWidth),
           )
         ],
       ),
     );
+  }
+
+  Widget containPage(double screenHeight, double screenWidth) {
+    return Container(
+      height: screenHeight * 0.8,
+      padding: EdgeInsets.all(screenWidth * 0.05),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 6,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ],
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
+          )),
+      child: Column(
+        children: <Widget>[
+          // search
+          search(screenHeight, screenWidth),
+          SizedBox(height: screenHeight * 0.02),
+          // tabbar view
+          tabbarView(screenWidth, screenHeight),
+        ],
+      ),
+    );
+  }
+
+  Container tabbarView(double screenWidth, double screenHeight) {
+    return Container(
+            width: screenWidth,
+            height: screenHeight * 0.64,
+            child: TabBarView(controller: _controller, children: [
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+              gridViewWG(screenWidth, screenHeight, bookList),
+            ]));
+  }
+
+  Container search(double screenHeight, double screenWidth) {
+    return Container(
+          height: screenHeight * 0.07,
+          width: screenWidth,
+          child: TextField(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: screenHeight * 0.01),
+              prefixIcon: Icon(
+                Icons.search,
+                size: 23,
+              ),
+              hintText: "Search here",
+              hintStyle: TextStyle(fontSize: 15, color: Colors.grey[800]),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(32),
+              ),
+            ),
+          ),
+        );
   }
 
   Widget gridViewWG(double screenWidth, screenHeight, List<Book> bookList) {

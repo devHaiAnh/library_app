@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:library_app/screens/signinScreen.dart';
+import 'package:library_app/screens/widget/imageLogin.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -43,170 +44,144 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           // appbar
           Positioned(
-            top: screenHeight * 0.1,
-            left: screenWidth * 0.08,
-            child: Container(
-              height: screenHeight * 0.3,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Welcome to \nAhk Library",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  Container(
-                    padding: EdgeInsets.all(screenWidth * 0.01),
-                    width: screenWidth * 0.15,
-                    height: screenWidth * 0.15,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Image.asset(
-                      "assets/img/logo.png",
-                      color: Colors.purple,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          // button
+              top: screenHeight * 0.1,
+              left: screenWidth * 0.08,
+              child: ImageLogin(
+                width: screenWidth,
+                height: screenHeight,
+              )),
+          // contain
           Positioned(
             bottom: 0,
             left: 0,
             right: 0,
-            child: Container(
-              height: screenHeight * 0.67,
-              padding: EdgeInsets.all(screenWidth * 0.08),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  )),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    height: screenHeight * 0.1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "New\nMember",
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              width: screenWidth * 0.1,
-                              height: screenWidth * 0.1,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.red[400]),
-                                  borderRadius: BorderRadius.circular(24)),
-                              child: Icon(
-                                Icons.camera_alt,
-                                color: Colors.red[400],
-                              ),
-                            ),
-                            Text(
-                              "Upload image",
-                              style: TextStyle(
-                                  color: Colors.grey[600], fontSize: 13),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.005),
-                  TextField(
-                    controller: _email,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: "Email",
-                      prefixIcon: Icon(Icons.email),
-                    ),
-                  ),
-                  TextField(
-                    controller: _username,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      labelText: "Username",
-                      prefixIcon: Icon(Icons.person),
-                    ),
-                  ),
-                  TextField(
-                    controller: _pass,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Password",
-                      prefixIcon: Icon(Icons.vpn_key),
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.05),
-                  InkWell(
-                    onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => SignInPage()));
-                    },
-                    child: Container(
-                      height: screenHeight * 0.08,
+            child: containPage(screenHeight, screenWidth, context),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget containPage(
+      double screenHeight, double screenWidth, BuildContext context) {
+    return Container(
+      height: screenHeight * 0.67,
+      padding: EdgeInsets.all(screenWidth * 0.08),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
+          )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            height: screenHeight * 0.1,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  "New\nMember",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      width: screenWidth * 0.1,
+                      height: screenWidth * 0.1,
                       decoration: BoxDecoration(
-                          color: Colors.purple,
+                          border: Border.all(color: Colors.red[400]),
                           borderRadius: BorderRadius.circular(24)),
-                      child: Center(
-                        child: Text(
-                          "Sign up",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
-                        ),
+                      child: Icon(
+                        Icons.camera_alt,
+                        color: Colors.red[400],
                       ),
                     ),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignInPage()));
-                    },
-                    child: Container(
-                      height: screenHeight * 0.05,
-                      child: Center(
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: "You are a member? ",
-                                  style: TextStyle(color: Colors.black)),
-                              TextSpan(
-                                text: "Sign in here",
-                                style: TextStyle(color: Colors.purple),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                    Text(
+                      "Upload image",
+                      style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: screenHeight * 0.005),
+          TextField(
+            controller: _email,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              labelText: "Email",
+              prefixIcon: Icon(Icons.email),
+            ),
+          ),
+          TextField(
+            controller: _username,
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+              labelText: "Username",
+              prefixIcon: Icon(Icons.person),
+            ),
+          ),
+          TextField(
+            controller: _pass,
+            obscureText: true,
+            decoration: InputDecoration(
+              labelText: "Password",
+              prefixIcon: Icon(Icons.vpn_key),
+            ),
+          ),
+          SizedBox(height: screenHeight * 0.05),
+          InkWell(
+            onTap: () {
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => SignInPage()));
+            },
+            child: Container(
+              height: screenHeight * 0.08,
+              decoration: BoxDecoration(
+                  color: Colors.purple,
+                  borderRadius: BorderRadius.circular(24)),
+              child: Center(
+                child: Text(
+                  "Sign up",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
             ),
-          )
+          ),
+          SizedBox(height: screenHeight * 0.02),
+          InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SignInPage()));
+            },
+            child: Container(
+              height: screenHeight * 0.05,
+              child: Center(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: "You are a member? ",
+                          style: TextStyle(color: Colors.black)),
+                      TextSpan(
+                        text: "Sign in here",
+                        style: TextStyle(color: Colors.purple),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

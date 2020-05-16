@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:library_app/screens/forgotPassword.dart';
-import 'package:library_app/screens/home/homeScreen.dart';
 import 'package:library_app/screens/signupScreen.dart';
+import 'package:library_app/screens/totalScreen.dart';
+import 'package:library_app/screens/widget/imageLogin.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -47,192 +48,164 @@ class _SignInPageState extends State<SignInPage> {
             ),
             // appbar
             Positioned(
-              top: screenHeight * 0.1,
-              left: screenWidth * 0.08,
-              child: Container(
-                height: screenHeight * 0.3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Welcome to \nAhk Library",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    Container(
-                      padding: EdgeInsets.all(screenWidth * 0.01),
-                      width: screenWidth * 0.15,
-                      height: screenWidth * 0.15,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Image.asset(
-                        "assets/img/logo.png",
-                        color: Colors.purple,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            // button
+                top: screenHeight * 0.1,
+                left: screenWidth * 0.08,
+                child: ImageLogin(
+                  width: screenWidth,
+                  height: screenHeight,
+                )),
+            // contain
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              child: Container(
-                height: screenHeight * 0.6,
-                padding: EdgeInsets.all(screenWidth * 0.08),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40),
-                      topRight: Radius.circular(40),
-                    )),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Welcome back",
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: screenHeight * 0.005),
-                    TextField(
-                      controller: _username,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        labelText: "Username",
-                        prefixIcon: Icon(Icons.person),
-                      ),
-                    ),
-                    TextField(
-                      controller: _pass,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: "Password",
-                        prefixIcon: Icon(Icons.vpn_key),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.01),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                savePass = !savePass;
-                              });
-                            },
-                            child: Container(
-                                height: screenHeight * 0.05,
-                                // color: Colors.red,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text(
-                                      "Save Password?",
-                                      style: TextStyle(color: Colors.purple),
-                                    ),
-                                    Container(
-                                      width: screenHeight * 0.04,
-                                      height: screenHeight * 0.04,
-                                      child: Icon(
-                                        savePass
-                                            ? Icons.radio_button_checked
-                                            : Icons.radio_button_unchecked,
-                                        color: Colors.purple,
-                                      ),
-                                    )
-                                  ],
-                                )),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ForgotPasswordPage()));
-                            },
-                            child: Container(
-                              height: screenHeight * 0.05,
-                              child: Center(
-                                  child: Text(
-                                "Forgot Password?",
-                                style: TextStyle(color: Colors.purple),
-                              )),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.04),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()));
-                      },
-                      child: Container(
-                        height: screenHeight * 0.08,
-                        decoration: BoxDecoration(
-                            color: Colors.purple,
-                            borderRadius: BorderRadius.circular(24)),
-                        child: Center(
-                          child: Text(
-                            "Sign in",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignUpPage()));
-                      },
-                      child: Container(
-                        height: screenHeight * 0.05,
-                        child: Center(
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                    text: "You are a new member? ",
-                                    style: TextStyle(color: Colors.black)),
-                                TextSpan(
-                                  text: "Sign up here",
-                                  style: TextStyle(color: Colors.purple),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child: containPage(screenHeight, screenWidth, context),
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget containPage(
+      double screenHeight, double screenWidth, BuildContext context) {
+    return Container(
+      height: screenHeight * 0.6,
+      padding: EdgeInsets.all(screenWidth * 0.08),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
+          )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            "Welcome back",
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: screenHeight * 0.005),
+          TextField(
+            controller: _username,
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+              labelText: "Username",
+              prefixIcon: Icon(Icons.person),
+            ),
+          ),
+          TextField(
+            controller: _pass,
+            obscureText: true,
+            decoration: InputDecoration(
+              labelText: "Password",
+              prefixIcon: Icon(Icons.vpn_key),
+            ),
+          ),
+          SizedBox(height: screenHeight * 0.01),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      savePass = !savePass;
+                    });
+                  },
+                  child: Container(
+                      height: screenHeight * 0.05,
+                      // color: Colors.red,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Save Password?",
+                            style: TextStyle(color: Colors.purple),
+                          ),
+                          Container(
+                            width: screenHeight * 0.04,
+                            height: screenHeight * 0.04,
+                            child: Icon(
+                              savePass
+                                  ? Icons.radio_button_checked
+                                  : Icons.radio_button_unchecked,
+                              color: Colors.purple,
+                            ),
+                          )
+                        ],
+                      )),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ForgotPasswordPage()));
+                  },
+                  child: Container(
+                    height: screenHeight * 0.05,
+                    child: Center(
+                        child: Text(
+                      "Forgot Password?",
+                      style: TextStyle(color: Colors.purple),
+                    )),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: screenHeight * 0.04),
+          InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TotalPage()));
+            },
+            child: Container(
+              height: screenHeight * 0.08,
+              decoration: BoxDecoration(
+                  color: Colors.purple,
+                  borderRadius: BorderRadius.circular(24)),
+              child: Center(
+                child: Text(
+                  "Sign in",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: screenHeight * 0.02),
+          InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SignUpPage()));
+            },
+            child: Container(
+              height: screenHeight * 0.05,
+              child: Center(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: "You are a new member? ",
+                          style: TextStyle(color: Colors.black)),
+                      TextSpan(
+                        text: "Sign up here",
+                        style: TextStyle(color: Colors.purple),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
