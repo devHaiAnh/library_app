@@ -14,6 +14,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final _username = TextEditingController();
   final _pass = TextEditingController();
 
+  bool hidePass = true;
+
   @override
   void dispose() {
     _email.dispose();
@@ -115,6 +117,9 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration: InputDecoration(
               labelText: "Email",
               prefixIcon: Icon(Icons.email),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+              ),
             ),
           ),
           TextField(
@@ -123,14 +128,30 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration: InputDecoration(
               labelText: "Username",
               prefixIcon: Icon(Icons.person),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+              ),
             ),
           ),
           TextField(
             controller: _pass,
-            obscureText: true,
+            obscureText: hidePass,
             decoration: InputDecoration(
               labelText: "Password",
               prefixIcon: Icon(Icons.vpn_key),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(hidePass ? Icons.visibility : Icons.visibility_off),
+                onPressed: () {
+                  setState(
+                    () {
+                      hidePass = !hidePass;
+                    },
+                  );
+                },
+              ),
             ),
           ),
           SizedBox(height: screenHeight * 0.05),

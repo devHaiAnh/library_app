@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:library_app/model/bookHome.dart';
 import 'package:library_app/screens/bookScreen.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
-import 'package:library_app/screens/widget/itemBook.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:library_app/screens/widget/itemBookCart.dart';
 
 class CartPage extends StatefulWidget {
   @override
@@ -67,32 +66,63 @@ class _CartPageState extends State<CartPage> {
             ),
           ],
           borderRadius: BorderRadius.circular(40)),
-      child: bookList.length != 0
-          ? ListView.builder(
-              shrinkWrap: true,
-              itemCount: bookList?.length ?? 0,
-              itemBuilder: (BuildContext context, int index) {
-                return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => BookPage(
-                                    book: bookList[index],
-                                  )));
-                    },
-                    child: ItemBook(
-                      height: screenHeight,
-                      width: screenWidth,
-                      itemBook: bookList[index],
-                    ));
-              },
-            )
-          : Container(
-              child: Center(
-                child: Text("/* No Data */"),
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 13,
+            child: Container(
+              child: bookList.length != 0
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: bookList?.length ?? 0,
+                      itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BookPage(
+                                            book: bookList[index],
+                                          )));
+                            },
+                            child: ItemBookCart(
+                              height: screenHeight,
+                              width: screenWidth,
+                              itemBook: bookList[index],
+                            ));
+                      },
+                    )
+                  : Container(
+                      child: Center(
+                        child: Text("/* No Data */"),
+                      ),
+                    ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.045),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    "Total:",
+                    style: TextStyle(fontSize: 15, color: Colors.purple[300]),
+                  ),
+                  Text(
+                    "\$ 177",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.purple,
+                        fontWeight: FontWeight.bold),
+                  )
+                ],
               ),
             ),
+          )
+        ],
+      ),
     );
   }
 }

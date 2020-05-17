@@ -16,6 +16,7 @@ class _SignInPageState extends State<SignInPage> {
   final _pass = TextEditingController(text: "admin");
 
   bool savePass = false;
+  bool hidePass = true;
 
   @override
   void dispose() {
@@ -92,14 +93,30 @@ class _SignInPageState extends State<SignInPage> {
             decoration: InputDecoration(
               labelText: "Username",
               prefixIcon: Icon(Icons.person),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+              ),
             ),
           ),
           TextField(
             controller: _pass,
-            obscureText: true,
+            obscureText: hidePass,
             decoration: InputDecoration(
               labelText: "Password",
               prefixIcon: Icon(Icons.vpn_key),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(hidePass ? Icons.visibility : Icons.visibility_off),
+                onPressed: () {
+                  setState(
+                    () {
+                      hidePass = !hidePass;
+                    },
+                  );
+                },
+              ),
             ),
           ),
           SizedBox(height: screenHeight * 0.01),

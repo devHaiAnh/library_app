@@ -12,6 +12,9 @@ class Book {
   String cover;
   String language;
   String description;
+  String registrationDate;
+  String expirationDate;
+  int status;
   bool bookMark;
   Book(
       {this.image,
@@ -27,6 +30,9 @@ class Book {
       this.cover,
       this.language,
       this.description,
+      this.registrationDate,
+      this.expirationDate,
+      this.status,
       this.bookMark});
 }
 
@@ -46,6 +52,9 @@ List<Book> bookList = [
     pages: 365,
     cover: "Hard",
     language: "English",
+    status: 0,
+    registrationDate: "10/10/2010",
+    expirationDate: "21/11/2010",
     description:
         "This is description1. This is description1. This is description1. This is description1. This is description1. This is description1.",
     bookMark: false,
@@ -64,6 +73,9 @@ List<Book> bookList = [
     pages: 366,
     cover: "Hard",
     language: "English",
+    status: 1,
+    registrationDate: "10/10/2010",
+    expirationDate: "21/11/2010",
     description:
         "This is description1. This is description1. This is description1. This is description1. This is description1. This is description1.",
     bookMark: false,
@@ -82,6 +94,30 @@ List<Book> bookList = [
     pages: 367,
     cover: "Hard",
     language: "English",
+    status: 2,
+    registrationDate: "10/10/2010",
+    expirationDate: "Unlimited",
+    description:
+        "This is description1. This is description1. This is description1. This is description1. This is description1. This is description1.",
+    bookMark: false,
+  ),
+  Book(
+    image: "https://m.media-amazon.com/images/I/51A29xxrpRL.jpg",
+    name: "We're True",
+    author: "Gabrielle Union",
+    imageAuthor:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Gabrielle_union_podcast.png/220px-Gabrielle_union_podcast.png",
+    writingGenre: "Romance",
+    achievements: "The author is beloved",
+    evaluate: 5.0,
+    star: 5.0,
+    category: "Comic",
+    pages: 367,
+    cover: "Hard",
+    language: "English",
+    status: 3,
+    registrationDate: "10/10/2010",
+    expirationDate: "Unlimited",
     description:
         "This is description1. This is description1. This is description1. This is description1. This is description1. This is description1.",
     bookMark: false,

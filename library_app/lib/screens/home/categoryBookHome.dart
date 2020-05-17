@@ -3,6 +3,7 @@ import 'package:library_app/model/bookHome.dart';
 import 'package:library_app/model/categoryHome.dart';
 import 'package:library_app/screens/bookScreen.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
+import 'package:library_app/screens/widget/itemBookCategory.dart';
 
 class CategoryBookHomePage extends StatefulWidget {
   // CategoryBookHomePage({Key key, this.index}) : super(key: key);
@@ -139,46 +140,50 @@ class _CategoryBookHomePageState extends State<CategoryBookHomePage>
 
   Container tabbarView(double screenWidth, double screenHeight) {
     return Container(
-            width: screenWidth,
-            height: screenHeight * 0.64,
-            child: TabBarView(controller: _controller, children: [
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-              gridViewWG(screenWidth, screenHeight, bookList),
-            ]));
+        width: screenWidth,
+        height: screenHeight * 0.64,
+        child: TabBarView(controller: _controller, children: [
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+          gridViewWG(screenWidth, screenHeight, bookList),
+        ]));
   }
 
   Container search(double screenHeight, double screenWidth) {
     return Container(
-          height: screenHeight * 0.07,
-          width: screenWidth,
-          child: TextField(
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: screenHeight * 0.01),
-              prefixIcon: Icon(
-                Icons.search,
-                size: 23,
-              ),
-              hintText: "Search here",
-              hintStyle: TextStyle(fontSize: 15, color: Colors.grey[800]),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(32),
-              ),
-            ),
+      height: screenHeight * 0.07,
+      width: screenWidth,
+      child: TextField(
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.only(top: screenHeight * 0.01),
+          prefixIcon: Icon(
+            Icons.search,
+            size: 23,
           ),
-        );
+          hintText: "Search here",
+          hintStyle: TextStyle(fontSize: 15, color: Colors.grey[800]),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(32),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(32),
+            borderSide: BorderSide(color: Colors.purple),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget gridViewWG(double screenWidth, screenHeight, List<Book> bookList) {
@@ -189,125 +194,19 @@ class _CategoryBookHomePageState extends State<CategoryBookHomePage>
           SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
       itemBuilder: (BuildContext context, int index) {
         return InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => BookPage(
-                          book: bookList[index],
-                        )));
-          },
-          child: Container(
-            margin: EdgeInsets.all(8),
-            height: screenHeight * 0.15,
-            width: screenWidth * 0.25,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 6,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // image
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    height: screenHeight * 0.17,
-                    margin: EdgeInsets.only(left: screenWidth * 0.03),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(
-                            bookHomeList[index].image,
-                          ),
-                          fit: BoxFit.cover),
-                      // borderRadius: BorderRadius.circular(16),
-                    ),
-                    // child: Placeholder(),
-                  ),
-                ),
-                // contain box
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    margin: EdgeInsets.only(left: screenWidth * 0.02),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Container(),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  bookHomeList[index].bookMark =
-                                      !bookHomeList[index].bookMark;
-                                  // bookMark = !bookMark;
-                                });
-                              },
-                              child: Container(
-                                child: Icon(
-                                  Icons.bookmark,
-                                  color: bookHomeList[index].bookMark == false
-                                      ? Colors.grey
-                                      : Colors.amber,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )),
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                bookHomeList[index].name,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12),
-                              ),
-                              SizedBox(height: screenHeight * 0.01),
-                              Text(
-                                bookHomeList[index].author,
-                                style: TextStyle(fontSize: 9),
-                              ),
-                              Container(
-                                height: screenHeight * 0.03,
-                                child: Row(
-                                  children: <Widget>[
-                                    Text(
-                                      bookHomeList[index].star.toString(),
-                                      style: TextStyle(fontSize: 9),
-                                    ),
-                                    Container(
-                                        height: screenHeight * 0.015,
-                                        child: Icon(Icons.star,
-                                            size: 10,
-                                            color: Colors.amberAccent))
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Container()
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BookPage(
+                            book: bookList[index],
+                          )));
+            },
+            child: ItemBookCategory(
+              width: screenWidth,
+              height: screenHeight,
+              itemBook: bookList[index],
+            ));
       },
     );
   }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:library_app/model/member.dart';
 
-class MemberPage extends StatefulWidget {
+class EditMemberPage extends StatefulWidget {
   final Member member;
-  MemberPage({Key key, this.member}) : super(key: key);
+  EditMemberPage({Key key, this.member}) : super(key: key);
 
   @override
-  _MemberPageState createState() => _MemberPageState();
+  _EditMemberPageState createState() => _EditMemberPageState();
 }
 
-class _MemberPageState extends State<MemberPage> {
+class _EditMemberPageState extends State<EditMemberPage> {
   bool typeAdmin = false;
   TextEditingController _name;
   TextEditingController _email;
@@ -65,14 +65,53 @@ class _MemberPageState extends State<MemberPage> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(Icons.close),
+                      child: Container(
+                          width: screenWidth * 0.08,
+                          height: screenWidth * 0.08,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 6,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          child: Icon(
+                            Icons.close,
+                            size: 18,
+                          )),
                     ),
                     Spacer(),
                     InkWell(
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(Icons.done, color: Colors.purple),
+                      child: Container(
+                          width: screenWidth * 0.08,
+                          height: screenWidth * 0.08,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 6,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          child: Icon(
+                            Icons.done,
+                            size: 18,
+                            color: Colors.purple,
+                          )),
                     ),
                   ],
                 ),
@@ -132,25 +171,7 @@ class _MemberPageState extends State<MemberPage> {
         children: <Widget>[
           Expanded(
             flex: 2,
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  // widget.book.bookMark = !widget.book.bookMark;
-                });
-              },
-              child: Container(
-                child: Align(
-                  alignment: Alignment.topRight,
-                  // child: Icon(
-                  //     widget.book.bookMark
-                  //         ? Icons.bookmark
-                  //         : Icons.bookmark_border,
-                  //     color: widget.book.bookMark
-                  //         ? Colors.amber
-                  //         : Colors.grey),
-                ),
-              ),
-            ),
+            child: Container(),
           ),
           Expanded(
             flex: 9,
@@ -187,24 +208,36 @@ class _MemberPageState extends State<MemberPage> {
             decoration: InputDecoration(
               labelText: "Full name",
               prefixIcon: Icon(Icons.person),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+              ),
             ),
           ),
+          SizedBox(height: screenHeight * 0.01),
           TextField(
             controller: _email,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               labelText: "Email",
-              prefixIcon: Icon(Icons.vpn_key),
+              prefixIcon: Icon(Icons.email),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+              ),
             ),
           ),
+          SizedBox(height: screenHeight * 0.01),
           TextField(
             controller: _phone,
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: "Phone",
-              prefixIcon: Icon(Icons.person),
+              prefixIcon: Icon(Icons.phone),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+              ),
             ),
           ),
+          SizedBox(height: screenHeight * 0.02),
           InkWell(
             onTap: () {
               setState(() {
@@ -220,7 +253,8 @@ class _MemberPageState extends State<MemberPage> {
                     Text(
                       "Admin",
                       style: TextStyle(
-                        color: Colors.purple,
+                        fontSize: 16,
+                        color: Colors.purple[400],
                       ),
                     ),
                     Container(
@@ -230,7 +264,7 @@ class _MemberPageState extends State<MemberPage> {
                         typeAdmin
                             ? Icons.radio_button_checked
                             : Icons.radio_button_unchecked,
-                        color: Colors.purple,
+                        color: Colors.purple[400],
                       ),
                     )
                   ],
@@ -250,7 +284,7 @@ class _MemberPageState extends State<MemberPage> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 25,
-            color: Colors.purple,
+            color: Colors.purple[400],
           ),
         ),
       ),

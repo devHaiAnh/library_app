@@ -13,6 +13,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _pass = TextEditingController();
   final _pass2 = TextEditingController();
 
+  bool hidePass = true;
+  bool hidePassRetype = true;
+
   @override
   void dispose() {
     _email.dispose();
@@ -55,13 +58,24 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   Navigator.pop(context);
                 },
                 child: Container(
-                    width: screenWidth * 0.1,
-                    height: screenWidth * 0.1,
+                    width: screenWidth * 0.08,
+                    height: screenWidth * 0.08,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(32),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 6,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(24),
                     ),
-                    child: Icon(Icons.close)),
+                    child: Icon(
+                      Icons.close,
+                      size: 18,
+                    )),
               ),
             ),
           ),
@@ -111,6 +125,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             decoration: InputDecoration(
               labelText: "Email",
               prefixIcon: Icon(Icons.email),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+              ),
             ),
           ),
           TextField(
@@ -119,22 +136,52 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             decoration: InputDecoration(
               labelText: "Username",
               prefixIcon: Icon(Icons.person),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+              ),
             ),
           ),
           TextField(
             controller: _pass,
-            obscureText: true,
+            obscureText: hidePass,
             decoration: InputDecoration(
               labelText: "Password",
               prefixIcon: Icon(Icons.vpn_key),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(hidePass ? Icons.visibility : Icons.visibility_off),
+                onPressed: () {
+                  setState(
+                    () {
+                      hidePass = !hidePass;
+                    },
+                  );
+                },
+              ),
             ),
           ),
           TextField(
             controller: _pass2,
-            obscureText: true,
+            obscureText: hidePassRetype,
             decoration: InputDecoration(
               labelText: "Retype Password",
               prefixIcon: Icon(Icons.vpn_key),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                    hidePassRetype ? Icons.visibility : Icons.visibility_off),
+                onPressed: () {
+                  setState(
+                    () {
+                      hidePassRetype = !hidePassRetype;
+                    },
+                  );
+                },
+              ),
             ),
           ),
           SizedBox(height: screenHeight * 0.05),

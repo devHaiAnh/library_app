@@ -30,7 +30,27 @@ class _AppBarAppState extends State<AppBarApp> {
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child: Icon(Icons.arrow_back_ios),
+                        child: Container(
+                            width: widget.width * 0.08,
+                            height: widget.width * 0.08,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 1,
+                                  blurRadius: 6,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            child: Center(
+                                child: Icon(
+                              Icons.arrow_back_ios,
+                              size: 18,
+                            ))),
                       ),
                 Container()
               ],

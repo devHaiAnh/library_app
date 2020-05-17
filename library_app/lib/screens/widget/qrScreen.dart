@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:library_app/screens/widget/appbarApp.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QRPage extends StatefulWidget {
-  QRPage({Key key, this.data}) : super(key: key);
+  QRPage({Key key, this.data, this.registed}) : super(key: key);
   final String data;
+  final bool registed;
   @override
   _QRPageState createState() => _QRPageState();
 }
@@ -39,39 +41,41 @@ class _QRPageState extends State<QRPage> {
                 children: <Widget>[
                   Container(
                       height: screenHeight * 0.4,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 6,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(24),
+                      ),
                       child: QrImage(data: widget.data)),
                   SizedBox(height: screenHeight * 0.05),
-                  Text("You can use this QR code \nto confirm at the librarian",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
+                  Text(
+                      widget.registed
+                          ? "This is the QR code you have registered"
+                          : "You can use this QR code \nto confirm at the librarian",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 ],
               ),
             ),
           ),
           // appbar
           Positioned(
-            top: 0,
-            left: screenWidth * 0.05,
-            right: screenWidth * 0.05,
-            child: SafeArea(
-              top: true,
-              left: true,
-              right: true,
-              child: Container(
-                height: screenHeight * 0.08,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(Icons.close),
-                    ),
-                    Container()
-                  ],
-                ),
-              ),
-            ),
-          ),
+              top: 0,
+              left: screenWidth * 0.05,
+              right: screenWidth * 0.05,
+              child: AppBarApp(
+                height: screenHeight,
+                width: screenWidth,
+                title: "QR code",
+                buttonBack: 1,
+              )),
         ],
       ),
     );

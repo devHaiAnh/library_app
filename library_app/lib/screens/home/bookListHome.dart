@@ -99,7 +99,7 @@ class _BookListHomePageState extends State<BookListHomePage> {
                 widget.title == "Trending"
                     ? Positioned(
                         top: screenHeight * 0.015,
-                        left: screenWidth * 0.02,
+                        left: screenWidth * 0.25,
                         child: Container(
                           width: screenWidth * 0.075,
                           height: screenWidth * 0.075,

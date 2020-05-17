@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:library_app/model/bookHome.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -14,50 +16,81 @@ class ItemBook extends StatefulWidget {
 class _ItemBookState extends State<ItemBook> {
   @override
   Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.passthrough,
+      children: <Widget>[
+        Container(
+          height: widget.height * 0.25,
+          padding: EdgeInsets.all(widget.width * 0.025),
+          margin: EdgeInsets.all(widget.width * 0.02),
+          width: widget.width * 0.7,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 1,
+                blurRadius: 6,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Row(
+            children: <Widget>[
+              // image
+              Expanded(
+                flex: 3,
+                child: image(),
+              ),
+              // contain
+              Expanded(
+                flex: 7,
+                child: containPage(),
+              ),
+            ],
+          ),
+        ),
+        widget.itemBook.status == 3
+            ? Container()
+            : Positioned(
+                top: widget.height * 0.018,
+                left: widget.width * -0.025,
+                child: widget.itemBook.status == 0
+                    ? bannerColor("green", "Reading")
+                    : widget.itemBook.status == 1
+                        ? bannerColor("blue", "Hiring")
+                        : bannerColor("violet", "Bought"))
+      ],
+    );
+  }
+
+  Widget bannerColor(String color, data) {
     return Container(
-      height: widget.height * 0.25,
-      padding: EdgeInsets.all(widget.width * 0.025),
-      margin: EdgeInsets.all(widget.width * 0.02),
-      width: widget.width * 0.7,
+      width: widget.width * 0.3,
+      height: widget.height * 0.05,
+      padding:
+          EdgeInsets.fromLTRB(widget.width * 0.08, widget.height * 0.022, 0, 0),
       decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 6,
-            offset: Offset(0, 3), // changes position of shadow
-          ),
-        ],
-        borderRadius: BorderRadius.circular(24),
+        image: DecorationImage(
+            image: AssetImage("assets/img/$color.png"), fit: BoxFit.cover),
       ),
-      child: Row(
-        children: <Widget>[
-          // image
-          Expanded(
-            flex: 3,
-            child: image(),
-          ),
-          // contain
-          Expanded(
-            flex: 7,
-            child: containPage(),
-          ),
-        ],
+      child: Text(
+        data,
+        style: TextStyle(color: Colors.white),
       ),
     );
   }
 
   Container image() {
     return Container(
-            width: widget.width,
-            height: widget.height,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: NetworkImage(widget.itemBook.image),
-                  fit: BoxFit.cover),
-            ),
-          );
+      width: widget.width,
+      height: widget.height,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: NetworkImage(widget.itemBook.image), fit: BoxFit.cover),
+      ),
+    );
   }
 
   Widget containPage() {
@@ -98,8 +131,6 @@ class _ItemBookState extends State<ItemBook> {
           Container(
             height: widget.height * 0.05,
             width: widget.width * 0.6,
-            // margin: EdgeInsets.only(
-            //     right: widget.width * 0.01),
             decoration: BoxDecoration(
                 color: Colors.purple[400],
                 borderRadius: BorderRadius.circular(16)),
@@ -148,8 +179,6 @@ class _ItemBookState extends State<ItemBook> {
               });
             },
             child: Container(
-              width: widget.width * 0.09,
-              height: widget.width * 0.09,
               child: Icon(
                   widget.itemBook.bookMark
                       ? Icons.bookmark

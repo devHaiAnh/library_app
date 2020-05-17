@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:library_app/model/bookHome.dart';
 import 'package:library_app/screens/bookScreen.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
-import 'package:library_app/screens/widget/itemBookHistory.dart';
-import 'package:library_app/screens/widget/qrScreen.dart';
+import 'package:library_app/screens/widget/itemBook.dart';
+import 'package:library_app/screens/widget/itemBookOrder.dart';
 
-class PaymentHistoryPage extends StatefulWidget {
+class OrderListPage extends StatefulWidget {
   @override
-  _PaymentHistoryPageState createState() => _PaymentHistoryPageState();
+  _OrderListPageState createState() => _OrderListPageState();
 }
 
-class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
+class _OrderListPageState extends State<OrderListPage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -34,10 +34,10 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
               left: screenWidth * 0.05,
               right: screenWidth * 0.05,
               child: AppBarApp(
+                buttonBack: 0,
                 width: screenWidth,
                 height: screenHeight,
-                buttonBack: 1,
-                title: "Payment History",
+                title: "Order List",
               )),
           // contain
           Positioned(
@@ -66,29 +66,25 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
               offset: Offset(0, 3), // changes position of shadow
             ),
           ],
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(40),
-            topRight: Radius.circular(40),
-          )),
+          borderRadius: BorderRadius.circular(40)),
       child: ListView.builder(
         shrinkWrap: true,
         itemCount: bookList.length,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => QRPage(
-                            data: "data",
-                            registed: true,
-                          )));
-            },
-            child: ItemBookHistory(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BookPage(
+                              book: bookList[index],
+                            )));
+              },
+              child: ItemBookOrder(
                 height: screenHeight,
                 width: screenWidth,
-                itemBook: bookList[index]),
-          );
+                itemBook: bookList[index],
+              ));
         },
       ),
     );
