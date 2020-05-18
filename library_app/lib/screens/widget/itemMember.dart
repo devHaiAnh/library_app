@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:library_app/model/member.dart';
-import 'package:library_app/screens/paymentHistoryScreen.dart';
+import 'package:library_app/data/model/member.dart';
+import 'package:library_app/screens/member/paymentHistoryScreen.dart';
 
 class ItemMember extends StatefulWidget {
   final double width, height;
@@ -14,10 +14,8 @@ class ItemMember extends StatefulWidget {
 }
 
 class _ItemMemberState extends State<ItemMember> {
-  // String you;
   @override
   void setState(fn) {
-    // you = widget.state ? " (you)" : "";
     super.setState(fn);
   }
 

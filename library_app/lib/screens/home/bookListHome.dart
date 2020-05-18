@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/model/bookHome.dart';
-import 'package:library_app/screens/bookScreen.dart';
+import 'package:library_app/data/model/bookHome.dart';
+import 'package:library_app/screens/book/bookScreen.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
 import 'package:library_app/screens/widget/itemBook.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class BookListHomePage extends StatefulWidget {
   BookListHomePage({Key key, this.title}) : super(key: key);

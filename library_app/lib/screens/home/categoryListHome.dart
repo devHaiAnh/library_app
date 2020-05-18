@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/model/categoryHome.dart';
+import 'package:library_app/data/model/categoryHome.dart';
 import 'package:library_app/screens/home/categoryBookHome.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
 

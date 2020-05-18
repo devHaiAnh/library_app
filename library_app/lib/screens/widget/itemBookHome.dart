@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/model/bookHome.dart';
+import 'package:library_app/data/model/bookHome.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ItemBookHome extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/model/bookHome.dart';
+import 'package:library_app/data/model/book.dart';
 import 'package:library_app/screens/widget/qrScreen.dart';
 
 class BookPage extends StatefulWidget {
@@ -593,7 +593,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
     );
   }
 
-  InkWell readDirectlyButton(
+  Widget readDirectlyButton(
       BuildContext context, double screenHeight, double screenWidth) {
     return InkWell(
       onTap: () {

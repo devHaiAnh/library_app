@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/model/member.dart';
+import 'package:library_app/data/model/member.dart';
 import 'package:library_app/screens/member/addMemberScreen.dart';
 import 'package:library_app/screens/member/editMemberScreen.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';

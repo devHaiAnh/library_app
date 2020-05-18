@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/model/bookHome.dart';
-import 'package:library_app/model/categoryHome.dart';
-import 'package:library_app/screens/bookScreen.dart';
+import 'package:library_app/data/model/bookHome.dart';
+import 'package:library_app/data/model/categoryHome.dart';
+import 'package:library_app/screens/book/bookScreen.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
 import 'package:library_app/screens/widget/itemBookCategory.dart';
 
 class CategoryBookHomePage extends StatefulWidget {
-  // CategoryBookHomePage({Key key, this.index}) : super(key: key);
-  // final int index;
   @override
   _CategoryBookHomePageState createState() => _CategoryBookHomePageState();
 }
@@ -138,7 +136,7 @@ class _CategoryBookHomePageState extends State<CategoryBookHomePage>
     );
   }
 
-  Container tabbarView(double screenWidth, double screenHeight) {
+  Widget tabbarView(double screenWidth, double screenHeight) {
     return Container(
         width: screenWidth,
         height: screenHeight * 0.64,
@@ -161,7 +159,7 @@ class _CategoryBookHomePageState extends State<CategoryBookHomePage>
         ]));
   }
 
-  Container search(double screenHeight, double screenWidth) {
+  Widget search(double screenHeight, double screenWidth) {
     return Container(
       height: screenHeight * 0.07,
       width: screenWidth,

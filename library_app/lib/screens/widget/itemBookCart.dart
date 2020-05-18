@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/model/bookHome.dart';
+import 'package:library_app/data/model/cart.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ItemBookCart extends StatefulWidget {
   final double width, height;
-  final Book itemBook;
-  ItemBookCart({Key key, this.width, this.height, this.itemBook})
+  final Cart itemCart;
+  ItemBookCart({Key key, this.width, this.height, this.itemCart})
       : super(key: key);
   @override
   _ItemBookCartState createState() => _ItemBookCartState();
@@ -54,7 +54,7 @@ class _ItemBookCartState extends State<ItemBookCart> {
       height: widget.height,
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: NetworkImage(widget.itemBook.image), fit: BoxFit.cover),
+            image: NetworkImage(widget.itemCart.image), fit: BoxFit.cover),
       ),
     );
   }
@@ -72,7 +72,7 @@ class _ItemBookCartState extends State<ItemBookCart> {
           Container(
             height: widget.height * 0.02,
             child: SmoothStarRating(
-              rating: widget.itemBook.star,
+              rating: widget.itemCart.star,
               size: 15,
               filledIconData: Icons.star,
               halfFilledIconData: Icons.star_half,
@@ -89,7 +89,7 @@ class _ItemBookCartState extends State<ItemBookCart> {
           Container(
               height: widget.height * 0.06,
               child: Text(
-                widget.itemBook.description,
+                widget.itemCart.description,
                 style: TextStyle(fontSize: 12),
               )),
           SizedBox(height: widget.height * 0.005),
@@ -163,12 +163,12 @@ class _ItemBookCartState extends State<ItemBookCart> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  widget.itemBook.name,
+                  widget.itemCart.name,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: widget.height * 0.001),
                 Text(
-                  widget.itemBook.author,
+                  widget.itemCart.author,
                   style: TextStyle(fontSize: 12),
                 ),
               ],

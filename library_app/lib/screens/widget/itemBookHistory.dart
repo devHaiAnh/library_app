@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/model/bookHome.dart';
+import 'package:library_app/data/model/order.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ItemBookHistory extends StatefulWidget {
   final double width, height;
-  final Book itemBook;
+  final Order itemBook;
   ItemBookHistory({Key key, this.width, this.height, this.itemBook})
       : super(key: key);
   @override
@@ -48,7 +48,7 @@ class _ItemBookHistoryState extends State<ItemBookHistory> {
     );
   }
 
-  Container image() {
+  Widget image() {
     return Container(
       width: widget.width,
       height: widget.height,
@@ -161,7 +161,7 @@ class _ItemBookHistoryState extends State<ItemBookHistory> {
     );
   }
 
-  Container nameBookAuthor() {
+  Widget nameBookAuthor() {
     return Container(
       width: widget.width,
       height: widget.height * 0.06,

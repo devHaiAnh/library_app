@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/model/bookHome.dart';
-import 'package:library_app/screens/bookScreen.dart';
+import 'package:library_app/data/model/book.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
 import 'package:library_app/screens/widget/itemBookHistory.dart';
 import 'package:library_app/screens/widget/qrScreen.dart';
@@ -72,7 +71,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
           )),
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: bookList.length,
+        itemCount: bookList?.length ?? 0,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () {

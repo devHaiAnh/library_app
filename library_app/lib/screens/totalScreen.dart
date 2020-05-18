@@ -1,11 +1,10 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:library_app/model/member.dart';
-import 'package:library_app/screens/bookMarkScreen.dart';
-import 'package:library_app/screens/cartScreen.dart';
+import 'package:library_app/screens/admin/memberListScreen.dart';
+import 'package:library_app/screens/admin/orderListScreen.dart';
+import 'package:library_app/screens/book/bookMarkScreen.dart';
 import 'package:library_app/screens/home/homeScreen.dart';
-import 'package:library_app/screens/memberListScreen.dart';
-import 'package:library_app/screens/orderListScreen.dart';
+import 'package:library_app/screens/member/cartScreen.dart';
 
 class TotalPage extends StatefulWidget {
   @override

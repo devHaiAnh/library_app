@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:library_app/model/bookHome.dart';
+import 'package:library_app/data/model/book.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ItemBook extends StatefulWidget {

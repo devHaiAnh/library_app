@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/model/bookHome.dart';
+import 'package:library_app/data/model/bookHome.dart';
 
 class ItemBookCategory extends StatefulWidget {
   final double width, height;

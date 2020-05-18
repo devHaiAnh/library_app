@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/model/member.dart';
+import 'package:library_app/data/model/member.dart';
 
 class EditMemberPage extends StatefulWidget {
   final Member member;
@@ -19,7 +19,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
     _name = TextEditingController(text: widget.member.name);
     _email = TextEditingController(text: widget.member.email);
     _phone = TextEditingController(text: widget.member.phone);
-    typeAdmin = widget.member.type;
+    typeAdmin = widget.member.admin;
     super.initState();
   }
 
@@ -135,7 +135,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 image: DecorationImage(
-                  image: AssetImage(widget.member.type == true
+                  image: AssetImage(widget.member.admin
                       ? "assets/img/admin.png"
                       : "assets/img/member.png"),
                   // fit: BoxFit.cover,

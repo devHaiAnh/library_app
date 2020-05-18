@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/model/bookHome.dart';
+import 'package:library_app/data/model/order.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ItemBookOrder extends StatefulWidget {
   final double width, height;
-  final Book itemBook;
-  ItemBookOrder({Key key, this.height, this.itemBook, this.width})
+  final Order itemOrder;
+  ItemBookOrder({Key key, this.height, this.itemOrder, this.width})
       : super(key: key);
   @override
   _ItemBookOrderState createState() => _ItemBookOrderState();
@@ -48,13 +48,13 @@ class _ItemBookOrderState extends State<ItemBookOrder> {
     );
   }
 
-  Container image() {
+  Widget image() {
     return Container(
       width: widget.width,
       height: widget.height,
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: NetworkImage(widget.itemBook.image), fit: BoxFit.cover),
+            image: NetworkImage(widget.itemOrder.image), fit: BoxFit.cover),
       ),
     );
   }
@@ -72,7 +72,7 @@ class _ItemBookOrderState extends State<ItemBookOrder> {
           Container(
             height: widget.height * 0.02,
             child: SmoothStarRating(
-              rating: widget.itemBook.star,
+              rating: widget.itemOrder.star,
               size: 15,
               filledIconData: Icons.star,
               halfFilledIconData: Icons.star_half,
@@ -96,7 +96,7 @@ class _ItemBookOrderState extends State<ItemBookOrder> {
                     style: TextStyle(color: Colors.black, fontSize: 13),
                   ),
                   TextSpan(
-                    text: widget.itemBook.registrationDate,
+                    text: widget.itemOrder.registrationDate,
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w600,
@@ -140,13 +140,13 @@ class _ItemBookOrderState extends State<ItemBookOrder> {
                     style: TextStyle(color: Colors.black, fontSize: 13),
                   ),
                   TextSpan(
-                    text: widget.itemBook.status == 0
+                    text: widget.itemOrder.status == 0
                         ? "Reading"
-                        : widget.itemBook.status == 1 ? "Hiring" : "Bought",
+                        : widget.itemOrder.status == 1 ? "Hiring" : "Bought",
                     style: TextStyle(
-                        color: widget.itemBook.status == 0
+                        color: widget.itemOrder.status == 0
                             ? Colors.green
-                            : widget.itemBook.status == 1
+                            : widget.itemOrder.status == 1
                                 ? Colors.blue
                                 : Colors.purple[400],
                         fontWeight: FontWeight.w600,
@@ -173,12 +173,12 @@ class _ItemBookOrderState extends State<ItemBookOrder> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  widget.itemBook.name,
+                  widget.itemOrder.name,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: widget.height * 0.001),
                 Text(
-                  widget.itemBook.author,
+                  widget.itemOrder.author,
                   style: TextStyle(fontSize: 12),
                 ),
               ],

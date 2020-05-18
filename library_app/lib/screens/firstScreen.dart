@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/screens/signinScreen.dart';
-import 'package:library_app/screens/signupScreen.dart';
+import 'package:library_app/screens/login_register_forgot/signinScreen.dart';
+import 'package:library_app/screens/login_register_forgot/signupScreen.dart';
 
 class FirstPage extends StatefulWidget {
   @override
