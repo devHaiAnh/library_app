@@ -786,7 +786,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
         controller: _controller,
         children: [
           aboutBook(screenWidth, screenHeight),
-          authorInfo(screenWidth, screenHeight, widget.book.imageAuthor),
+          authorInfo(screenWidth, screenHeight, "widget.book.imageAuthor"),
         ],
       ),
     );
@@ -892,14 +892,14 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
         children: <Widget>[
           InkWell(
             onTap: () {
-              setState(() {
-                widget.book.bookMark = !widget.book.bookMark;
-              });
+              // setState(() {
+              //   widget.book.bookMark = !widget.book.bookMark;
+              // });
             },
             child: Container(
-              child: Icon(
-                  widget.book.bookMark ? Icons.bookmark : Icons.bookmark_border,
-                  color: widget.book.bookMark ? Colors.amber : Colors.grey),
+              // child: Icon(
+              //     widget.book.bookMark ? Icons.bookmark : Icons.bookmark_border,
+              //     color: widget.book.bookMark ? Colors.amber : Colors.grey),
             ),
           ),
         ],
@@ -1025,7 +1025,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                   style: TextStyle(color: Colors.grey),
                 ),
                 Text(
-                  widget.book.writingGenre,
+                  "widget.book.writingGenre",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
@@ -1033,7 +1033,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                   style: TextStyle(color: Colors.grey),
                 ),
                 Text(
-                  widget.book.achievements,
+                  "widget.book.achievements",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(

@@ -51,16 +51,16 @@ class _ItemBookState extends State<ItemBook> {
             ],
           ),
         ),
-        widget.itemBook.status == 3
-            ? Container()
-            : Positioned(
-                top: widget.height * 0.018,
-                left: widget.width * -0.025,
-                child: widget.itemBook.status == 0
-                    ? bannerColor("green", "Reading")
-                    : widget.itemBook.status == 1
-                        ? bannerColor("blue", "Hiring")
-                        : bannerColor("violet", "Bought"))
+        // widget.itemBook.status == 3
+        //     ? Container()
+        //     : Positioned(
+        //         top: widget.height * 0.018,
+        //         left: widget.width * -0.025,
+        //         child: widget.itemBook.status == 0
+        //             ? bannerColor("green", "Reading")
+        //             : widget.itemBook.status == 1
+        //                 ? bannerColor("blue", "Hiring")
+        //                 : bannerColor("violet", "Bought"))
       ],
     );
   }
@@ -174,16 +174,16 @@ class _ItemBookState extends State<ItemBook> {
           ),
           InkWell(
             onTap: () {
-              setState(() {
-                widget.itemBook.bookMark = !widget.itemBook.bookMark;
-              });
+              // setState(() {
+              //   widget.itemBook.bookMark = !widget.itemBook.bookMark;
+              // });
             },
             child: Container(
-              child: Icon(
-                  widget.itemBook.bookMark
-                      ? Icons.bookmark
-                      : Icons.bookmark_border,
-                  color: widget.itemBook.bookMark ? Colors.amber : Colors.grey),
+              // child: Icon(
+              //     widget.itemBook.bookMark
+              //         ? Icons.bookmark
+              //         : Icons.bookmark_border,
+              //     color: widget.itemBook.bookMark ? Colors.amber : Colors.grey),
             ),
           )
         ],

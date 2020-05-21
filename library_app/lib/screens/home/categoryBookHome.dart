@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/data/model/bookHome.dart';
-import 'package:library_app/data/model/categoryHome.dart';
-import 'package:library_app/screens/book/bookScreen.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
-import 'package:library_app/screens/widget/itemBookCategory.dart';
 
 class CategoryBookHomePage extends StatefulWidget {
   @override
@@ -14,27 +10,27 @@ class _CategoryBookHomePageState extends State<CategoryBookHomePage>
     with TickerProviderStateMixin {
   TabController _controller;
 
-  final List<Tab> myTabs = <Tab>[
-    Tab(text: categoryList[0].name),
-    Tab(text: categoryList[1].name),
-    Tab(text: categoryList[2].name),
-    Tab(text: categoryList[3].name),
-    Tab(text: categoryList[4].name),
-    Tab(text: categoryList[5].name),
-    Tab(text: categoryList[6].name),
-    Tab(text: categoryList[7].name),
-    Tab(text: categoryList[8].name),
-    Tab(text: categoryList[9].name),
-    Tab(text: categoryList[10].name),
-    Tab(text: categoryList[11].name),
-    Tab(text: categoryList[12].name),
-    Tab(text: categoryList[13].name),
-    Tab(text: categoryList[14].name),
-  ];
+  // final List<Tab> myTabs = <Tab>[
+  //   Tab(text: categoryList[0].name),
+  //   Tab(text: categoryList[1].name),
+  //   Tab(text: categoryList[2].name),
+  //   Tab(text: categoryList[3].name),
+  //   Tab(text: categoryList[4].name),
+  //   Tab(text: categoryList[5].name),
+  //   Tab(text: categoryList[6].name),
+  //   Tab(text: categoryList[7].name),
+  //   Tab(text: categoryList[8].name),
+  //   Tab(text: categoryList[9].name),
+  //   Tab(text: categoryList[10].name),
+  //   Tab(text: categoryList[11].name),
+  //   Tab(text: categoryList[12].name),
+  //   Tab(text: categoryList[13].name),
+  //   Tab(text: categoryList[14].name),
+  // ];
 
   @override
   void initState() {
-    _controller = TabController(length: categoryList.length, vsync: this);
+    // _controller = TabController(length: categoryList.length, vsync: this);
     super.initState();
   }
 
@@ -91,7 +87,7 @@ class _CategoryBookHomePageState extends State<CategoryBookHomePage>
                       TextStyle(fontWeight: FontWeight.normal),
                   indicatorColor: Colors.purple,
                   indicatorSize: TabBarIndicatorSize.label,
-                  tabs: myTabs),
+                  tabs: [Tab(text: "1",),Tab(text: "2",),]),
             ),
           ),
           // contain
@@ -141,21 +137,23 @@ class _CategoryBookHomePageState extends State<CategoryBookHomePage>
         width: screenWidth,
         height: screenHeight * 0.64,
         child: TabBarView(controller: _controller, children: [
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
-          gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          // gridViewWG(screenWidth, screenHeight, bookList),
+          Placeholder(),
+          Placeholder(),
         ]));
   }
 
@@ -184,28 +182,28 @@ class _CategoryBookHomePageState extends State<CategoryBookHomePage>
     );
   }
 
-  Widget gridViewWG(double screenWidth, screenHeight, List<Book> bookList) {
-    List<Book> bookHomeList = bookList;
-    return GridView.builder(
-      itemCount: bookHomeList.length,
-      gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      itemBuilder: (BuildContext context, int index) {
-        return InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => BookPage(
-                            book: bookList[index],
-                          )));
-            },
-            child: ItemBookCategory(
-              width: screenWidth,
-              height: screenHeight,
-              itemBook: bookList[index],
-            ));
-      },
-    );
-  }
+  // Widget gridViewWG(double screenWidth, screenHeight, List<Book> bookList) {
+  //   List<Book> bookHomeList = bookList;
+  //   return GridView.builder(
+  //     itemCount: bookHomeList.length,
+  //     gridDelegate:
+  //         SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+  //     itemBuilder: (BuildContext context, int index) {
+  //       return InkWell(
+  //           onTap: () {
+  //             Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                     builder: (context) => BookPage(
+  //                           book: bookList[index],
+  //                         )));
+  //           },
+  //           child: ItemBookCategory(
+  //             width: screenWidth,
+  //             height: screenHeight,
+  //             itemBook: bookList[index],
+  //           ));
+  //     },
+  //   );
+  // }
 }

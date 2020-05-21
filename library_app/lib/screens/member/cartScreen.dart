@@ -77,19 +77,20 @@ class _CartPageState extends State<CartPage> {
                       itemCount: bookList?.length ?? 0,
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => BookPage(
-                                            book: bookList[index],
-                                          )));
-                            },
-                            child: ItemBookCart(
-                              height: screenHeight,
-                              width: screenWidth,
-                              itemBook: bookList[index],
-                            ));
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BookPage(
+                                          book: bookList[index],
+                                        )));
+                          },
+                          // child: ItemBookCart(
+                          //   height: screenHeight,
+                          //   width: screenWidth,
+                          //   itemBook: bookList[index],
+                          // ),
+                        );
                       },
                     )
                   : Container(

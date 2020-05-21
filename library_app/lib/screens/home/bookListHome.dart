@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/data/model/bookHome.dart';
 import 'package:library_app/screens/book/bookScreen.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
 import 'package:library_app/screens/widget/itemBook.dart';
@@ -74,26 +73,26 @@ class _BookListHomePageState extends State<BookListHomePage> {
           )),
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: bookList.length,
+        itemCount: 0,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => BookPage(
-                            book: bookList[index],
-                          )));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => BookPage(
+              //               book: bookList[index],
+              //             )));
             },
             child: Stack(
               fit: StackFit.passthrough,
               children: <Widget>[
                 // item object
-                ItemBook(
-                  height: screenHeight,
-                  width: screenWidth,
-                  itemBook: bookList[index],
-                ),
+                // ItemBook(
+                //   height: screenHeight,
+                //   width: screenWidth,
+                //   itemBook: bookList[index],
+                // ),
                 // star
                 widget.title == "Trending"
                     ? Positioned(

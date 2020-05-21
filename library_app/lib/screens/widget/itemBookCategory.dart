@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/data/model/bookHome.dart';
+import 'package:library_app/data/model/book.dart';
 
 class ItemBookCategory extends StatefulWidget {
   final double width, height;
@@ -67,16 +67,17 @@ class _ItemBookCategoryState extends State<ItemBookCategory> {
             ],
           ),
         ),
-        widget.itemBook.status == 3
-            ? Container()
-            : Positioned(
-                top: widget.height * 0.043,
-                left: widget.width * -0.025,
-                child: widget.itemBook.status == 0
-                    ? bannerColor("green", "Reading")
-                    : widget.itemBook.status == 1
-                        ? bannerColor("blue", "Hiring")
-                        : bannerColor("violet", "Bought"))
+        // widget.itemBook.status == 3
+        //     ? 
+            Container()
+            // : Positioned(
+            //     top: widget.height * 0.043,
+            //     left: widget.width * -0.025,
+            //     child: widget.itemBook.status == 0
+            //         ? bannerColor("green", "Reading")
+            //         : widget.itemBook.status == 1
+            //             ? bannerColor("blue", "Hiring")
+            //             : bannerColor("violet", "Bought"))
       ],
     );
   }
@@ -106,16 +107,16 @@ class _ItemBookCategoryState extends State<ItemBookCategory> {
         Container(),
         InkWell(
           onTap: () {
-            setState(() {
-              widget.itemBook.bookMark = !widget.itemBook.bookMark;
-              // bookMark = !bookMark;
-            });
+            // setState(() {
+            //   widget.itemBook.bookMark = !widget.itemBook.bookMark;
+            //   // bookMark = !bookMark;
+            // });
           },
           child: Container(
-            child: Icon(
-              widget.itemBook.bookMark ? Icons.bookmark : Icons.bookmark_border,
-              color: widget.itemBook.bookMark ? Colors.amber : Colors.grey,
-            ),
+            // child: Icon(
+            //   widget.itemBook.bookMark ? Icons.bookmark : Icons.bookmark_border,
+            //   color: widget.itemBook.bookMark ? Colors.amber : Colors.grey,
+            // ),
           ),
         ),
       ],

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/data/model/bookHome.dart';
-import 'package:library_app/data/model/categoryHome.dart';
 import 'package:library_app/data/model/member.dart';
 import 'package:library_app/screens/book/bookScreen.dart';
 import 'package:library_app/screens/home/bookListHome.dart';
@@ -154,24 +152,25 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.only(left: screenWidth * 0.03),
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: bookList.length,
+              itemCount: 0,
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => QRPage(
-                                    data: "data",
-                                    registed: true,
-                                  )));
-                    },
-                    child: ItemBookHistory(
-                      width: screenWidth,
-                      height: screenHeight,
-                      itemBook: bookList[index],
-                    ));
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => QRPage(
+                                  data: "data",
+                                  registed: true,
+                                )));
+                  },
+                  // child: ItemBookHistory(
+                  //   width: screenWidth,
+                  //   height: screenHeight,
+                  //   itemBook: bookList[index],
+                  // ),
+                );
               },
             ),
           ),
@@ -243,23 +242,24 @@ class _HomePageState extends State<HomePage> {
                   width: screenWidth * 0.92,
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: bookList.length,
+                    itemCount: 0,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => BookPage(
-                                          book: bookList[index],
-                                        )));
-                          },
-                          child: ItemBookHome(
-                            width: screenWidth,
-                            height: screenHeight,
-                            itemBook: bookList[index],
-                          ));
+                        onTap: () {
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => BookPage(
+                          //               book: bookList[index],
+                          //             )));
+                        },
+                        // child: ItemBookHome(
+                        //   width: screenWidth,
+                        //   height: screenHeight,
+                        //   itemBook: bookList[index],
+                        // ),
+                      );
                     },
                   ),
                 ),
@@ -334,23 +334,24 @@ class _HomePageState extends State<HomePage> {
                   width: screenWidth * 0.92,
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: bookList.length,
+                    itemCount: 0,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => BookPage(
-                                          book: bookList[index],
-                                        )));
-                          },
-                          child: ItemBookHome(
-                            width: screenWidth,
-                            height: screenHeight,
-                            itemBook: bookList[index],
-                          ));
+                        onTap: () {
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => BookPage(
+                          //               book: bookList[index],
+                          //             )));
+                        },
+                        // child: ItemBookHome(
+                        //   width: screenWidth,
+                        //   height: screenHeight,
+                        //   itemBook: bookList[index],
+                        // ),
+                      );
                     },
                   ),
                 ),
@@ -403,20 +404,21 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.only(left: screenWidth * 0.05),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: categoryList?.length ?? 0,
+              itemCount: 0,
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CategoryBookHomePage()));
-                    },
-                    child: ItemCategoryHome(
-                      width: screenWidth,
-                      height: screenHeight,
-                      itemCategoryBook: categoryList[index],
-                    ));
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CategoryBookHomePage()));
+                  },
+                  // child: ItemCategoryHome(
+                  //   width: screenWidth,
+                  //   height: screenHeight,
+                  //   itemCategoryBook: categoryList[index],
+                  // ),
+                );
               },
             ),
           ),

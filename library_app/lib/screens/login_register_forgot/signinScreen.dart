@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:library_app/blocs/login_bloc/login_bloc.dart';
 import 'package:library_app/screens/login_register_forgot/forgotPassword.dart';
 import 'package:library_app/screens/login_register_forgot/signupScreen.dart';
 import 'package:library_app/screens/totalScreen.dart';
@@ -12,11 +14,20 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   final background =
       "https://images.pexels.com/photos/207730/pexels-photo-207730.jpeg?auto=compress&cs=tinysrgb&h=650&w=940";
-  final _username = TextEditingController(text: "admin@admin.com");
-  final _pass = TextEditingController(text: "admin");
+  TextEditingController _username;
+  TextEditingController _pass;
 
   bool savePass = false;
   bool hidePass = true;
+
+  GlobalKey _loginKey = GlobalKey();
+
+  @override
+  void setState(fn) {
+    _username = TextEditingController(text: "admin@admin.com");
+    _pass = TextEditingController(text: "admin");
+    super.setState(fn);
+  }
 
   @override
   void dispose() {
@@ -29,40 +40,60 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            // background
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: screenHeight * 0.5,
-                child: Image.network(
-                  background,
-                  fit: BoxFit.cover,
+    return BlocProvider(
+      create: (context) => LoginBloc(),
+      child: BlocListener<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state is LoadingState) {
+          } else if (state is ShowPasswordState) {
+            hidePass = state.showPass;
+          } else if (state is SavePasswordState) {
+            savePass = state.savePass;
+          } else if (state is ErrorState) {
+            _showDialog(context, state.errorTitle, state.errorMessage);
+          }
+        },
+        child: BlocBuilder<LoginBloc, LoginState>(
+          builder: (context, state) {
+            return WillPopScope(
+              onWillPop: _onWillPop,
+              child: Scaffold(
+                key: _loginKey,
+                body: Stack(
+                  children: <Widget>[
+                    // background
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        height: screenHeight * 0.5,
+                        child: Image.network(
+                          background,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    // appbar
+                    Positioned(
+                        top: screenHeight * 0.1,
+                        left: screenWidth * 0.08,
+                        child: ImageLogin(
+                          width: screenWidth,
+                          height: screenHeight,
+                        )),
+                    // contain
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: containPage(screenHeight, screenWidth, context),
+                    )
+                  ],
                 ),
               ),
-            ),
-            // appbar
-            Positioned(
-                top: screenHeight * 0.1,
-                left: screenWidth * 0.08,
-                child: ImageLogin(
-                  width: screenWidth,
-                  height: screenHeight,
-                )),
-            // contain
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: containPage(screenHeight, screenWidth, context),
-            )
-          ],
+            );
+          },
         ),
       ),
     );
@@ -110,11 +141,8 @@ class _SignInPageState extends State<SignInPage> {
               suffixIcon: IconButton(
                 icon: Icon(hidePass ? Icons.visibility : Icons.visibility_off),
                 onPressed: () {
-                  setState(
-                    () {
-                      hidePass = !hidePass;
-                    },
-                  );
+                  BlocProvider.of<LoginBloc>(_loginKey.currentContext)
+                      .add(ShowPasswordEvent(showPass: hidePass));
                 },
               ),
             ),
@@ -126,9 +154,8 @@ class _SignInPageState extends State<SignInPage> {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    setState(() {
-                      savePass = !savePass;
-                    });
+                    BlocProvider.of(_loginKey.currentContext)
+                        .add(SavePasswordEvent(savePass: savePass));
                   },
                   child: Container(
                       height: screenHeight * 0.05,
@@ -158,10 +185,8 @@ class _SignInPageState extends State<SignInPage> {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ForgotPasswordPage()));
+                    BlocProvider.of(_loginKey.currentContext)
+                        .add(PressButtonMoveForgotEvent(context: context));
                   },
                   child: Container(
                     height: screenHeight * 0.05,
@@ -178,8 +203,11 @@ class _SignInPageState extends State<SignInPage> {
           SizedBox(height: screenHeight * 0.04),
           InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => TotalPage()));
+              BlocProvider.of(_loginKey.currentContext).add(
+                  PressButtonLoginEvent(
+                      username: _username.text,
+                      passowrd: _pass.text,
+                      context: context));
             },
             child: Container(
               height: screenHeight * 0.08,
@@ -200,8 +228,8 @@ class _SignInPageState extends State<SignInPage> {
           SizedBox(height: screenHeight * 0.02),
           InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SignUpPage()));
+              BlocProvider.of(_loginKey.currentContext)
+                  .add(PressButtonMoveRegisterEvent(context: context));
             },
             child: Container(
               height: screenHeight * 0.05,
@@ -246,5 +274,23 @@ class _SignInPageState extends State<SignInPage> {
           ),
         )) ??
         false;
+  }
+
+  _showDialog(BuildContext mainContext, String title, String message) async {
+    await showDialog(
+      context: mainContext,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
   }
 }

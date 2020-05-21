@@ -52,13 +52,13 @@ class _ItemMemberState extends State<ItemMember> {
                 //   color: Colors.red
                 // ),
                 child: Center(
-              child: Image.asset(
-                  widget.itemMember.type
-                      ? "assets/img/admin.png"
-                      : "assets/img/member.png",
-                  height: widget.height * 0.1,
-                  color:
-                      widget.itemMember.type ? Colors.black87 : Colors.black54),
+              // child: Image.asset(
+              //     widget.itemMember.type
+              //         ? "assets/img/admin.png"
+              //         : "assets/img/member.png",
+              //     height: widget.height * 0.1,
+              //     color:
+              //         widget.itemMember.type ? Colors.black87 : Colors.black54),
             )),
           ),
           // contain
@@ -209,25 +209,25 @@ class _ItemMemberState extends State<ItemMember> {
                   ),
                   Container(
                     height: widget.height * 0.02,
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "Type: ",
-                            style: TextStyle(color: Colors.black, fontSize: 13),
-                          ),
-                          TextSpan(
-                            text: widget.itemMember.type == true
-                                ? "Admin"
-                                : "Member",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13),
-                          )
-                        ],
-                      ),
-                    ),
+                    // child: RichText(
+                    //   text: TextSpan(
+                    //     children: [
+                    //       TextSpan(
+                    //         text: "Type: ",
+                    //         style: TextStyle(color: Colors.black, fontSize: 13),
+                    //       ),
+                    //       TextSpan(
+                    //         text: widget.itemMember.type == true
+                    //             ? "Admin"
+                    //             : "Member",
+                    //         style: TextStyle(
+                    //             color: Colors.black,
+                    //             fontWeight: FontWeight.w600,
+                    //             fontSize: 13),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
                   ),
                 ],
               ),

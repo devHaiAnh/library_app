@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/data/model/bookHome.dart';
+import 'package:library_app/data/model/book.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ItemBookHome extends StatefulWidget {
@@ -68,17 +68,17 @@ class _ItemBookHomeState extends State<ItemBookHome> {
           right: 10,
           child: InkWell(
             onTap: () {
-              setState(() {
-                widget.itemBook.bookMark = !widget.itemBook.bookMark;
-              });
+              // setState(() {
+              //   widget.itemBook.bookMark = !widget.itemBook.bookMark;
+              // });
             },
             child: Container(
               color: Colors.white.withOpacity(0.3),
-              child: Icon(
-                  widget.itemBook.bookMark
-                      ? Icons.bookmark
-                      : Icons.bookmark_border,
-                  color: widget.itemBook.bookMark ? Colors.amber : Colors.grey),
+              // child: Icon(
+              //     widget.itemBook.bookMark
+              //         ? Icons.bookmark
+              //         : Icons.bookmark_border,
+              //     color: widget.itemBook.bookMark ? Colors.amber : Colors.grey),
             ),
           ),
         )

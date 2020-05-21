@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/data/model/categoryHome.dart';
+import 'package:library_app/data/model/category.dart';
 import 'package:library_app/screens/home/categoryBookHome.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
 
@@ -68,7 +68,7 @@ class _CategoryListHomePageState extends State<CategoryListHomePage> {
             topRight: Radius.circular(40),
           )),
       child: GridView.builder(
-        itemCount: categoryList.length,
+        itemCount: categoryList?.length ?? 0,
         gridDelegate:
             SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
         itemBuilder: (BuildContext context, int index) {

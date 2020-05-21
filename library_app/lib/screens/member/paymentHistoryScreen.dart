@@ -83,10 +83,10 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                             registed: true,
                           )));
             },
-            child: ItemBookHistory(
-                height: screenHeight,
-                width: screenWidth,
-                itemBook: bookList[index]),
+            // child: ItemBookHistory(
+            //     height: screenHeight,
+            //     width: screenWidth,
+            //     itemBook: bookList[index]),
           );
         },
       ),
