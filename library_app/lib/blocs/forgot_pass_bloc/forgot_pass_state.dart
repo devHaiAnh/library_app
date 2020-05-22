@@ -22,6 +22,20 @@ class SuccessState extends ForgotPassState {
   List<Object> get props => [title, message];
 }
 
+class ShowPasswordState extends ForgotPassState {
+  final bool showPass;
+  ShowPasswordState({@required this.showPass});
+  @override
+  List<Object> get props => [showPass];
+}
+
+class ShowPasswordRetypeState extends ForgotPassState {
+  final bool showPass;
+  ShowPasswordRetypeState({@required this.showPass});
+  @override
+  List<Object> get props => [showPass];
+}
+
 class ErrorState extends ForgotPassState {
   final String errorTitle;
   final String errorMessage;

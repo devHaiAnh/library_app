@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:library_app/blocs/login_bloc/login_bloc.dart';
-import 'package:library_app/screens/login_register_forgot/forgotPassword.dart';
-import 'package:library_app/screens/login_register_forgot/signupScreen.dart';
-import 'package:library_app/screens/totalScreen.dart';
 import 'package:library_app/screens/widget/imageLogin.dart';
+import 'package:library_app/streams/login_stream.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -20,12 +19,14 @@ class _SignInPageState extends State<SignInPage> {
   bool savePass = false;
   bool hidePass = true;
 
-  GlobalKey _loginKey = GlobalKey();
+  GlobalKey loginKey = GlobalKey();
+  LoginStream loginStream;
 
   @override
   void setState(fn) {
-    _username = TextEditingController(text: "admin@admin.com");
-    _pass = TextEditingController(text: "admin");
+    _username = TextEditingController();
+    _pass = TextEditingController();
+    loginStream = LoginStream();
     super.setState(fn);
   }
 
@@ -33,6 +34,7 @@ class _SignInPageState extends State<SignInPage> {
   void dispose() {
     _username.dispose();
     _pass.dispose();
+    loginStream.dispose();
     super.dispose();
   }
 
@@ -45,6 +47,7 @@ class _SignInPageState extends State<SignInPage> {
       child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoadingState) {
+            SpinKitDoubleBounce(color: Colors.white);
           } else if (state is ShowPasswordState) {
             hidePass = state.showPass;
           } else if (state is SavePasswordState) {
@@ -58,7 +61,7 @@ class _SignInPageState extends State<SignInPage> {
             return WillPopScope(
               onWillPop: _onWillPop,
               child: Scaffold(
-                key: _loginKey,
+                key: loginKey,
                 body: Stack(
                   children: <Widget>[
                     // background
@@ -118,32 +121,47 @@ class _SignInPageState extends State<SignInPage> {
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: screenHeight * 0.005),
-          TextField(
-            controller: _username,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              labelText: "Username",
-              prefixIcon: Icon(Icons.person),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.purple),
+          StreamBuilder(
+            stream: loginStream.userStream,
+            builder: (context, snapshot) => TextField(
+              controller: _username,
+              onChanged: (a) {
+                loginStream.userChange(a.trim());
+              },
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: "Username",
+                errorText: snapshot.hasError ? snapshot.error : null,
+                prefixIcon: Icon(Icons.person),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.purple),
+                ),
               ),
             ),
           ),
-          TextField(
-            controller: _pass,
-            obscureText: hidePass,
-            decoration: InputDecoration(
-              labelText: "Password",
-              prefixIcon: Icon(Icons.vpn_key),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.purple),
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(hidePass ? Icons.visibility : Icons.visibility_off),
-                onPressed: () {
-                  BlocProvider.of<LoginBloc>(_loginKey.currentContext)
-                      .add(ShowPasswordEvent(showPass: hidePass));
-                },
+          StreamBuilder(
+            stream: loginStream.passStream,
+            builder: (context, snapshot) => TextField(
+              controller: _pass,
+              onChanged: (a) {
+                loginStream.passChange(a.trim());
+              },
+              obscureText: hidePass,
+              decoration: InputDecoration(
+                labelText: "Password",
+                errorText: snapshot.hasError ? snapshot.error : null,
+                prefixIcon: Icon(Icons.lock),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.purple),
+                ),
+                suffixIcon: IconButton(
+                  icon:
+                      Icon(hidePass ? Icons.visibility : Icons.visibility_off),
+                  onPressed: () {
+                    BlocProvider.of<LoginBloc>(loginKey.currentContext)
+                        .add(ShowPasswordEvent(showPass: hidePass));
+                  },
+                ),
               ),
             ),
           ),
@@ -154,7 +172,7 @@ class _SignInPageState extends State<SignInPage> {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    BlocProvider.of(_loginKey.currentContext)
+                    BlocProvider.of(loginKey.currentContext)
                         .add(SavePasswordEvent(savePass: savePass));
                   },
                   child: Container(
@@ -185,7 +203,7 @@ class _SignInPageState extends State<SignInPage> {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    BlocProvider.of(_loginKey.currentContext)
+                    BlocProvider.of(loginKey.currentContext)
                         .add(PressButtonMoveForgotEvent(context: context));
                   },
                   child: Container(
@@ -203,10 +221,10 @@ class _SignInPageState extends State<SignInPage> {
           SizedBox(height: screenHeight * 0.04),
           InkWell(
             onTap: () {
-              BlocProvider.of(_loginKey.currentContext).add(
+              BlocProvider.of(loginKey.currentContext).add(
                   PressButtonLoginEvent(
-                      username: _username.text,
-                      passowrd: _pass.text,
+                      username: _username.text.trim(),
+                      passowrd: _pass.text.trim(),
                       context: context));
             },
             child: Container(
@@ -228,7 +246,7 @@ class _SignInPageState extends State<SignInPage> {
           SizedBox(height: screenHeight * 0.02),
           InkWell(
             onTap: () {
-              BlocProvider.of(_loginKey.currentContext)
+              BlocProvider.of(loginKey.currentContext)
                   .add(PressButtonMoveRegisterEvent(context: context));
             },
             child: Container(

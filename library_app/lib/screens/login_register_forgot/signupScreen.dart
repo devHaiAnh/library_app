@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/screens/login_register_forgot/signinScreen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:library_app/blocs/register_bloc/register_bloc.dart';
 import 'package:library_app/screens/widget/imageLogin.dart';
+import 'package:library_app/streams/register_stream.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -10,17 +13,31 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final background =
       "https://images.pexels.com/photos/1837726/pexels-photo-1837726.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
-  final _email = TextEditingController();
-  final _username = TextEditingController();
-  final _pass = TextEditingController();
+
+  TextEditingController _email;
+  TextEditingController _username;
+  TextEditingController _pass;
 
   bool hidePass = true;
+
+  GlobalKey _registerKey = GlobalKey();
+  RegisterStream _registerStream;
+
+  @override
+  void setState(fn) {
+    _email = TextEditingController();
+    _username = TextEditingController();
+    _pass = TextEditingController();
+    _registerStream = RegisterStream();
+    super.setState(fn);
+  }
 
   @override
   void dispose() {
     _email.dispose();
     _username.dispose();
     _pass.dispose();
+    _registerStream.dispose();
     super.dispose();
   }
 
@@ -28,38 +45,57 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          // background
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: screenHeight * 0.5,
-              child: Image.network(
-                background,
-                fit: BoxFit.cover,
+    return BlocProvider(
+      create: (context) => RegisterBloc(),
+      child: BlocListener<RegisterBloc, RegisterState>(
+        listener: (context, state) {
+          if (state is LoadingState) {
+            SpinKitDoubleBounce(color: Colors.white);
+          } else if (state is ShowPasswordState) {
+            hidePass = state.showPass;
+          } else if (state is ErrorState) {
+            _showDialog(context, state.errorTitle, state.errorMessage);
+          }
+        },
+        child: BlocBuilder<RegisterBloc, RegisterState>(
+          builder: (context, state) {
+            return Scaffold(
+              key: _registerKey,
+              body: Stack(
+                children: <Widget>[
+                  // background
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: screenHeight * 0.5,
+                      child: Image.network(
+                        background,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  // appbar
+                  Positioned(
+                      top: screenHeight * 0.1,
+                      left: screenWidth * 0.08,
+                      child: ImageLogin(
+                        width: screenWidth,
+                        height: screenHeight,
+                      )),
+                  // contain
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: containPage(screenHeight, screenWidth, context),
+                  )
+                ],
               ),
-            ),
-          ),
-          // appbar
-          Positioned(
-              top: screenHeight * 0.1,
-              left: screenWidth * 0.08,
-              child: ImageLogin(
-                width: screenWidth,
-                height: screenHeight,
-              )),
-          // contain
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: containPage(screenHeight, screenWidth, context),
-          )
-        ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -87,80 +123,102 @@ class _SignUpPageState extends State<SignUpPage> {
                   "New\nMember",
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      width: screenWidth * 0.1,
-                      height: screenWidth * 0.1,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.red[400]),
-                          borderRadius: BorderRadius.circular(24)),
-                      child: Icon(
-                        Icons.camera_alt,
-                        color: Colors.red[400],
-                      ),
-                    ),
-                    Text(
-                      "Upload image",
-                      style: TextStyle(color: Colors.grey[600], fontSize: 13),
-                    )
-                  ],
-                )
+                // Column(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: <Widget>[
+                //     Container(
+                //       width: screenWidth * 0.1,
+                //       height: screenWidth * 0.1,
+                //       decoration: BoxDecoration(
+                //           border: Border.all(color: Colors.red[400]),
+                //           borderRadius: BorderRadius.circular(24)),
+                //       child: Icon(
+                //         Icons.camera_alt,
+                //         color: Colors.red[400],
+                //       ),
+                //     ),
+                //     Text(
+                //       "Upload image",
+                //       style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                //     )
+                //   ],
+                // )
+                Container()
               ],
             ),
           ),
           SizedBox(height: screenHeight * 0.005),
-          TextField(
-            controller: _email,
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              labelText: "Email",
-              prefixIcon: Icon(Icons.email),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.purple),
+          StreamBuilder(
+            stream: _registerStream.emailStream,
+            builder: (context, snapshot) => TextField(
+              controller: _email,
+              onChanged: (a) {
+                _registerStream.emailChange(a.trim());
+              },
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                labelText: "Email",
+                errorText: snapshot.hasError ? snapshot.error : null,
+                prefixIcon: Icon(Icons.email),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.purple),
+                ),
               ),
             ),
           ),
-          TextField(
-            controller: _username,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              labelText: "Username",
-              prefixIcon: Icon(Icons.person),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.purple),
+          StreamBuilder(
+            stream: _registerStream.userStream,
+            builder: (context, snapshot) => TextField(
+              controller: _username,
+              onChanged: (a) {
+                _registerStream.userChange(a.trim());
+              },
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: "Username",
+                errorText: snapshot.hasError ? snapshot.error : null,
+                prefixIcon: Icon(Icons.person),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.purple),
+                ),
               ),
             ),
           ),
-          TextField(
-            controller: _pass,
-            obscureText: hidePass,
-            decoration: InputDecoration(
-              labelText: "Password",
-              prefixIcon: Icon(Icons.vpn_key),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.purple),
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(hidePass ? Icons.visibility : Icons.visibility_off),
-                onPressed: () {
-                  setState(
-                    () {
-                      hidePass = !hidePass;
-                    },
-                  );
-                },
+          StreamBuilder(
+            stream: _registerStream.passStream,
+            builder: (context, snapshot) => TextField(
+              controller: _pass,
+              onChanged: (a) {
+                _registerStream.passChange(a.trim());
+              },
+              obscureText: hidePass,
+              decoration: InputDecoration(
+                labelText: "Password",
+                errorText: snapshot.hasError ? snapshot.error : null,
+                prefixIcon: Icon(Icons.lock),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.purple),
+                ),
+                suffixIcon: IconButton(
+                  icon:
+                      Icon(hidePass ? Icons.visibility : Icons.visibility_off),
+                  onPressed: () {
+                    BlocProvider.of(_registerKey.currentContext)
+                        .add(ShowPasswordEvent(showPass: hidePass));
+                  },
+                ),
               ),
             ),
           ),
           SizedBox(height: screenHeight * 0.05),
           InkWell(
             onTap: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => SignInPage()));
+              BlocProvider.of(_registerKey.currentContext).add(
+                  PressButtonRegisterEvent(
+                      username: _username.text.trim(),
+                      passowrd: _pass.text.trim(),
+                      email: _email.text.trim(),
+                      context: context));
             },
             child: Container(
               height: screenHeight * 0.08,
@@ -181,8 +239,8 @@ class _SignUpPageState extends State<SignUpPage> {
           SizedBox(height: screenHeight * 0.02),
           InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SignInPage()));
+              BlocProvider.of(_registerKey.currentContext)
+                  .add(PressButtonMoveLoginEvent(context: context));
             },
             child: Container(
               height: screenHeight * 0.05,
@@ -203,6 +261,24 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  _showDialog(BuildContext mainContext, String title, String message) async {
+    await showDialog(
+      context: mainContext,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
         ],
       ),
     );

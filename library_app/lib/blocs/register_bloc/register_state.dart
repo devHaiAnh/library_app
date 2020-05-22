@@ -22,6 +22,13 @@ class SuccessState extends RegisterState {
   List<Object> get props => [title, message];
 }
 
+class ShowPasswordState extends RegisterState {
+  final bool showPass;
+  ShowPasswordState({@required this.showPass});
+  @override
+  List<Object> get props => [showPass];
+}
+
 class ErrorState extends RegisterState {
   final String errorTitle;
   final String errorMessage;

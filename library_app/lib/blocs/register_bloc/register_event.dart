@@ -20,6 +20,13 @@ class PressButtonRegisterEvent extends RegisterEvent {
   List<Object> get props => [username, passowrd, email];
 }
 
+class PressButtonMoveLoginEvent extends RegisterEvent {
+  final BuildContext context;
+  PressButtonMoveLoginEvent({@required this.context});
+  @override
+  List<Object> get props => [];
+}
+
 class ShowPasswordEvent extends RegisterEvent {
   final bool showPass;
   ShowPasswordEvent({@required this.showPass});

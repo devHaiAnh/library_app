@@ -25,3 +25,10 @@ class ShowPasswordEvent extends ForgotPassEvent {
   @override
   List<Object> get props => [showPass];
 }
+
+class ShowPasswordRetypeEvent extends ForgotPassEvent {
+  final bool showPass;
+  ShowPasswordRetypeEvent({@required this.showPass});
+  @override
+  List<Object> get props => [showPass];
+}

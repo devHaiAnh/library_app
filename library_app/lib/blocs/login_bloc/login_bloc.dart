@@ -9,7 +9,6 @@ import 'package:library_app/screens/login_register_forgot/forgotPassword.dart';
 import 'package:library_app/screens/login_register_forgot/signupScreen.dart';
 import 'package:library_app/screens/totalScreen.dart';
 import 'package:library_app/streams/login_stream.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -26,12 +25,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (event is PressButtonLoginEvent) {
         yield LoadingState();
         if (event.loginStream.isValidInfo(
-            username: event.username.trim(), password: event.passowrd.trim())) {
+            username: event.username, password: event.passowrd)) {
           final result = await postLogin(
-              username: event.username.trim(), password: event.passowrd.trim());
+              username: event.username, password: event.passowrd);
           if (result == 1) {
             yield SuccessState();
-            ConfigsApp.userName = event.username.trim();
+            ConfigsApp.userName = event.username;
             Navigator.push(event.context,
                 MaterialPageRoute(builder: (context) => TotalPage()));
           } else if (result == 2) {
