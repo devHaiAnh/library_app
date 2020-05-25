@@ -3,30 +3,27 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:library_app/configs/configsApp.dart';
 
-Future<int> postRegister({
-  String username,
-  String password,
-  String email,
-}) async {
+Future<int> postUpdatePass(
+    {String password}) async {
   try {
     Map<String, dynamic> body = {
-      "username": username,
+      "username": ConfigsApp.userName,
       "password": password,
       "name": "null",
-      "email": email,
-      "phone": 0,
+      "email": "null",
+      "phone": "null",
       "admin": false
     };
     var finalBody = json.encode(body);
     Response response = await post(
         ConfigsApp.isDebugMode
-            ? ConfigsApp.baseUrl + ConfigsApp.memberUrl
-            : ConfigsApp.baseUrl + ConfigsApp.memberUrl,
+            ? ConfigsApp.baseUrl + ConfigsApp.membersUrl + ConfigsApp.updateUrl + ConfigsApp.passUrl
+            : ConfigsApp.baseUrl + ConfigsApp.membersUrl + ConfigsApp.updateUrl + ConfigsApp.passUrl,
         body: finalBody,
         headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
-      if (data['message'] == 'add member success') {
+      if (data['message'] == 'update password success') {
         return 1;
       } else {
         return 0;
@@ -37,6 +34,5 @@ Future<int> postRegister({
     }
   } catch (e) {
     print("error: ${e.toString()}");
-    return 0;
   }
 }

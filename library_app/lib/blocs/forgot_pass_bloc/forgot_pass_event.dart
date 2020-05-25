@@ -1,7 +1,10 @@
 part of 'forgot_pass_bloc.dart';
 
-abstract class ForgotPassEvent extends Equatable {
+class ForgotPassEvent extends Equatable {
   const ForgotPassEvent();
+
+  @override
+  List<Object> get props => [];
 }
 class PressButtonForgotPassEvent extends ForgotPassEvent {
   final String username;

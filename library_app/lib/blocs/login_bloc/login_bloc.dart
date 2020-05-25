@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:library_app/blocs/forgot_pass_bloc/forgot_pass_bloc.dart';
 import 'package:library_app/configs/configsApp.dart';
-import 'package:library_app/data/api/login_api.dart';
+import 'package:library_app/data/api/login_register_forgot/login_api.dart';
+import 'package:library_app/data/model/login_model.dart';
 import 'package:library_app/screens/login_register_forgot/forgotPassword.dart';
 import 'package:library_app/screens/login_register_forgot/signupScreen.dart';
 import 'package:library_app/screens/totalScreen.dart';
@@ -24,26 +26,33 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       if (event is PressButtonLoginEvent) {
         yield LoadingState();
-        if (event.loginStream.isValidInfo(
-            username: event.username, password: event.passowrd)) {
-          final result = await postLogin(
-              username: event.username, password: event.passowrd);
-          if (result == 1) {
-            yield SuccessState();
-            ConfigsApp.userName = event.username;
-            Navigator.push(event.context,
-                MaterialPageRoute(builder: (context) => TotalPage()));
-          } else if (result == 2) {
-            yield ErrorState(
-                errorTitle: "Warning!!!", errorMessage: "Wrong Password");
-          } else if (result == 3) {
-            yield ErrorState(
-                errorTitle: "Warning!!!", errorMessage: "Wrong Username");
-          } else {
-            yield ErrorState(
-                errorTitle: "Warning!!!", errorMessage: "Error Sever");
-          }
+        // if (event.loginStream.isValidInfo(
+        //     username: event.username, password: event.passowrd)) {
+        LoginModel loginModel =
+            await postLogin(username: event.username, password: event.passowrd);
+        if (loginModel.message == "login success") {
+          yield SuccessState();
+          ConfigsApp.userName = loginModel.member.username;
+          ConfigsApp.passWord = loginModel.member.password;
+          Navigator.push(
+              event.context,
+              MaterialPageRoute(
+                  builder: (context) => TotalPage(member: loginModel.member)));
+        } else if (loginModel.message == "wrong password") {
+          yield ErrorState(
+              errorTitle: "Warning!!!", errorMessage: "Wrong Password");
+        } else if (loginModel.message == "wrong username") {
+          yield ErrorState(
+              errorTitle: "Warning!!!", errorMessage: "Account does not exist");
+        } else {
+          yield ErrorState(
+              errorTitle: "Warning!!!", errorMessage: "Error Sever");
         }
+        // } else {
+        //   yield ErrorState(
+        //       errorTitle: "Warning!!!",
+        //       errorMessage: "The data entered is not in the correct format");
+        // }
       }
       if (event is PressButtonMoveForgotEvent) {
         yield LoadingState();
@@ -65,7 +74,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield SavePasswordState(savePass: !event.savePass);
       }
       if (event is ShowPasswordEvent) {
-        yield ShowPasswordState(showPass: !event.showPass);        
+        yield ShowPasswordState(showPass: !event.showPass);
       }
     } catch (e) {
       print("error: ${e.toString()}");

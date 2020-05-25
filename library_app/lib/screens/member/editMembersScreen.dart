@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:library_app/blocs/member_bloc/member_bloc.dart';
-import 'package:library_app/data/model/login_model.dart';
+import 'package:library_app/data/model/members_model.dart';
 import 'package:library_app/streams/updateMember_stream.dart';
 
-class EditMemberPage extends StatefulWidget {
+class EditMembersPage extends StatefulWidget {
   final Member member;
-  EditMemberPage({Key key, this.member}) : super(key: key);
+  EditMembersPage({Key key, this.member}) : super(key: key);
 
   @override
-  _EditMemberPageState createState() => _EditMemberPageState();
+  _EditMembersPageState createState() => _EditMembersPageState();
 }
 
-class _EditMemberPageState extends State<EditMemberPage> {
+class _EditMembersPageState extends State<EditMembersPage> {
+  bool typeAdmin = false;
   TextEditingController _name;
   TextEditingController _email;
   TextEditingController _phone;
@@ -25,6 +26,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
     _name = TextEditingController(text: widget.member.name);
     _email = TextEditingController(text: widget.member.email);
     _phone = TextEditingController(text: widget.member.phone);
+    typeAdmin = widget.member.admin;
     updateMemberStream = UpdateMemberStream();
     super.initState();
   }
@@ -50,6 +52,8 @@ class _EditMemberPageState extends State<EditMemberPage> {
             SpinKitDoubleBounce(color: Colors.white);
           } else if (state is SuccessState) {
             _showDialog(context, state.title, state.message);
+          } else if (state is CheckAdminState) {
+            typeAdmin = state.admin;
           } else if (state is ErrorState) {
             _showDialog(context, state.errorTitle, state.errorMessage);
           }
@@ -113,10 +117,11 @@ class _EditMemberPageState extends State<EditMemberPage> {
                               onTap: () {
                                 BlocProvider.of<MemberBloc>(
                                         editMemberKey.currentContext)
-                                    .add(PressButtonUpdateMemberEvent(
+                                    .add(PressButtonUpdateEvent(
                                         name: _name.text.trim(),
                                         email: _email.text.trim(),
                                         phone: _phone.text.trim(),
+                                        admin: typeAdmin,
                                         context: context));
                               },
                               child: Container(
@@ -286,6 +291,39 @@ class _EditMemberPageState extends State<EditMemberPage> {
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.purple),
                 ),
+              ),
+            ),
+          ),
+          SizedBox(height: screenHeight * 0.02),
+          InkWell(
+            onTap: () {
+              BlocProvider.of<MemberBloc>(editMemberKey.currentContext)
+                  .add(CheckAdminEvent(admin: typeAdmin));
+            },
+            child: Container(
+              height: screenHeight * 0.05,
+              child: Row(
+                // mainAxisAlignment:
+                //     MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Admin",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.purple[400],
+                    ),
+                  ),
+                  Container(
+                    width: screenHeight * 0.04,
+                    height: screenHeight * 0.04,
+                    child: Icon(
+                      typeAdmin
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_unchecked,
+                      color: Colors.purple[400],
+                    ),
+                  )
+                ],
               ),
             ),
           ),

@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:library_app/data/model/login_model.dart';
+import 'package:library_app/blocs/member_bloc/member_bloc.dart';
+import 'package:library_app/data/model/members_model.dart';
 import 'package:library_app/screens/payment_order/paymentHistoryScreen.dart';
 
-class ItemMember extends StatefulWidget {
+class ItemMembers extends StatefulWidget {
   final double width, height;
   final Member itemMember;
-  ItemMember({Key key, this.width, this.height, this.itemMember})
+  final bool state;
+  ItemMembers({Key key, this.width, this.height, this.itemMember, this.state})
       : super(key: key);
   @override
-  _ItemMemberState createState() => _ItemMemberState();
+  _ItemMembersState createState() => _ItemMembersState();
 }
 
-class _ItemMemberState extends State<ItemMember> {
+class _ItemMembersState extends State<ItemMembers> {
+  String you;
+
+  @override
+  void initState() {
+    you = widget.state ? " (You)" : "";
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -73,7 +84,7 @@ class _ItemMemberState extends State<ItemMember> {
                           flex: 12,
                           child: Container(
                             child: Text(
-                              widget.itemMember.username,
+                              widget.itemMember.username + you,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
@@ -108,7 +119,30 @@ class _ItemMemberState extends State<ItemMember> {
                             ),
                           ),
                         ),
-                        SizedBox(width: widget.width * 0.01),
+                        SizedBox(width: widget.width * 0.02),
+                        widget.state
+                            ? Container()
+                            : Expanded(
+                                flex: 2,
+                                child: InkWell(
+                                  onTap: () {
+                                    BlocProvider.of<MemberBloc>(context).add(
+                                        PressButtonDeleteEvent(
+                                            username:
+                                                widget.itemMember.username,
+                                            context: context));
+                                  },
+                                  child: Container(
+                                    width: widget.width * 0.07,
+                                    height: widget.width * 0.07,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.red),
+                                        borderRadius:
+                                            BorderRadius.circular(24)),
+                                    child: Icon(Icons.close, color: Colors.red),
+                                  ),
+                                ),
+                              )
                       ],
                     ),
                   ),

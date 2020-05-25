@@ -192,23 +192,33 @@ def handle_login():
                                        name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
             member = MemberModel.query.filter_by(
                 username=login_member.username).first()
+            results = {
+                "username": member.username,
+                "password": member.password,
+                "name": member.name,
+                "email": member.email,
+                "phone": member.phone,
+                "admin": member.admin
+            }
             if member.password == login_member.password:
-                return {"message": "login success", "admin": member.admin}
+                return {"message": "login success", "member": results, "state": 1}
             else:
-                return {"message": "wrong password"}
+                return {"message": "wrong password", "state": 1}
         except:
-            return {"message": "wrong username"}
+            return {"message": "wrong username", "state": 1}
     else:
-        return {"message": "login fail"}
+        return {"message": "login fail", "state": 0}
 
 # forgot password
+
+
 @app.route('/forgot', methods=['POST'])
 def handle_forgot_password():
     if request.is_json:
         try:
             data = request.get_json()
             forgot_password = MemberModel(username=data['username'], password=data['password'],
-                                        name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
+                                          name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
             update = MemberModel.query.filter_by(
                 username=forgot_password.username).first()
             if update.email == forgot_password.email:
@@ -233,11 +243,22 @@ def handle_members():
                 data = request.get_json()
                 new_member = MemberModel(username=data['username'], password=data['password'],
                                          name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
+                check_member = MemberModel.query.filter_by(
+                    username=new_member.username).first()
+                results = [
+                    {
+                        "username": check_member.username,
+                        "password": check_member.password,
+                        "name": check_member.name,
+                        "email": check_member.email,
+                        "phone": check_member.phone,
+                        "admin": check_member.admin
+                    }]
+                return {"message": "member already exists"}
+            except:
                 db.session.add(new_member)
                 db.session.commit()
                 return {"message": "add member success"}
-            except:
-                return {"message": "add member error"}
         else:
             return {"message": "add member fail"}
     elif request.method == 'GET':
@@ -267,7 +288,6 @@ def handle_members_update():
                                         name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
             update = MemberModel.query.filter_by(
                 username=update_member.username).first()
-            update.password = update_member.password
             update.name = update_member.name
             update.email = update_member.email
             update.phone = update_member.phone
@@ -279,13 +299,33 @@ def handle_members_update():
     else:
         return {"message": "update member fail"}
 
+@app.route('/members/update/member', methods=['POST'])
+def handle_member_update():
+    if request.is_json:
+        try:
+            data = request.get_json()
+            update_member = MemberModel(username=data['username'], password=data['password'],
+                                        name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
+            update = MemberModel.query.filter_by(
+                username=update_member.username).first()
+            update.name = update_member.name
+            update.email = update_member.email
+            update.phone = update_member.phone
+            db.session.commit()
+            return {"message": "update member success"}
+        except:
+            return {"message": "update member fail"}
+    else:
+        return {"message": "update member fail"}
+
+
 @app.route('/members/update/password', methods=['POST'])
 def handle_members_update_password():
     if request.is_json:
         try:
             data = request.get_json()
             update_password = MemberModel(username=data['username'], password=data['password'],
-                                        name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
+                                          name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
             update = MemberModel.query.filter_by(
                 username=update_password.username).first()
             update.password = update_password.password
@@ -309,7 +349,7 @@ def handle_members_delete():
             db.session.commit()
             return {"message": "delete member success"}
         except:
-            return {"message": "delete member fail"}
+            return {"message": "delete member error"}
     else:
         return {"message": "delete member fail"}
 

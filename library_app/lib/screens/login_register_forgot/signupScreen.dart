@@ -24,12 +24,12 @@ class _SignUpPageState extends State<SignUpPage> {
   RegisterStream _registerStream;
 
   @override
-  void setState(fn) {
+  void initState() {
     _email = TextEditingController();
     _username = TextEditingController();
     _pass = TextEditingController();
     _registerStream = RegisterStream();
-    super.setState(fn);
+    super.initState();
   }
 
   @override
@@ -51,6 +51,8 @@ class _SignUpPageState extends State<SignUpPage> {
         listener: (context, state) {
           if (state is LoadingState) {
             SpinKitDoubleBounce(color: Colors.white);
+          } else if (state is SuccessState) {
+            _showDialog(context, state.title, state.message);
           } else if (state is ShowPasswordState) {
             hidePass = state.showPass;
           } else if (state is ErrorState) {
@@ -203,7 +205,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   icon:
                       Icon(hidePass ? Icons.visibility : Icons.visibility_off),
                   onPressed: () {
-                    BlocProvider.of(_registerKey.currentContext)
+                    BlocProvider.of<RegisterBloc>(_registerKey.currentContext)
                         .add(ShowPasswordEvent(showPass: hidePass));
                   },
                 ),
@@ -213,7 +215,7 @@ class _SignUpPageState extends State<SignUpPage> {
           SizedBox(height: screenHeight * 0.05),
           InkWell(
             onTap: () {
-              BlocProvider.of(_registerKey.currentContext).add(
+              BlocProvider.of<RegisterBloc>(_registerKey.currentContext).add(
                   PressButtonRegisterEvent(
                       username: _username.text.trim(),
                       passowrd: _pass.text.trim(),
@@ -239,7 +241,7 @@ class _SignUpPageState extends State<SignUpPage> {
           SizedBox(height: screenHeight * 0.02),
           InkWell(
             onTap: () {
-              BlocProvider.of(_registerKey.currentContext)
+              BlocProvider.of<RegisterBloc>(_registerKey.currentContext)
                   .add(PressButtonMoveLoginEvent(context: context));
             },
             child: Container(

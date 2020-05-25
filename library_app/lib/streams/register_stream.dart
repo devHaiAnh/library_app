@@ -34,30 +34,17 @@ class RegisterStream {
     }
   }
 
-  bool isValidInfo(
-      {String username,
-      String password,
-      String email}) {
+  bool isValidInfo({String username, String password, String email}) {
     bool status = true;
-
     if (!Validations.isValidUser(username)) {
-      _userController.sink.addError("This account is not valid");
       status = false;
-    } else {
-      _userController.sink.add("ok");
-    }
+    } else {}
     if (!Validations.isValidPass(password)) {
-      _passController.sink.addError("Password must be 4-8 characters long");
       status = false;
-    } else {
-      _passController.sink.add("ok");
-    }
-    if (!Validations.isValidPass(email)) {
-      _emailController.sink.addError("This email is not valid");
+    } else {}
+    if (!Validations.isValidEmail(email)) {
       status = false;
-    } else {
-      _emailController.sink.add("ok");
-    }
+    } else {}
     return status;
   }
 

@@ -4,7 +4,7 @@ class Validations {
   static Future<bool> isConnectedNetwork() async {
     bool status = false;
     try {
-      final result = await InternetAddress.lookup('unionist.pikatech.vn')
+      final result = await InternetAddress.lookup('github.com/devHaiAnh')
           .timeout(const Duration(seconds: 20));
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         status = true;

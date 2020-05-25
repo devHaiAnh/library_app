@@ -25,13 +25,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   ForgotPassStream _forgotPassStream;
 
   @override
-  void setState(fn) {
+  void initState() {
     _email = TextEditingController();
     _username = TextEditingController();
     _pass = TextEditingController();
     _passRetype = TextEditingController();
     _forgotPassStream = ForgotPassStream();
-    super.setState(fn);
+    super.initState();
   }
 
   @override
@@ -54,6 +54,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         listener: (context, state) {
           if (state is LoadingState) {
             SpinKitDoubleBounce(color: Colors.white);
+          } else if (state is SuccessState) {
+            _showDialog(context, state.title, state.message);
           } else if (state is ShowPasswordState) {
             hidePass = state.showPass;
           } else if (state is ShowPasswordRetypeState) {
@@ -215,8 +217,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   icon:
                       Icon(hidePass ? Icons.visibility : Icons.visibility_off),
                   onPressed: () {
-                    BlocProvider.of(_forgotKey.currentContext)
-                        .add(ShowPasswordState(showPass: hidePass));
+                    BlocProvider.of<ForgotPassBloc>(_forgotKey.currentContext)
+                        .add(ShowPasswordEvent(showPass: hidePass));
                   },
                 ),
               ),
@@ -227,7 +229,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             builder: (context, snapshot) => TextField(
               controller: _passRetype,
               onChanged: (a) {
-                _forgotPassStream.passRetypeChange(_pass.text.trim(),a.trim());
+                _forgotPassStream.passRetypeChange(_pass.text.trim(), a.trim());
               },
               obscureText: hidePassRetype,
               decoration: InputDecoration(
@@ -241,8 +243,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   icon: Icon(
                       hidePassRetype ? Icons.visibility : Icons.visibility_off),
                   onPressed: () {
-                    BlocProvider.of(_forgotKey.currentContext)
-                        .add(ShowPasswordRetypeState(showPass: hidePassRetype));
+                    BlocProvider.of<ForgotPassBloc>(_forgotKey.currentContext)
+                        .add(ShowPasswordRetypeEvent(showPass: hidePassRetype));
                   },
                 ),
               ),
@@ -251,7 +253,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           SizedBox(height: screenHeight * 0.05),
           InkWell(
             onTap: () {
-              BlocProvider.of(_forgotKey.currentContext).add(
+              BlocProvider.of<ForgotPassBloc>(_forgotKey.currentContext).add(
                   PressButtonForgotPassEvent(
                       username: _username.text.trim(),
                       passowrd: _pass.text.trim(),

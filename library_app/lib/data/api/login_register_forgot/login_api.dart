@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:library_app/configs/configsApp.dart';
+import 'package:library_app/data/model/login_model.dart';
 
-Future<int> postLogin({String username, String password}) async {
+Future<dynamic> postLogin({String username, String password}) async {
   try {
     Map<String, dynamic> body = {
       "username": username,
@@ -22,22 +23,17 @@ Future<int> postLogin({String username, String password}) async {
         headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
-      if (data['message'] == 'login success') {
-        ConfigsApp.admin = data['admin'];
-        return 1;
-      } else if (data['message'] == 'wrong password') {
-        return 2;
-      } else if (data['message'] == 'wrong username') {
-        return 3;
+      if (data['state'] == 1) {
+        return LoginModel.fromJson(data);
       } else {
-        return 0;
+        return null;
       }
     } else {
       print("api error");
-      return 0;
+      return null;
     }
   } catch (e) {
     print("error: ${e.toString()}");
-    return 0;
+    return null;
   }
 }

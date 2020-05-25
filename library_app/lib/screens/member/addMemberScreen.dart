@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:library_app/blocs/member_bloc/member_bloc.dart';
+import 'package:library_app/streams/addMember_stream.dart';
 
 class AddMemberPage extends StatefulWidget {
   @override
@@ -13,6 +17,9 @@ class _AddMemberPageState extends State<AddMemberPage> {
   TextEditingController _phone;
   TextEditingController _username;
   TextEditingController _password;
+
+  GlobalKey addMemberKey = GlobalKey();
+  AddMemberStream addMemberStream;
   @override
   void initState() {
     _name = TextEditingController();
@@ -20,7 +27,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
     _phone = TextEditingController();
     _username = TextEditingController();
     _password = TextEditingController();
-    // typeAdmin = widget.member.type;
+    addMemberStream = AddMemberStream();
     super.initState();
   }
 
@@ -31,6 +38,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
     _phone.dispose();
     _username.dispose();
     _password.dispose();
+    addMemberStream.dispose();
     super.dispose();
   }
 
@@ -38,39 +46,62 @@ class _AddMemberPageState extends State<AddMemberPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          // background
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              color: Colors.grey[100],
-            ),
-          ),
-          // appbar
-          Positioned(
-            top: 0,
-            left: screenWidth * 0.05,
-            right: screenWidth * 0.05,
-            child: SafeArea(
-              top: true,
-              left: true,
-              right: true,
-              child: appBar(screenHeight, context, screenWidth),
-            ),
-          ),
-          // contain
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: containPage(screenHeight, screenWidth),
-          ),
-        ],
+    return BlocProvider(
+      create: (context) => MemberBloc(),
+      child: BlocListener<MemberBloc, MemberState>(
+        listener: (context, state) {
+          if (state is LoadingState) {
+            SpinKitDoubleBounce(color: Colors.white);
+          } else if (state is SuccessState) {
+            _showDialog(context, state.title, state.message);
+          } else if (state is ShowPasswordOldState) {
+            hidePass = state.showPass;
+          } else if (state is CheckAdminState) {
+            typeAdmin = state.admin;
+          } else if (state is ErrorState) {
+            _showDialog(context, state.errorTitle, state.errorMessage);
+          }
+        },
+        child: BlocBuilder<MemberBloc, MemberState>(
+          builder: (context, state) {
+            return Scaffold(
+              key: addMemberKey,
+              body: Stack(
+                children: <Widget>[
+                  // background
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      color: Colors.grey[100],
+                    ),
+                  ),
+                  // appbar
+                  Positioned(
+                    top: 0,
+                    left: screenWidth * 0.05,
+                    right: screenWidth * 0.05,
+                    child: SafeArea(
+                      top: true,
+                      left: true,
+                      right: true,
+                      child: appBar(screenHeight, context, screenWidth),
+                    ),
+                  ),
+                  // contain
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: containPage(screenHeight, screenWidth),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -132,7 +163,15 @@ class _AddMemberPageState extends State<AddMemberPage> {
           ),
           InkWell(
             onTap: () {
-              Navigator.pop(context);
+              BlocProvider.of<MemberBloc>(addMemberKey.currentContext).add(
+                  PressButtonAddEvent(
+                      username: _username.text.trim(),
+                      password: _password.text.trim(),
+                      name: _name.text.trim(),
+                      email: _email.text.trim(),
+                      phone: _phone.text.trim(),
+                      admin: typeAdmin,
+                      context: context));
             },
             child: Container(
                 width: screenWidth * 0.08,
@@ -188,112 +227,148 @@ class _AddMemberPageState extends State<AddMemberPage> {
 
   Widget data(double screenWidth, double screenHeight) {
     return Container(
-      // color: Colors.red,
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: screenHeight * 0.1),
-          TextField(
-            controller: _name,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              labelText: "Full name",
-              prefixIcon: Icon(Icons.assignment),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.purple),
+          StreamBuilder(
+            stream: addMemberStream.nameStream,
+            builder: (context, snapshot) => TextField(
+              controller: _name,
+              onChanged: (a) {
+                addMemberStream.nameChange(a.trim());
+              },
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: "Full name",
+                errorText: snapshot.hasError ? snapshot.error : null,
+                prefixIcon: Icon(Icons.assignment),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.purple),
+                ),
               ),
             ),
           ),
           SizedBox(height: screenHeight * 0.01),
-          TextField(
-            controller: _email,
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              labelText: "Email",
-              prefixIcon: Icon(Icons.email),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.purple),
-              ),
-            ),
-          ),
-          SizedBox(height: screenHeight * 0.01),
-          TextField(
-            controller: _phone,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              labelText: "Phone",
-              prefixIcon: Icon(Icons.phone),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.purple),
+          StreamBuilder(
+            stream: addMemberStream.phoneStream,
+            builder: (context, snapshot) => TextField(
+              controller: _phone,
+              onChanged: (a) {
+                addMemberStream.phoneChange(a.trim());
+              },
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                labelText: "Phone",
+                errorText: snapshot.hasError ? snapshot.error : null,
+                prefixIcon: Icon(Icons.phone),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.purple),
+                ),
               ),
             ),
           ),
           SizedBox(height: screenHeight * 0.02),
-          TextField(
-            controller: _username,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              labelText: "Username",
-              prefixIcon: Icon(Icons.person),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.purple),
+          StreamBuilder(
+            stream: addMemberStream.userStream,
+            builder: (context, snapshot) => TextField(
+              controller: _username,
+              onChanged: (a) {
+                addMemberStream.userChange(a.trim());
+              },
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                labelText: "Username",
+                errorText: snapshot.hasError ? snapshot.error : null,
+                prefixIcon: Icon(Icons.person),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.purple),
+                ),
               ),
             ),
           ),
           SizedBox(height: screenHeight * 0.02),
-          TextField(
-            controller: _password,
-            keyboardType: TextInputType.phone,
-            obscureText: hidePass,
-            decoration: InputDecoration(
+          StreamBuilder(
+            stream: addMemberStream.passStream,
+            builder: (context, snapshot) => TextField(
+              controller: _password,
+              onChanged: (a) {
+                addMemberStream.passChange(a.trim());
+              },
+              keyboardType: TextInputType.text,
+              obscureText: hidePass,
+              decoration: InputDecoration(
                 labelText: "Password",
+                errorText: snapshot.hasError ? snapshot.error : null,
                 prefixIcon: Icon(Icons.lock),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.purple),
                 ),
                 suffixIcon: IconButton(
-                    icon: Icon(
-                        hidePass ? Icons.visibility : Icons.visibility_off),
-                    onPressed: () {
-                      setState(() {
-                        hidePass = !hidePass;
-                      });
-                    })),
+                  icon:
+                      Icon(hidePass ? Icons.visibility : Icons.visibility_off),
+                  onPressed: () {
+                    BlocProvider.of<MemberBloc>(addMemberKey.currentContext)
+                        .add(
+                      ShowPasswordOldEvent(showPass: hidePass),
+                    );
+                  },
+                ),
+              ),
+            ),
           ),
           SizedBox(height: screenHeight * 0.02),
           InkWell(
             onTap: () {
-              setState(() {
-                typeAdmin = !typeAdmin;
-              });
+              BlocProvider.of<MemberBloc>(addMemberKey.currentContext)
+                  .add(CheckAdminEvent(admin: typeAdmin));
             },
             child: Container(
-                height: screenHeight * 0.05,
-                child: Row(
-                  // mainAxisAlignment:
-                  //     MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Admin",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.purple[400],
-                      ),
+              height: screenHeight * 0.05,
+              child: Row(
+                // mainAxisAlignment:
+                //     MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Admin",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.purple[400],
                     ),
-                    Container(
-                      width: screenHeight * 0.04,
-                      height: screenHeight * 0.04,
-                      child: Icon(
-                        typeAdmin
-                            ? Icons.radio_button_checked
-                            : Icons.radio_button_unchecked,
-                        color: Colors.purple[400],
-                      ),
-                    )
-                  ],
-                )),
+                  ),
+                  Container(
+                    width: screenHeight * 0.04,
+                    height: screenHeight * 0.04,
+                    child: Icon(
+                      typeAdmin
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_unchecked,
+                      color: Colors.purple[400],
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
+        ],
+      ),
+    );
+  }
+
+  _showDialog(BuildContext mainContext, String title, String message) async {
+    await showDialog(
+      context: mainContext,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
         ],
       ),
     );

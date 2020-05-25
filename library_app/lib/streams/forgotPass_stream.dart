@@ -45,39 +45,27 @@ class ForgotPassStream {
   }
 
   bool isValidInfo(
-      {String username, String password, String passwordRetype, String email}) {
+      {String username, String password, String repassword, String email}) {
     bool status = true;
-
     if (!Validations.isValidUser(username)) {
-      _userController.sink.addError("This account is not valid");
       status = false;
-    } else {
-      _userController.sink.add("ok");
-    }
+    } else {}
     if (!Validations.isValidPass(password)) {
-      _passController.sink.addError("Password must be 4-8 characters long");
       status = false;
-    } else {
-      _passController.sink.add("ok");
-    }
-    if (!Validations.isValidConfirmPass(password, passwordRetype)) {
-      _passRetypeController.sink.addError("Retype password does not match");
+    } else {}
+    if (!Validations.isValidConfirmPass(password, repassword)) {
       status = false;
-    } else {
-      _passRetypeController.sink.add("Ok");
-    }
+    } else {}
     if (!Validations.isValidEmail(email)) {
-      _emailController.sink.addError("This email is not valid");
       status = false;
-    } else {
-      _emailController.sink.add("ok");
-    }
+    } else {}
     return status;
   }
 
   void dispose() {
     _userController.close();
     _passController.close();
+    _passRetypeController.close();
     _emailController.close();
   }
 }

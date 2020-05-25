@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:library_app/blocs/login_bloc/login_bloc.dart';
+import 'package:library_app/data/model/login_model.dart';
 import 'package:library_app/screens/widget/imageLogin.dart';
 import 'package:library_app/streams/login_stream.dart';
 
@@ -22,12 +23,14 @@ class _SignInPageState extends State<SignInPage> {
   GlobalKey loginKey = GlobalKey();
   LoginStream loginStream;
 
+  Member model;
+
   @override
-  void setState(fn) {
+  void initState() {
     _username = TextEditingController();
     _pass = TextEditingController();
     loginStream = LoginStream();
-    super.setState(fn);
+    super.initState();
   }
 
   @override
@@ -172,7 +175,7 @@ class _SignInPageState extends State<SignInPage> {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    BlocProvider.of(loginKey.currentContext)
+                    BlocProvider.of<LoginBloc>(loginKey.currentContext)
                         .add(SavePasswordEvent(savePass: savePass));
                   },
                   child: Container(
@@ -203,7 +206,7 @@ class _SignInPageState extends State<SignInPage> {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    BlocProvider.of(loginKey.currentContext)
+                    BlocProvider.of<LoginBloc>(loginKey.currentContext)
                         .add(PressButtonMoveForgotEvent(context: context));
                   },
                   child: Container(
@@ -221,7 +224,7 @@ class _SignInPageState extends State<SignInPage> {
           SizedBox(height: screenHeight * 0.04),
           InkWell(
             onTap: () {
-              BlocProvider.of(loginKey.currentContext).add(
+              BlocProvider.of<LoginBloc>(loginKey.currentContext).add(
                   PressButtonLoginEvent(
                       username: _username.text.trim(),
                       passowrd: _pass.text.trim(),
@@ -246,7 +249,7 @@ class _SignInPageState extends State<SignInPage> {
           SizedBox(height: screenHeight * 0.02),
           InkWell(
             onTap: () {
-              BlocProvider.of(loginKey.currentContext)
+              BlocProvider.of<LoginBloc>(loginKey.currentContext)
                   .add(PressButtonMoveRegisterEvent(context: context));
             },
             child: Container(

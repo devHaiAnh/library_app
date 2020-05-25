@@ -1,32 +1,45 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:library_app/screens/admin/memberListScreen.dart';
-import 'package:library_app/screens/admin/orderListScreen.dart';
-import 'package:library_app/screens/book/bookMarkScreen.dart';
+import 'package:library_app/configs/configsApp.dart';
+import 'package:library_app/data/model/login_model.dart';
+import 'package:library_app/screens/bookmark/bookMarkScreen.dart';
+import 'package:library_app/screens/cart/cartScreen.dart';
 import 'package:library_app/screens/home/homeScreen.dart';
-import 'package:library_app/screens/member/cartScreen.dart';
+import 'package:library_app/screens/member/memberListScreen.dart';
+import 'package:library_app/screens/payment_order/orderListScreen.dart';
 
 class TotalPage extends StatefulWidget {
+  final Member member;
+  TotalPage({Key key, @required this.member}) : super(key: key);
   @override
   _TotalPageState createState() => _TotalPageState();
 }
 
 class _TotalPageState extends State<TotalPage> {
-  final drawerHeader =
-      "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80";
   GlobalKey _bottomNavigationKey = GlobalKey();
   GlobalKey _totalKey = GlobalKey();
 
-  bool admin = true;
+  bool admin;
 
-  final HomePage _homePage = HomePage();
-  final BookMarkPage _bookMarkPage = BookMarkPage();
-  final CartPage _cartPage = CartPage();
+  HomePage _homePage;
+  BookMarkPage _bookMarkPage;
+  CartPage _cartPage;
+  MemberListPage _memberListPage;
+  OrderListPage _orderListPage;
 
-  final MemberListPage _memberListPage = MemberListPage();
-  final OrderListPage _orderListPage = OrderListPage();
+  Widget _home;
 
-  Widget _home = HomePage();
+  @override
+  void initState() {
+    admin = widget.member.admin;
+    _homePage = HomePage(model: widget.member);
+    _bookMarkPage = BookMarkPage();
+    _cartPage = CartPage();
+    _memberListPage = MemberListPage();
+    _orderListPage = OrderListPage();
+    _home = HomePage(model: widget.member);
+    super.initState();
+  }
 
   Widget _showChooserMember(int page) {
     switch (page) {

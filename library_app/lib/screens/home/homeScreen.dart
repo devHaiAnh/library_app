@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/data/model/member.dart';
-import 'package:library_app/screens/book/bookScreen.dart';
-import 'package:library_app/screens/home/bookListHome.dart';
-import 'package:library_app/screens/home/categoryBookHome.dart';
-import 'package:library_app/screens/home/categoryListHome.dart';
-import 'package:library_app/screens/member/changePasswordScreen.dart';
-import 'package:library_app/screens/member/editMemberScreen.dart';
-import 'package:library_app/screens/member/paymentHistoryScreen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:library_app/blocs/home_bloc/home_bloc.dart';
+import 'package:library_app/data/model/category.dart';
+import 'package:library_app/data/model/login_model.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
-import 'package:library_app/screens/widget/itemBookHistory.dart';
-import 'package:library_app/screens/widget/itemBookHome.dart';
 import 'package:library_app/screens/widget/itemCategoryHome.dart';
 import 'package:library_app/screens/widget/itemMember.dart';
-import 'package:library_app/screens/widget/qrScreen.dart';
 
 class HomePage extends StatefulWidget {
+  final Member model;
+  HomePage({Key key, @required this.model}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -28,6 +23,9 @@ class _HomePageState extends State<HomePage> {
   bool hideOldPass = true;
   bool hideNewPass = true;
   bool hideRetypePass = true;
+
+  GlobalKey homeKey = GlobalKey();
+
   @override
   void initState() {
     _oldPassword = TextEditingController();
@@ -48,37 +46,48 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          // background
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              color: Colors.grey[100],
-            ),
-          ),
-          // appbar
-          Positioned(
-              top: 0,
-              left: screenWidth * 0.05,
-              right: screenWidth * 0.05,
-              child: AppBarApp(
-                buttonBack: 0,
-                width: screenWidth,
-                height: screenHeight,
-                title: "Home",
-              )),
-          // contain page
-          Positioned(
-            top: screenHeight * 0.12,
-            bottom: screenHeight * 0.005,
-            child: containPage(screenHeight, screenWidth, context),
-          )
-        ],
+    return BlocProvider(
+      create: (context) => HomeBloc(),
+      child: BlocListener<HomeBloc, HomeState>(
+        listener: (context, state) {},
+        child: BlocBuilder<HomeBloc, HomeState>(
+          builder: (context, state) {
+            return Scaffold(
+              key: homeKey,
+              body: Stack(
+                children: <Widget>[
+                  // background
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      color: Colors.grey[100],
+                    ),
+                  ),
+                  // appbar
+                  Positioned(
+                      top: 0,
+                      left: screenWidth * 0.05,
+                      right: screenWidth * 0.05,
+                      child: AppBarApp(
+                        buttonBack: 0,
+                        width: screenWidth,
+                        height: screenHeight,
+                        title: "Home",
+                      )),
+                  // contain page
+                  Positioned(
+                    top: screenHeight * 0.12,
+                    bottom: screenHeight * 0.005,
+                    child: containPage(screenHeight, screenWidth, context),
+                  )
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -134,10 +143,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PaymentHistoryPage()));
+                    BlocProvider.of<HomeBloc>(homeKey.currentContext)
+                        .add(PressBtnMoveMyBookAllEvent(context: context));
                   },
                   child: Text(
                     "See all",
@@ -157,13 +164,8 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => QRPage(
-                                  data: "data",
-                                  registed: true,
-                                )));
+                    BlocProvider.of<HomeBloc>(homeKey.currentContext)
+                        .add(PressBtnMoveMyBookEvent(context: context));
                   },
                   // child: ItemBookHistory(
                   //   width: screenWidth,
@@ -201,11 +203,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                BookListHomePage(title: "New")));
+                    BlocProvider.of<HomeBloc>(homeKey.currentContext)
+                        .add(PressBtnMoveNewBookAllEvent(context: context));
                   },
                   child: Text(
                     "See all",
@@ -247,12 +246,8 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
                         onTap: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => BookPage(
-                          //               book: bookList[index],
-                          //             )));
+                          BlocProvider.of<HomeBloc>(homeKey.currentContext)
+                              .add(PressBtnMoveNewBookEvent(context: context));
                         },
                         // child: ItemBookHome(
                         //   width: screenWidth,
@@ -293,11 +288,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                BookListHomePage(title: "Trending")));
+                    BlocProvider.of<HomeBloc>(homeKey.currentContext)
+                        .add(PressBtnMoveTrendingAllEvent(context: context));
                   },
                   child: Text(
                     "See all",
@@ -339,12 +331,8 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
                         onTap: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => BookPage(
-                          //               book: bookList[index],
-                          //             )));
+                          BlocProvider.of<HomeBloc>(homeKey.currentContext)
+                              .add(PressBtnMoveTrendingEvent(context: context));
                         },
                         // child: ItemBookHome(
                         //   width: screenWidth,
@@ -385,10 +373,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CategoryListHomePage()));
+                    BlocProvider.of<HomeBloc>(homeKey.currentContext)
+                        .add(PressBtnMoveCategoryAllEvent(context: context));
                   },
                   child: Text(
                     "See all",
@@ -404,20 +390,18 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.only(left: screenWidth * 0.05),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 0,
+              itemCount: categoryList.length,
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CategoryBookHomePage()));
+                    BlocProvider.of<HomeBloc>(homeKey.currentContext)
+                        .add(PressBtnMoveCategoryEvent(context: context));
                   },
-                  // child: ItemCategoryHome(
-                  //   width: screenWidth,
-                  //   height: screenHeight,
-                  //   itemCategoryBook: categoryList[index],
-                  // ),
+                  child: ItemCategoryHome(
+                    width: screenWidth,
+                    height: screenHeight,
+                    itemCategoryBook: categoryList[index],
+                  ),
                 );
               },
             ),
@@ -443,7 +427,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "hi Ảnh Hai",
+                  "Hi ${widget.model.username}",
                   style: TextStyle(fontSize: 25, color: Colors.purple),
                 ),
                 InkWell(
@@ -560,7 +544,8 @@ class _HomePageState extends State<HomePage> {
                   // close
                   InkWell(
                     onTap: () {
-                      Navigator.pop(context);
+                      BlocProvider.of<HomeBloc>(homeKey.currentContext)
+                          .add(PressBtnBackEvent(context: context));
                     },
                     child: Icon(Icons.close),
                   ),
@@ -576,13 +561,13 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   // contain
                   Expanded(
-                      flex: 9,
-                      child: ItemMember(
+                    flex: 9,
+                    // child: Container(),
+                    child: ItemMember(
                         width: screenWidth,
                         height: screenHeight,
-                        itemMember: memberList[1],
-                        state: true,
-                      )),
+                        itemMember: widget.model),
+                  ),
                   SizedBox(height: screenHeight * 0.01),
                   // button
                   Expanded(
@@ -593,12 +578,11 @@ class _HomePageState extends State<HomePage> {
                             flex: 1,
                             child: InkWell(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => EditMemberPage(
-                                              member: memberList[1],
-                                            )));
+                                BlocProvider.of<HomeBloc>(
+                                        homeKey.currentContext)
+                                    .add(PressBtnMoveEditEvent(
+                                        member: widget.model,
+                                        context: context));
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -632,12 +616,10 @@ class _HomePageState extends State<HomePage> {
                             flex: 1,
                             child: InkWell(
                               onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ChangePasswordPage()));
+                                BlocProvider.of<HomeBloc>(
+                                        homeKey.currentContext)
+                                    .add(PressBtnMoveChangePassEvent(
+                                        context: context));
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -700,7 +682,8 @@ class _HomePageState extends State<HomePage> {
                         alignment: Alignment.centerLeft,
                         child: InkWell(
                           onTap: () {
-                            Navigator.pop(context);
+                            BlocProvider.of<HomeBloc>(homeKey.currentContext)
+                                .add(PressBtnBackEvent(context: context));
                           },
                           child: Icon(Icons.close),
                         ),
@@ -733,7 +716,10 @@ class _HomePageState extends State<HomePage> {
                                   flex: 1,
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.pop(context);
+                                      BlocProvider.of<HomeBloc>(
+                                              homeKey.currentContext)
+                                          .add(PressBtnBackEvent(
+                                              context: context));
                                     },
                                     child: Container(
                                       height: screenHeight * 0.065,
@@ -770,23 +756,10 @@ class _HomePageState extends State<HomePage> {
                                   flex: 1,
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.pop(context);
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder:
-                                      //             (context) =>
-                                      //                 QRPage(
-                                      //                   data: widget
-                                      //                           .book
-                                      //                           .name +
-                                      //                       widget
-                                      //                           .book
-                                      //                           .author +
-                                      //                       "Read Rental",
-                                      //                   registed:
-                                      //                       false,
-                                      //                 )));
+                                      BlocProvider.of<HomeBloc>(
+                                              homeKey.currentContext)
+                                          .add(PressBtnLogoutEvent(
+                                              context: context));
                                     },
                                     child: Container(
                                       height: screenHeight * 0.065,

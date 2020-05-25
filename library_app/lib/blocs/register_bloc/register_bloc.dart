@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:library_app/data/api/register_api.dart';
+import 'package:library_app/data/api/login_register_forgot/register_api.dart';
 import 'package:library_app/screens/login_register_forgot/signinScreen.dart';
 import 'package:library_app/streams/register_stream.dart';
 
@@ -21,10 +21,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     try {
       if (event is PressButtonRegisterEvent) {
         yield LoadingState();
-        if (event.registerStream.isValidInfo(
-            username: event.username,
-            password: event.passowrd,
-            email: event.email)) {
+        // if (event.registerStream.isValidInfo(
+        //     username: event.username,
+        //     password: event.passowrd,
+        //     email: event.email)) {
           final result = await postRegister(
               username: event.username,
               password: event.passowrd,
@@ -32,12 +32,18 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           if (result == 1) {
             yield SuccessState(
                 title: "Congratulations", message: "SignUp Success");
-            Navigator.pop(event.context);
+          } else if (result == 2) {
+            yield ErrorState(
+                errorTitle: "Warning!!!", errorMessage: "Member already exists");
           } else {
             yield ErrorState(
                 errorTitle: "Warning!!!", errorMessage: "Error Sever");
           }
-        }
+        // } else {
+        //   yield ErrorState(
+        //       errorTitle: "Warning!!!",
+        //       errorMessage: "The data entered is not in the correct format");
+        // }
       }
       if (event is PressButtonMoveLoginEvent) {
         yield LoadingState();
