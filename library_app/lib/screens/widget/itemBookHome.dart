@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/data/model/book.dart';
+import 'package:library_app/data/model/books_model.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ItemBookHome extends StatefulWidget {
@@ -33,13 +33,21 @@ class _ItemBookHomeState extends State<ItemBookHome> {
                           widget.itemBook.image,
                         ),
                         fit: BoxFit.cover),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 6,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
                     borderRadius: BorderRadius.circular(16)),
               ),
               SizedBox(height: widget.height * 0.01),
               // name
               Text(
                 widget.itemBook.name,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
               ),
               // author
               Text(widget.itemBook.author, style: TextStyle(fontSize: 10)),
@@ -48,7 +56,7 @@ class _ItemBookHomeState extends State<ItemBookHome> {
                 padding: EdgeInsets.only(top: widget.height * 0.005),
                 height: widget.height * 0.025,
                 child: SmoothStarRating(
-                  rating: widget.itemBook.star,
+                  rating: widget.itemBook.evaluateBook,
                   size: 12,
                   filledIconData: Icons.star,
                   halfFilledIconData: Icons.star_half,

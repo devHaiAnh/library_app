@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/data/model/book.dart';
-import 'package:library_app/screens/widget/qrScreen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:library_app/blocs/books_bloc/books_bloc.dart';
+import 'package:library_app/data/model/books_model.dart';
 
 class BookPage extends StatefulWidget {
-  // HomePage({Key key, this.title}) : super(key: key);
-
-  // final String title;
   BookPage({Key key, this.book}) : super(key: key);
-  // final String image;
   final Book book;
 
   @override
@@ -16,9 +13,14 @@ class BookPage extends StatefulWidget {
 
 class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
   TabController _controller;
+  int count = 1;
+  bool bookmark;
+
+  GlobalKey bookKey = GlobalKey();
   @override
   void initState() {
     super.initState();
+    // count = 1;
     _controller = TabController(length: 2, vsync: this);
   }
 
@@ -32,85 +34,113 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          // background
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              color: Colors.grey[100],
-            ),
-          ),
-          // appbar
-          Positioned(
-            top: 0,
-            left: screenWidth * 0.05,
-            right: screenWidth * 0.05,
-            child: SafeArea(
-              top: true,
-              left: true,
-              right: true,
-              child: Container(
-                height: screenHeight * 0.08,
-                child: Row(
-                  children: <Widget>[
-                    InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          width: screenWidth * 0.08,
-                          height: screenWidth * 0.08,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 1,
-                                blurRadius: 6,
-                                offset:
-                                    Offset(0, 3), // changes position of shadow
-                              ),
-                            ],
-                            borderRadius: BorderRadius.circular(24),
+    return BlocProvider(
+      create: (context) => BooksBloc(),
+      child: BlocListener<BooksBloc, BooksState>(
+        listener: (context, state) {
+          if (state is ErrorState) {
+            _showDialog(context, state.errorTitle, state.errorMessage);
+          } else if (state is PressBookmarkState) {
+            bookmark = state.bookmark;
+          }
+        },
+        child: BlocBuilder<BooksBloc, BooksState>(
+          builder: (context, state) {
+            return Scaffold(
+              key: bookKey,
+              body: Stack(
+                children: <Widget>[
+                  // background
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      color: Colors.grey[100],
+                    ),
+                  ),
+                  // appbar
+                  Positioned(
+                    top: 0,
+                    left: screenWidth * 0.05,
+                    right: screenWidth * 0.05,
+                    child: SafeArea(
+                      top: true,
+                      left: true,
+                      right: true,
+                      child: Container(
+                        height: screenHeight * 0.08,
+                        child: Row(
+                          children: <Widget>[
+                            InkWell(
+                                onTap: () {
+                                  BlocProvider.of<BooksBloc>(
+                                          bookKey.currentContext)
+                                      .add(PressButtonBackEvent(
+                                          context: context));
+                                },
+                                child: Container(
+                                  width: screenWidth * 0.08,
+                                  height: screenWidth * 0.08,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 1,
+                                        blurRadius: 6,
+                                        offset: Offset(
+                                            0, 3), // changes position of shadow
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: Icon(
+                                    Icons.arrow_back_ios,
+                                    size: 18,
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  // contain
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: containPage(screenHeight, screenWidth, context),
+                  ),
+                  // image book
+                  Positioned(
+                    top: screenHeight * 0.1,
+                    left: screenWidth * 0.35,
+                    right: screenWidth * 0.35,
+                    child: Container(
+                      height: screenHeight * 0.25,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(widget.book.image),
+                          fit: BoxFit.cover,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 6,
+                            offset: Offset(0, 3), // changes position of shadow
                           ),
-                          child: Icon(
-                            Icons.arrow_back_ios,
-                            size: 18,
-                          ),
-                        )),
-                  ],
-                ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ),
-          ),
-          // contain
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: containPage(screenHeight, screenWidth, context),
-          ),
-          // image book
-          Positioned(
-            top: screenHeight * 0.1,
-            left: screenWidth * 0.35,
-            right: screenWidth * 0.35,
-            child: Container(
-              height: screenHeight * 0.25,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(widget.book.image),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          )
-        ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -138,7 +168,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
       child: Column(
         children: <Widget>[
           // bookmark
-          bookmark(),
+          bookMark(),
           // contain
           contain(screenWidth, screenHeight, context),
         ],
@@ -199,181 +229,181 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
       BuildContext context, double screenHeight, double screenWidth) {
     return InkWell(
       onTap: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ), //this right here
-              child: Container(
-                height: screenHeight * 0.45,
-                padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.05,
-                    vertical: screenHeight * 0.03),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Icon(Icons.close),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 9,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 9,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Container(
-                                    height: screenHeight * 0.05,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        countBook(screenWidth),
-                                        Text(
-                                          "\$ 77",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.purple,
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
-                                    )),
-                                Container(
-                                    height: screenHeight * 0.05,
-                                    width: screenWidth,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(
-                                          "Transport Fee:",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.purple[300]),
-                                        ),
-                                        Text(
-                                          "\$ 5",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.purple,
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
-                                    )),
-                                Container(
-                                    height: screenHeight * 0.05,
-                                    width: screenWidth,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(
-                                          "VAT (10%): ",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.purple[300]),
-                                        ),
-                                        Text(
-                                          "\$ 18",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.purple,
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
-                                    )),
-                                Divider(thickness: 1),
-                                Container(
-                                    height: screenHeight * 0.05,
-                                    width: screenWidth,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(
-                                          "Total: ",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.purple[300]),
-                                        ),
-                                        Text(
-                                          "\$ 200",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.purple,
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
-                                    )),
-                              ],
-                            ),
-                          ),
-                          // button
-                          Expanded(
-                            flex: 2,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => QRPage(
-                                              data: widget.book.name +
-                                                  widget.book.author +
-                                                  "Buy Book",
-                                              registed: false,
-                                            )));
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.purple[400],
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 1,
-                                        blurRadius: 6,
-                                        offset: Offset(
-                                            0, 3), // changes position of shadow
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(24)),
-                                child: Center(
-                                  child: Text(
-                                    "Confirm",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
-          },
-        );
+        // BlocProvider.of<BooksBloc>(bookKey.currentContext).add();
+        // showDialog(
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return Dialog(
+        //       shape: RoundedRectangleBorder(
+        //         borderRadius: BorderRadius.circular(24),
+        //       ), //this right here
+        //       child: Container(
+        //         height: screenHeight * 0.45,
+        //         padding: EdgeInsets.symmetric(
+        //             horizontal: screenWidth * 0.05,
+        //             vertical: screenHeight * 0.03),
+        //         child: Column(
+        //           mainAxisAlignment: MainAxisAlignment.center,
+        //           crossAxisAlignment: CrossAxisAlignment.start,
+        //           children: [
+        //             Expanded(
+        //               flex: 1,
+        //               child: Align(
+        //                 alignment: Alignment.centerLeft,
+        //                 child: InkWell(
+        //                   onTap: () {
+        //                     BlocProvider.of<BooksBloc>(bookKey.currentContext)
+        //                         .add(PressButtonBackEvent(context: context));
+        //                   },
+        //                   child: Icon(Icons.close),
+        //                 ),
+        //               ),
+        //             ),
+        //             Expanded(
+        //               flex: 9,
+        //               child: Column(
+        //                 crossAxisAlignment: CrossAxisAlignment.start,
+        //                 children: <Widget>[
+        //                   Expanded(
+        //                     flex: 9,
+        //                     child: Column(
+        //                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //                       crossAxisAlignment: CrossAxisAlignment.start,
+        //                       children: <Widget>[
+        //                         Container(
+        //                             height: screenHeight * 0.05,
+        //                             child: Row(
+        //                               mainAxisAlignment:
+        //                                   MainAxisAlignment.spaceBetween,
+        //                               children: <Widget>[
+        //                                 countBook(screenWidth),
+        //                                 Text(
+        //                                   "\$ ${(cost * count).toStringAsFixed(2)}",
+        //                                   style: TextStyle(
+        //                                       fontSize: 18,
+        //                                       color: Colors.purple,
+        //                                       fontWeight: FontWeight.bold),
+        //                                 )
+        //                               ],
+        //                             )),
+        //                         Container(
+        //                             height: screenHeight * 0.05,
+        //                             width: screenWidth,
+        //                             child: Row(
+        //                               mainAxisAlignment:
+        //                                   MainAxisAlignment.spaceBetween,
+        //                               children: <Widget>[
+        //                                 Text(
+        //                                   "Transport Fee:",
+        //                                   style: TextStyle(
+        //                                       fontSize: 15,
+        //                                       color: Colors.purple[300]),
+        //                                 ),
+        //                                 Text(
+        //                                   "\$ 5",
+        //                                   style: TextStyle(
+        //                                       fontSize: 20,
+        //                                       color: Colors.purple,
+        //                                       fontWeight: FontWeight.bold),
+        //                                 )
+        //                               ],
+        //                             )),
+        //                         Container(
+        //                             height: screenHeight * 0.05,
+        //                             width: screenWidth,
+        //                             child: Row(
+        //                               mainAxisAlignment:
+        //                                   MainAxisAlignment.spaceBetween,
+        //                               children: <Widget>[
+        //                                 Text(
+        //                                   "VAT (10%): ",
+        //                                   style: TextStyle(
+        //                                       fontSize: 15,
+        //                                       color: Colors.purple[300]),
+        //                                 ),
+        //                                 Text(
+        //                                   "\$ ${(cost * count * 10 / 100).toStringAsFixed(2)}",
+        //                                   style: TextStyle(
+        //                                       fontSize: 20,
+        //                                       color: Colors.purple,
+        //                                       fontWeight: FontWeight.bold),
+        //                                 )
+        //                               ],
+        //                             )),
+        //                         Divider(thickness: 1),
+        //                         Container(
+        //                             height: screenHeight * 0.05,
+        //                             width: screenWidth,
+        //                             child: Row(
+        //                               mainAxisAlignment:
+        //                                   MainAxisAlignment.spaceBetween,
+        //                               children: <Widget>[
+        //                                 Text(
+        //                                   "Total: ",
+        //                                   style: TextStyle(
+        //                                       fontSize: 15,
+        //                                       color: Colors.purple[300]),
+        //                                 ),
+        //                                 Text(
+        //                                   "\$ 200",
+        //                                   style: TextStyle(
+        //                                       fontSize: 20,
+        //                                       color: Colors.purple,
+        //                                       fontWeight: FontWeight.bold),
+        //                                 )
+        //                               ],
+        //                             )),
+        //                       ],
+        //                     ),
+        //                   ),
+        //                   // button
+        //                   Expanded(
+        //                     flex: 2,
+        //                     child: InkWell(
+        //                       onTap: () {
+        //                         BlocProvider.of<BooksBloc>(
+        //                                 bookKey.currentContext)
+        //                             .add(PressButtonQREvent(
+        //                                 context: context,
+        //                                 data: widget.book.name +
+        //                                     widget.book.author +
+        //                                     "Buy Book",
+        //                                 registed: false));
+        //                       },
+        //                       child: Container(
+        //                         decoration: BoxDecoration(
+        //                             color: Colors.purple[400],
+        //                             boxShadow: [
+        //                               BoxShadow(
+        //                                 color: Colors.grey.withOpacity(0.5),
+        //                                 spreadRadius: 1,
+        //                                 blurRadius: 6,
+        //                                 offset: Offset(
+        //                                     0, 3), // changes position of shadow
+        //                               ),
+        //                             ],
+        //                             borderRadius: BorderRadius.circular(24)),
+        //                         child: Center(
+        //                           child: Text(
+        //                             "Confirm",
+        //                             style: TextStyle(
+        //                                 fontSize: 15,
+        //                                 color: Colors.white,
+        //                                 fontWeight: FontWeight.bold),
+        //                           ),
+        //                         ),
+        //                       ),
+        //                     ),
+        //                   )
+        //                 ],
+        //               ),
+        //             )
+        //           ],
+        //         ),
+        //       ),
+        //     );
+        //   },
+        // );
       },
       child: Container(
         height: screenHeight * 0.065,
@@ -397,7 +427,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
               style: TextStyle(fontSize: 15, color: Colors.white),
             ),
             Text(
-              "\$ 200",
+              "\$ ${widget.book.cost}",
               style: TextStyle(
                   fontSize: 18,
                   color: Colors.white,
@@ -435,7 +465,8 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                         alignment: Alignment.centerLeft,
                         child: InkWell(
                           onTap: () {
-                            Navigator.pop(context);
+                            BlocProvider.of<BooksBloc>(bookKey.currentContext)
+                                .add(PressButtonBackEvent(context: context));
                           },
                           child: Icon(Icons.close),
                         ),
@@ -468,7 +499,10 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                                   flex: 1,
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.pop(context);
+                                      BlocProvider.of<BooksBloc>(
+                                              bookKey.currentContext)
+                                          .add(PressButtonBackEvent(
+                                              context: context));
                                     },
                                     child: Container(
                                       height: screenHeight * 0.065,
@@ -505,16 +539,14 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                                   flex: 1,
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => QRPage(
-                                                    data: widget.book.name +
-                                                        widget.book.author +
-                                                        "Read Rental",
-                                                    registed: false,
-                                                  )));
+                                      BlocProvider.of<BooksBloc>(
+                                              bookKey.currentContext)
+                                          .add(PressButtonQREvent(
+                                              context: context,
+                                              data: widget.book.name +
+                                                  widget.book.author +
+                                                  "Read Rental",
+                                              registed: false));
                                     },
                                     child: Container(
                                       height: screenHeight * 0.065,
@@ -619,7 +651,8 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                         alignment: Alignment.centerLeft,
                         child: InkWell(
                           onTap: () {
-                            Navigator.pop(context);
+                            BlocProvider.of<BooksBloc>(bookKey.currentContext)
+                                .add(PressButtonBackEvent(context: context));
                           },
                           child: Icon(Icons.close),
                         ),
@@ -652,7 +685,10 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                                   flex: 1,
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.pop(context);
+                                      BlocProvider.of<BooksBloc>(
+                                              bookKey.currentContext)
+                                          .add(PressButtonBackEvent(
+                                              context: context));
                                     },
                                     child: Container(
                                       height: screenHeight * 0.065,
@@ -689,16 +725,14 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                                   flex: 1,
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => QRPage(
-                                                    data: widget.book.name +
-                                                        widget.book.author +
-                                                        "Read Directly",
-                                                    registed: false,
-                                                  )));
+                                      BlocProvider.of<BooksBloc>(
+                                              bookKey.currentContext)
+                                          .add(PressButtonQREvent(
+                                              context: context,
+                                              data: widget.book.name +
+                                                  widget.book.author +
+                                                  "Read Directly",
+                                              registed: false));
                                     },
                                     child: Container(
                                       height: screenHeight * 0.065,
@@ -786,7 +820,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
         controller: _controller,
         children: [
           aboutBook(screenWidth, screenHeight),
-          authorInfo(screenWidth, screenHeight, "widget.book.imageAuthor"),
+          authorInfo(screenWidth, screenHeight, widget.book.imageAuthor),
         ],
       ),
     );
@@ -826,7 +860,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                 style: TextStyle(
                     color: Colors.green,
                     fontWeight: FontWeight.bold,
-                    fontSize: 10),
+                    fontSize: 9),
               ),
             ),
           ),
@@ -855,10 +889,20 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
           borderRadius: BorderRadius.circular(24)),
       child: Row(
         children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Container(
-              child: Icon(Icons.navigate_before, color: Colors.purple[300]),
+          InkWell(
+            onTap: () {
+              setState(() {
+                if (count > 1) {
+                  count--;
+                  // widget.list[widget.argument].amount = amount;
+                }
+              });
+            },
+            child: Expanded(
+              flex: 1,
+              child: Container(
+                child: Icon(Icons.remove, color: Colors.purple[300]),
+              ),
             ),
           ),
           Expanded(
@@ -866,16 +910,26 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
             child: Container(
               child: Center(
                 child: Text(
-                  "3",
+                  count.toString(),
                   style: TextStyle(fontSize: 14, color: Colors.purple[300]),
                 ),
               ),
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              child: Icon(Icons.navigate_next, color: Colors.purple[300]),
+          InkWell(
+            onTap: () {
+              setState(() {
+                if (count < 99) {
+                  count++;
+                  // widget.list[widget.argument].amount = amount;
+                }
+              });
+            },
+            child: Expanded(
+              flex: 1,
+              child: Container(
+                child: Icon(Icons.add, color: Colors.purple[300]),
+              ),
             ),
           ),
         ],
@@ -883,7 +937,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget bookmark() {
+  Widget bookMark() {
     return Expanded(
       flex: 2,
       child: Row(
@@ -897,10 +951,10 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
               // });
             },
             child: Container(
-              // child: Icon(
-              //     widget.book.bookMark ? Icons.bookmark : Icons.bookmark_border,
-              //     color: widget.book.bookMark ? Colors.amber : Colors.grey),
-            ),
+                // child: Icon(
+                //     widget.book.bookMark ? Icons.bookmark : Icons.bookmark_border,
+                //     color: widget.book.bookMark ? Colors.amber : Colors.grey),
+                ),
           ),
         ],
       ),
@@ -926,7 +980,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                     style: TextStyle(color: Colors.black45),
                   ),
                   Text(
-                    widget.book.star.toString(),
+                    widget.book.evaluateBook.toString(),
                   ),
                 ],
               ),
@@ -999,15 +1053,23 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
           flex: 3,
           child: Container(
             decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(image), fit: BoxFit.cover)),
+              image: DecorationImage(
+                  image: NetworkImage(image), fit: BoxFit.cover),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 6,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
           ),
         ),
         Expanded(
           flex: 7,
           child: Container(
             padding: EdgeInsets.only(left: screenWidth * 0.05),
-            // color: Colors.yellowAccent,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1025,7 +1087,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                   style: TextStyle(color: Colors.grey),
                 ),
                 Text(
-                  "widget.book.writingGenre",
+                  widget.book.writingGenre,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
@@ -1033,7 +1095,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                   style: TextStyle(color: Colors.grey),
                 ),
                 Text(
-                  "widget.book.achievements",
+                  widget.book.achievements,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
@@ -1041,17 +1103,17 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                   style: TextStyle(color: Colors.grey),
                 ),
                 Row(
-                    children: <Widget>[
-                      Text(
-                        widget.book.star.toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                          height: screenHeight * 0.015,
-                          child: Icon(Icons.star,
-                              size: 12, color: Colors.amberAccent))
-                    ],
-                  ),
+                  children: <Widget>[
+                    Text(
+                      widget.book.evaluateAuthor.toString(),
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                        height: screenHeight * 0.015,
+                        child: Icon(Icons.star,
+                            size: 12, color: Colors.amberAccent))
+                  ],
+                ),
                 // Text(
                 //   widget.book.evaluate.toString(),
                 //   style: TextStyle(fontWeight: FontWeight.bold),
@@ -1061,6 +1123,24 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
           ),
         ),
       ],
+    );
+  }
+
+  _showDialog(BuildContext mainContext, String title, String message) async {
+    await showDialog(
+      context: mainContext,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
     );
   }
 }

@@ -33,28 +33,6 @@ class MemberModel(db.Model):
     def __repr__(self):
         return f"<Member {self.username}>"
 
-# author
-
-
-class AuthorModel(db.Model):
-    __tablename__ = 'authors'
-    authorId = db.Column(db.Integer, primary_key=True)
-    image = db.Column(db.String(255))
-    name = db.Column(db.String(255))
-    writingGenre = db.Column(db.String(255))
-    achievements = db.Column(db.String(255))
-    evaluate = db.Column(db.Float)
-
-    def __init__(self, image, name, writingGenre, achievements, evaluate):
-        self.image = image
-        self.name = name
-        self.writingGenre = writingGenre
-        self.achievements = achievements
-        self.evaluate = evaluate
-
-    def __repr__(self):
-        return f"<Author {self.name}>"
-
 # book
 
 
@@ -64,23 +42,33 @@ class BookModel(db.Model):
     image = db.Column(db.String(255))
     name = db.Column(db.String(255))
     author = db.Column(db.String(255))
-    evaluate = db.Column(db.Float)
+    imageAuthor = db.Column(db.String(255))
+    writingGenre = db.Column(db.String(255))
+    achievements = db.Column(db.String(255))
+    evaluateAuthor = db.Column(db.Float)
+    evaluateBook = db.Column(db.Float)
     description = db.Column(db.String(255))
     category = db.Column(db.String(255))
     pages = db.Column(db.Integer)
     cover = db.Column(db.String(255))
     language = db.Column(db.String(255))
+    cost = db.Column(db.Float)
 
-    def __init__(self, image, name, author, evaluate, description, category, pages, cover, language, status):
+    def __init__(self, image, name, author, imageAuthor, writingGenre, achievements, evaluateAuthor, evaluateBook, description, category, pages, cover, language, cost):
         self.image = image
         self.name = name
         self.author = author
-        self.evaluate = evaluate
+        self.imageAuthor = imageAuthor
+        self.writingGenre = writingGenre
+        self.achievements = achievements
+        self.evaluateAuthor = evaluateAuthor
+        self.evaluateBook = evaluateBook
         self.description = description
         self.category = category
         self.pages = pages
         self.cover = cover
         self.language = language
+        self.cost = cost
 
     def __repr__(self):
         return f"<Book {self.name}>"
@@ -94,18 +82,18 @@ class BookmarkModel(db.Model):
     image = db.Column(db.String(255))
     name = db.Column(db.String(255))
     author = db.Column(db.String(255))
-    evaluate = db.Column(db.Float)
+    evaluateBook = db.Column(db.Float)
     description = db.Column(db.String(255))
     registrationDate = db.Column(db.Integer)
     expirationDate = db.Column(db.Integer)
     status = db.Column(db.Integer)
     username = db.Column(db.String(255))
 
-    def __init__(self, image, name, author, evaluate, description, registrationDate, expirationDate, status, username):
+    def __init__(self, image, name, author, evaluateBook, description, registrationDate, expirationDate, status, username):
         self.image = image
         self.name = name
         self.author = author
-        self.evaluate = evaluate
+        self.evaluateBook = evaluateBook
         self.description = description
         self.registrationDate = registrationDate
         self.expirationDate = expirationDate
@@ -124,18 +112,16 @@ class CartModel(db.Model):
     image = db.Column(db.String(255))
     name = db.Column(db.String(255))
     author = db.Column(db.String(255))
-    evaluate = db.Column(db.Float)
-    description = db.Column(db.String(255))
+    evaluateBook = db.Column(db.Float)
     count = db.Column(db.Integer)
     cost = db.Column(db.Integer)
     username = db.Column(db.String(255))
 
-    def __init__(self, image, name, author, evaluate, description, count, cost, username):
+    def __init__(self, image, name, author, evaluateBook, count, cost, username):
         self.image = image
         self.name = name
         self.author = author
-        self.evaluate = evaluate
-        self.description = description
+        self.evaluateBook = evaluateBook
         self.count = count
         self.cost = cost
         self.username = username
@@ -152,7 +138,7 @@ class OrderModel(db.Model):
     image = db.Column(db.String(255))
     name = db.Column(db.String(255))
     author = db.Column(db.String(255))
-    evaluate = db.Column(db.Float)
+    evaluateBook = db.Column(db.Float)
     registrationDate = db.Column(db.Integer)
     expirationDate = db.Column(db.Integer)
     count = db.Column(db.Integer)
@@ -160,11 +146,11 @@ class OrderModel(db.Model):
     status = db.Column(db.Integer)
     username = db.Column(db.String(255))
 
-    def __init__(self, image, name, author, evaluate, registrationDate, expirationDate, count, cost, status, username):
+    def __init__(self, image, name, author, evaluateBook, registrationDate, expirationDate, count, cost, status, username):
         self.image = image
         self.name = name
         self.author = author
-        self.evaluate = evaluate
+        self.evaluateBook = evaluateBook
         self.registrationDate = registrationDate
         self.expirationDate = expirationDate
         self.count = count
@@ -299,6 +285,7 @@ def handle_members_update():
     else:
         return {"message": "update member fail"}
 
+
 @app.route('/members/update/member', methods=['POST'])
 def handle_member_update():
     if request.is_json:
@@ -362,7 +349,7 @@ def handle_bookmarks():
         try:
             data = request.get_json()
             get_bookmark = BookmarkModel(image=data['image'], name=data['name'], author=data['author'],
-                                         evaluate=data['evaluate'], description=data['description'], registrationDate=data['registrationDate'],
+                                         evaluateBook=data['evaluateBook'], description=data['description'], registrationDate=data['registrationDate'],
                                          expirationDate=data['expirationDate'], status=data['status'], username=data['username'])
 
             bookmarks = BookmarkModel.query.filter_by(
@@ -372,7 +359,7 @@ def handle_bookmarks():
                     "image": bookmark.image,
                     "name": bookmark.name,
                     "author": bookmark.author,
-                    "evaluate": bookmark.evaluate,
+                    "evaluateBook": bookmark.evaluateBook,
                     "description": bookmark.description,
                     "registrationDate": bookmark.registrationDate,
                     "expirationDate": bookmark.expirationDate,
@@ -392,7 +379,7 @@ def handle_bookmarks_add():
         try:
             data = request.get_json()
             new_bookmark = BookmarkModel(image=data['image'], name=data['name'], author=data['author'],
-                                         evaluate=data['evaluate'], description=data['description'], registrationDate=data['registrationDate'],
+                                         evaluateBook=data['evaluateBook'], description=data['description'], registrationDate=data['registrationDate'],
                                          expirationDate=data['expirationDate'], status=data['status'], username=data['username'])
             db.session.add(new_bookmark)
             db.session.commit()
@@ -409,7 +396,7 @@ def handle_bookmarks_delete():
         try:
             data = request.get_json()
             delete_bookmark = BookmarkModel(image=data['image'], name=data['name'], author=data['author'],
-                                            evaluate=data['evaluate'], description=data[
+                                            evaluateBook=data['evaluateBook'], description=data[
                                                 'description'], registrationDate=data['registrationDate'],
                                             expirationDate=data['expirationDate'], status=data['status'], username=data['username'])
             BookmarkModel.query.filter_by(
@@ -430,7 +417,7 @@ def handle_carts():
         try:
             data = request.get_json()
             get_cart = CartModel(image=data['image'], name=data['name'], author=data['author'],
-                                 evaluate=data['evaluate'], description=data['description'],
+                                 evaluateBook=data['evaluateBook'], description=data['description'],
                                  count=data['count'], cost=data['cost'], username=data['username'])
             carts = CartModel.query.filter_by(
                 username=get_cart.username)
@@ -439,7 +426,7 @@ def handle_carts():
                     "image": cart.image,
                     "name": cart.name,
                     "author": cart.author,
-                    "evaluate": cart.evaluate,
+                    "evaluateBook": cart.evaluateBook,
                     "description": cart.description,
                     "count": cart.count,
                     "cost": cart.cost,
@@ -458,7 +445,7 @@ def handle_carts_add():
         try:
             data = request.get_json()
             new_cart = CartModel(image=data['image'], name=data['name'], author=data['author'],
-                                 evaluate=data['evaluate'], description=data['description'],
+                                 evaluateBook=data['evaluateBook'], description=data['description'],
                                  count=data['count'], cost=data['cost'], username=data['username'])
             db.session.add(new_cart)
             db.session.commit()
@@ -475,7 +462,7 @@ def handle_carts_delete():
         try:
             data = request.get_json()
             delete_cart = CartModel(image=data['image'], name=data['name'], author=data['author'],
-                                    evaluate=data['evaluate'], description=data['description'],
+                                    evaluateBook=data['evaluateBook'], description=data['description'],
                                     count=data['count'], cost=data['cost'], username=data['username'])
             CartModel.query.filter_by(
                 name=delete_cart.name, username=delete_cart.username).delete()
@@ -580,15 +567,17 @@ def handle_orders_delete():
 # book
 
 
-@app.route('/books', methods=['POST'])
+@app.route('/books', methods=['POST', 'GET'])
 def handle_books_add():
     if request.method == 'POST':
         if request.is_json:
             try:
                 data = request.get_json()
-                new_book = BookModel(image=data['image'], name=data['name'], author=data['author'], evaluate=data['evaluate'],
+                new_book = BookModel(image=data['image'], name=data['name'], author=data['author'], imageAuthor=data['imageAuthor'],
+                                     writingGenre=data['writingGenre'], achievements=data['achievements'],
+                                     evaluateAuthor=data['evaluateAuthor'], evaluateBook=data['evaluateBook'],
                                      description=data['description'], category=data['category'], pages=data['pages'],
-                                     cover=data['cover'], language=data['language'])
+                                     cover=data['cover'], language=data['language'], cost=data['cost'])
                 db.session.add(new_book)
                 db.session.commit()
                 return {"message": "add book success"}
@@ -604,26 +593,64 @@ def handle_books_add():
                     "image": book.image,
                     "name": book.name,
                     "author": book.author,
-                    "evaluate": book.evaluate,
+                    "imageAuthor": book.imageAuthor,
+                    "writingGenre": book.writingGenre,
+                    "achievements": book.achievements,
+                    "evaluateAuthor": book.evaluateAuthor,
+                    "evaluateBook": book.evaluateBook,
                     "description": book.description,
                     "category": book.category,
                     "pages": book.pages,
                     "cover": book.cover,
-                    "language": book.language
+                    "language": book.language,
+                    "cost": book.cost
                 } for book in books]
             return {"books": results, "message": "get book success"}
         except:
             return {"message": "get order fail"}
 
+@app.route('/books/update', methods=['POST'])
+def handle_books_update():
+    if request.is_json:
+        try:
+            data = request.get_json()
+            update_book = BookModel(image=data['image'], name=data['name'], author=data['author'], imageAuthor=data['imageAuthor'],
+                                     writingGenre=data['writingGenre'], achievements=data['achievements'],
+                                     evaluateAuthor=data['evaluateAuthor'], evaluateBook=data['evaluateBook'],
+                                     description=data['description'], category=data['category'], pages=data['pages'],
+                                     cover=data['cover'], language=data['language'], cost=data['cost'])
+            update = BookModel.query.filter_by(
+                name=update_book.name).first()
+            update.image = update_book.image
+            update.author = update_book.author
+            update.imageAuthor = update_book.imageAuthor
+            update.writingGenre = update_book.writingGenre
+            update.achievements = update_book.achievements
+            update.evaluateAuthor = update_book.evaluateAuthor
+            update.evaluateBook = update_book.evaluateBook
+            update.description = update_book.description
+            update.category = update_book.category
+            update.pages = update_book.pages
+            update.cover = update_book.cover
+            update.language = update_book.language
+            update.cost = update_book.cost
+            db.session.commit()
+            return {"message": "update book success"}
+        except:
+            return {"message": "update book fail"}
+    else:
+        return {"message": "update book fail"}
 
 @app.route('/books/delete', methods=['POST'])
 def handle_books_delete():
     if request.is_json:
         try:
             data = request.get_json()
-            delete_book = BookModel(image=data['image'], name=data['name'], author=data['author'], evaluate=data['evaluate'],
-                                    description=data['description'], category=data['category'], pages=data['pages'],
-                                    cover=data['cover'], language=data['language'], status=data['status'])
+            delete_book = BookModel(image=data['image'], name=data['name'], author=data['author'], imageAuthor=data['imageAuthor'],
+                                     writingGenre=data['writingGenre'], achievements=data['achievements'],
+                                     evaluateAuthor=data['evaluateAuthor'], evaluateBook=data['evaluateBook'],
+                                     description=data['description'], category=data['category'], pages=data['pages'],
+                                     cover=data['cover'], language=data['language'], cost=data['cost'])
             BookModel.query.filter_by(
                 name=delete_book.name).delete()
             db.session.commit()

@@ -23,7 +23,7 @@ class PressBtnBackEvent extends HomeEvent {
 class PressBtnMoveEditEvent extends HomeEvent {
   final Member member;
   final BuildContext context;
-  PressBtnMoveEditEvent({@required this.member ,@required this.context});
+  PressBtnMoveEditEvent({@required this.member, @required this.context});
   @override
   List<Object> get props => [member];
 }
@@ -67,10 +67,11 @@ class PressBtnMoveTrendingAllEvent extends HomeEvent {
 
 // new book
 class PressBtnMoveNewBookEvent extends HomeEvent {
+  final Book book;
   final BuildContext context;
-  PressBtnMoveNewBookEvent({@required this.context});
+  PressBtnMoveNewBookEvent({@required this.book, @required this.context});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [book];
 }
 
 class PressBtnMoveNewBookAllEvent extends HomeEvent {
@@ -94,3 +95,14 @@ class PressBtnMoveMyBookAllEvent extends HomeEvent {
   @override
   List<Object> get props => [];
 }
+
+// // book list
+// class LoadBookEvent extends HomeEvent {
+//   @override
+//   List<Object> get props => [];
+// }
+
+// class OnReFreshBookEvent extends HomeEvent {
+//   @override
+//   List<Object> get props => [];
+// }

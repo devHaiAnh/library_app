@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:library_app/data/model/book.dart';
 import 'package:library_app/screens/book/bookScreen.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
-import 'package:library_app/screens/widget/itemBookCart.dart';
 
 class CartPage extends StatefulWidget {
   @override
@@ -78,12 +77,12 @@ class _CartPageState extends State<CartPage> {
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => BookPage(
-                                          book: bookList[index],
-                                        )));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => BookPage(
+                            //               book: bookList[index],
+                            //             )));
                           },
                           // child: ItemBookCart(
                           //   height: screenHeight,

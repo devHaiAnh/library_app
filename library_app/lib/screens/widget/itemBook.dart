@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:library_app/data/model/book.dart';
+import 'package:library_app/data/model/books_model.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ItemBook extends StatefulWidget {
@@ -89,6 +89,14 @@ class _ItemBookState extends State<ItemBook> {
       decoration: BoxDecoration(
         image: DecorationImage(
             image: NetworkImage(widget.itemBook.image), fit: BoxFit.cover),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 6,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
       ),
     );
   }
@@ -106,7 +114,7 @@ class _ItemBookState extends State<ItemBook> {
           Container(
             height: widget.height * 0.02,
             child: SmoothStarRating(
-              rating: widget.itemBook.star,
+              rating: widget.itemBook.evaluateBook,
               size: 15,
               filledIconData: Icons.star,
               halfFilledIconData: Icons.star_half,
@@ -121,12 +129,12 @@ class _ItemBookState extends State<ItemBook> {
           SizedBox(height: widget.height * 0.01),
           // description
           Container(
-              height: widget.height * 0.06,
+              height: widget.height * 0.05,
               child: Text(
                 widget.itemBook.description,
                 style: TextStyle(fontSize: 12),
               )),
-          SizedBox(height: widget.height * 0.005),
+          SizedBox(height: widget.height * 0.015),
           // button
           Container(
             height: widget.height * 0.05,
@@ -179,12 +187,12 @@ class _ItemBookState extends State<ItemBook> {
               // });
             },
             child: Container(
-              // child: Icon(
-              //     widget.itemBook.bookMark
-              //         ? Icons.bookmark
-              //         : Icons.bookmark_border,
-              //     color: widget.itemBook.bookMark ? Colors.amber : Colors.grey),
-            ),
+                // child: Icon(
+                //     widget.itemBook.bookMark
+                //         ? Icons.bookmark
+                //         : Icons.bookmark_border,
+                //     color: widget.itemBook.bookMark ? Colors.amber : Colors.grey),
+                ),
           )
         ],
       ),

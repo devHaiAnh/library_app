@@ -117,6 +117,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                                         name: _name.text.trim(),
                                         email: _email.text.trim(),
                                         phone: _phone.text.trim(),
+                                        member: widget.member,
                                         context: context));
                               },
                               child: Container(

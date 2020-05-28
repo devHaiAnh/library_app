@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:library_app/blocs/member_bloc/member_bloc.dart';
+import 'package:library_app/blocs/members_bloc/members_bloc.dart';
 import 'package:library_app/data/model/members_model.dart';
 import 'package:library_app/streams/updateMember_stream.dart';
 
@@ -45,8 +45,8 @@ class _EditMembersPageState extends State<EditMembersPage> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return BlocProvider(
-      create: (context) => MemberBloc(),
-      child: BlocListener<MemberBloc, MemberState>(
+      create: (context) => MembersBloc(),
+      child: BlocListener<MembersBloc, MembersState>(
         listener: (context, state) {
           if (state is LoadingState) {
             SpinKitDoubleBounce(color: Colors.white);
@@ -58,7 +58,7 @@ class _EditMembersPageState extends State<EditMembersPage> {
             _showDialog(context, state.errorTitle, state.errorMessage);
           }
         },
-        child: BlocBuilder<MemberBloc, MemberState>(
+        child: BlocBuilder<MembersBloc, MembersState>(
           builder: (context, state) {
             return Scaffold(
               key: editMemberKey,
@@ -115,7 +115,7 @@ class _EditMembersPageState extends State<EditMembersPage> {
                             Spacer(),
                             InkWell(
                               onTap: () {
-                                BlocProvider.of<MemberBloc>(
+                                BlocProvider.of<MembersBloc>(
                                         editMemberKey.currentContext)
                                     .add(PressButtonUpdateEvent(
                                         name: _name.text.trim(),
@@ -297,7 +297,7 @@ class _EditMembersPageState extends State<EditMembersPage> {
           SizedBox(height: screenHeight * 0.02),
           InkWell(
             onTap: () {
-              BlocProvider.of<MemberBloc>(editMemberKey.currentContext)
+              BlocProvider.of<MembersBloc>(editMemberKey.currentContext)
                   .add(CheckAdminEvent(admin: typeAdmin));
             },
             child: Container(

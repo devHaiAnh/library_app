@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:library_app/blocs/member_bloc/member_bloc.dart';
+import 'package:library_app/blocs/members_bloc/members_bloc.dart';
 import 'package:library_app/streams/addMember_stream.dart';
 
 class AddMemberPage extends StatefulWidget {
@@ -47,8 +47,8 @@ class _AddMemberPageState extends State<AddMemberPage> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return BlocProvider(
-      create: (context) => MemberBloc(),
-      child: BlocListener<MemberBloc, MemberState>(
+      create: (context) => MembersBloc(),
+      child: BlocListener<MembersBloc, MembersState>(
         listener: (context, state) {
           if (state is LoadingState) {
             SpinKitDoubleBounce(color: Colors.white);
@@ -62,7 +62,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
             _showDialog(context, state.errorTitle, state.errorMessage);
           }
         },
-        child: BlocBuilder<MemberBloc, MemberState>(
+        child: BlocBuilder<MembersBloc, MembersState>(
           builder: (context, state) {
             return Scaffold(
               key: addMemberKey,
@@ -163,7 +163,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
           ),
           InkWell(
             onTap: () {
-              BlocProvider.of<MemberBloc>(addMemberKey.currentContext).add(
+              BlocProvider.of<MembersBloc>(addMemberKey.currentContext).add(
                   PressButtonAddEvent(
                       username: _username.text.trim(),
                       password: _password.text.trim(),
@@ -309,7 +309,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                   icon:
                       Icon(hidePass ? Icons.visibility : Icons.visibility_off),
                   onPressed: () {
-                    BlocProvider.of<MemberBloc>(addMemberKey.currentContext)
+                    BlocProvider.of<MembersBloc>(addMemberKey.currentContext)
                         .add(
                       ShowPasswordOldEvent(showPass: hidePass),
                     );
@@ -321,7 +321,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
           SizedBox(height: screenHeight * 0.02),
           InkWell(
             onTap: () {
-              BlocProvider.of<MemberBloc>(addMemberKey.currentContext)
+              BlocProvider.of<MembersBloc>(addMemberKey.currentContext)
                   .add(CheckAdminEvent(admin: typeAdmin));
             },
             child: Container(

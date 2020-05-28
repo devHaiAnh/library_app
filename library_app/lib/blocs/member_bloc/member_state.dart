@@ -14,18 +14,6 @@ class LoadingState extends MemberState {
   List<Object> get props => [];
 }
 
-class RefreshState extends MemberState {
-  @override
-  List<Object> get props => [];
-}
-
-class LoadedState extends MemberState {
-  final List<Member> memberList;
-  LoadedState({@required this.memberList});
-  @override
-  List<Object> get props => [memberList];
-}
-
 class SuccessState extends MemberState {
   final String title;
   final String message;
@@ -53,13 +41,6 @@ class ShowPasswordRetypeState extends MemberState {
   ShowPasswordRetypeState({@required this.showPass});
   @override
   List<Object> get props => [showPass];
-}
-
-class CheckAdminState extends MemberState {
-  final bool admin;
-  CheckAdminState({@required this.admin});
-  @override
-  List<Object> get props => [admin];
 }
 
 class ErrorState extends MemberState {

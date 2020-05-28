@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:library_app/data/model/book.dart';
-import 'package:library_app/screens/book/bookScreen.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
-import 'package:library_app/screens/widget/itemBook.dart';
 
 class BookMarkPage extends StatefulWidget {
   @override
@@ -71,19 +69,20 @@ class _BookMarkPageState extends State<BookMarkPage> {
         itemCount: bookList.length,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => BookPage(
-                              book: bookList[index],
-                            )));
-              },
-              child: ItemBook(
-                height: screenHeight,
-                width: screenWidth,
-                itemBook: bookList[index],
-              ));
+            onTap: () {
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => BookPage(
+              //               book: bookList[index],
+              //             )));
+            },
+            // child: ItemBook(
+            //   height: screenHeight,
+            //   width: screenWidth,
+            //   itemBook: bookList[index],
+            // ),
+          );
         },
       ),
     );

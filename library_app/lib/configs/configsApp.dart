@@ -8,6 +8,7 @@ class ConfigsApp {
   static String membersUrl = '/members';
   static String passUrl = "/password";
   static String memberUrl = '/member';
+  static String bookUrl = "/books";
   static String bookmarkUrl = "/bookmarks";
   static String cartUrl = "/carts";
   static String orderUrl = "/orders";

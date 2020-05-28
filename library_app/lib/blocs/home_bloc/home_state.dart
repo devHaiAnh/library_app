@@ -14,6 +14,18 @@ class LoadingState extends HomeState {
   List<Object> get props => [];
 }
 
+// class RefreshState extends HomeState {
+//   @override
+//   List<Object> get props => [];
+// }
+
+// class LoadedState extends HomeState {
+//   final List<Book> bookList;
+//   LoadedState({@required this.bookList});
+//   @override
+//   List<Object> get props => [bookList];
+// }
+
 class SuccessState extends HomeState {
   final String title;
   final String message;

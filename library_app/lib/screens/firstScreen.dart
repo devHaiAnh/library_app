@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:library_app/blocs/main_bloc/main_bloc.dart';
 import 'package:library_app/screens/login_register_forgot/signinScreen.dart';
 import 'package:library_app/screens/login_register_forgot/signupScreen.dart';
 
@@ -8,13 +10,24 @@ class FirstPage extends StatefulWidget {
 }
 
 class _FirstPageState extends State<FirstPage> {
+  final _mainBloc = MainBloc();
   final background =
       "https://images.pexels.com/photos/3646172/pexels-photo-3646172.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
+
+  GlobalKey mainKey = GlobalKey();
+
+  @override
+  void dispose() {
+    _mainBloc.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      key: mainKey,
       body: Stack(
         children: <Widget>[
           // background
@@ -122,6 +135,24 @@ class _FirstPageState extends State<FirstPage> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  _showDialog(BuildContext mainContext, String title, String message) async {
+    await showDialog(
+      context: mainContext,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
         ],
       ),
     );

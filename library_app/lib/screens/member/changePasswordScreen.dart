@@ -291,7 +291,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 changePassStream.passRetypeChange(
                     _newPassword.text.trim(), a.trim());
               },
-              keyboardType: TextInputType.phone,
+              keyboardType: TextInputType.text,
               obscureText: hideRetypePass,
               decoration: InputDecoration(
                 labelText: "Retype password",

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:library_app/blocs/member_bloc/member_bloc.dart';
+import 'package:library_app/blocs/members_bloc/members_bloc.dart';
 import 'package:library_app/configs/configsApp.dart';
 import 'package:library_app/data/model/members_model.dart';
 import 'package:library_app/screens/member/addMemberScreen.dart';
@@ -14,7 +14,7 @@ class MemberListPage extends StatefulWidget {
 }
 
 class _MemberListPageState extends State<MemberListPage> {
-  final _memberBloc = MemberBloc();
+  final _memberBloc = MembersBloc();
   GlobalKey memberListKey = GlobalKey();
 
   @override
@@ -29,9 +29,9 @@ class _MemberListPageState extends State<MemberListPage> {
     final screenHeight = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (context) => _memberBloc..add(LoadMemberEvent()),
-      child: BlocListener<MemberBloc, MemberState>(
+      child: BlocListener<MembersBloc, MembersState>(
         listener: (context, state) {},
-        child: BlocBuilder<MemberBloc, MemberState>(
+        child: BlocBuilder<MembersBloc, MembersState>(
           builder: (context, state) {
             if (state is LoadedState) {
               return Scaffold(

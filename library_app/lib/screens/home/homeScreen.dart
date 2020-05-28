@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:library_app/blocs/books_bloc/books_bloc.dart';
 import 'package:library_app/blocs/home_bloc/home_bloc.dart';
 import 'package:library_app/data/model/category.dart';
 import 'package:library_app/data/model/login_model.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
+import 'package:library_app/screens/widget/itemBookHome.dart';
 import 'package:library_app/screens/widget/itemCategoryHome.dart';
 import 'package:library_app/screens/widget/itemMember.dart';
 
@@ -25,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   bool hideRetypePass = true;
 
   GlobalKey homeKey = GlobalKey();
+  final _bookBloc = BooksBloc();
 
   @override
   void initState() {
@@ -39,6 +42,7 @@ class _HomePageState extends State<HomePage> {
     _oldPassword.dispose();
     _newPassword.dispose();
     _retypePassword.dispose();
+    _bookBloc.close();
     super.dispose();
   }
 
@@ -183,85 +187,173 @@ class _HomePageState extends State<HomePage> {
 
   Widget newBook(
       double screenHeight, double screenWidth, BuildContext context) {
-    return Container(
-      height: screenHeight * 0.37,
-      width: screenWidth,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(
-                left: screenWidth * 0.05,
-                right: screenWidth * 0.05,
-                bottom: screenWidth * 0.02),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  "New Book",
-                  style: TextStyle(fontSize: 25, color: Colors.purple),
+    return BlocProvider(
+      create: (context) => _bookBloc..add(LoadBookEvent()),
+      child: BlocListener<BooksBloc, BooksState>(
+        listener: (context, state) {},
+        child: BlocBuilder<BooksBloc, BooksState>(
+          builder: (context, state) {
+            if (state is LoadedState) {
+              return Container(
+                height: screenHeight * 0.37,
+                width: screenWidth,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: screenWidth * 0.05,
+                          right: screenWidth * 0.05,
+                          bottom: screenWidth * 0.02),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            "New Book",
+                            style:
+                                TextStyle(fontSize: 25, color: Colors.purple),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              BlocProvider.of<HomeBloc>(homeKey.currentContext)
+                                  .add(PressBtnMoveNewBookAllEvent(
+                                      context: context));
+                            },
+                            child: Text(
+                              "See all",
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.grey),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: screenHeight * 0.31,
+                      width: screenWidth,
+                      padding: EdgeInsets.all(screenWidth * 0.02),
+                      margin: EdgeInsets.only(left: screenWidth * 0.05),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(24),
+                            bottomLeft: Radius.circular(24)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            height: screenHeight * 0.285,
+                            width: screenWidth * 0.92,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: state.bookList.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (BuildContext context, int index) {
+                                return InkWell(
+                                  onTap: () {
+                                    BlocProvider.of<HomeBloc>(
+                                            homeKey.currentContext)
+                                        .add(PressBtnMoveNewBookEvent(
+                                          book: state.bookList[index],
+                                            context: context));
+                                  },
+                                  child: ItemBookHome(
+                                    width: screenWidth,
+                                    height: screenHeight,
+                                    itemBook: state.bookList[index],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                InkWell(
-                  onTap: () {
-                    BlocProvider.of<HomeBloc>(homeKey.currentContext)
-                        .add(PressBtnMoveNewBookAllEvent(context: context));
-                  },
-                  child: Text(
-                    "See all",
-                    style: TextStyle(fontSize: 15, color: Colors.grey),
-                  ),
+              );
+            } else {
+              return Container(
+                height: screenHeight * 0.37,
+                width: screenWidth,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: screenWidth * 0.05,
+                          right: screenWidth * 0.05,
+                          bottom: screenWidth * 0.02),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            "New Book",
+                            style:
+                                TextStyle(fontSize: 25, color: Colors.purple),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              BlocProvider.of<HomeBloc>(homeKey.currentContext)
+                                  .add(PressBtnMoveNewBookAllEvent(
+                                      context: context));
+                            },
+                            child: Text(
+                              "See all",
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.grey),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: screenHeight * 0.31,
+                      width: screenWidth,
+                      padding: EdgeInsets.all(screenWidth * 0.02),
+                      margin: EdgeInsets.only(left: screenWidth * 0.05),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(24),
+                            bottomLeft: Radius.circular(24)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            height: screenHeight * 0.285,
+                            width: screenWidth * 0.92,
+                            child: Center(
+                              child: Text("/* No book */"),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          Container(
-            height: screenHeight * 0.31,
-            width: screenWidth,
-            padding: EdgeInsets.all(screenWidth * 0.02),
-            margin: EdgeInsets.only(left: screenWidth * 0.05),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(24),
-                  bottomLeft: Radius.circular(24)),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  height: screenHeight * 0.285,
-                  width: screenWidth * 0.92,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: 0,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      return InkWell(
-                        onTap: () {
-                          BlocProvider.of<HomeBloc>(homeKey.currentContext)
-                              .add(PressBtnMoveNewBookEvent(context: context));
-                        },
-                        // child: ItemBookHome(
-                        //   width: screenWidth,
-                        //   height: screenHeight,
-                        //   itemBook: bookList[index],
-                        // ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+              );
+            }
+          },
+        ),
       ),
     );
   }

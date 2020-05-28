@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:library_app/blocs/member_bloc/member_bloc.dart';
 import 'package:library_app/data/model/members_model.dart';
 import 'package:library_app/screens/payment_order/paymentHistoryScreen.dart';
 
@@ -126,11 +124,11 @@ class _ItemMembersState extends State<ItemMembers> {
                                 flex: 2,
                                 child: InkWell(
                                   onTap: () {
-                                    BlocProvider.of<MemberBloc>(context).add(
-                                        PressButtonDeleteEvent(
-                                            username:
-                                                widget.itemMember.username,
-                                            context: context));
+                                    // BlocProvider.of<MemberBloc>(context).add(
+                                    //     PressButtonDeleteEvent(
+                                    //         username:
+                                    //             widget.itemMember.username,
+                                    //         context: context));
                                   },
                                   child: Container(
                                     width: widget.width * 0.07,
