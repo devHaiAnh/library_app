@@ -4,10 +4,10 @@ import 'package:http/http.dart';
 import 'package:library_app/configs/configsApp.dart';
 
 Future<int> postUpdateMembers(
-    {String name, String email, String phone, bool admin}) async {
+    {String username, String name, String email, String phone, bool admin}) async {
   try {
     Map<String, dynamic> body = {
-      "username": ConfigsApp.userName,
+      "username": username,
       "password": "null",
       "name": name,
       "email": email,

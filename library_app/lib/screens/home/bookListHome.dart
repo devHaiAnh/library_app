@@ -144,18 +144,12 @@ class _BookListHomePageState extends State<BookListHomePage> {
                 },
               )
             : Container(
-                child: Center(
-                  child: Text("/* No members yet */"),
-                ),
+                child: Center(),
               ),
       );
     } else {
       return Scaffold(
-        body: Container(
-          child: Center(
-            child: const Text("</ No data />"),
-          ),
-        ),
+        body: Container(),
       );
     }
   }

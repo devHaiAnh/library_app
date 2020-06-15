@@ -4,7 +4,6 @@ abstract class MembersEvent extends Equatable {
   const MembersEvent();
 }
 
-
 // Read
 class LoadMemberEvent extends MembersEvent {
   @override
@@ -50,6 +49,7 @@ class CheckAdminEvent extends MembersEvent {
 
 // Update
 class PressButtonUpdateEvent extends MembersEvent {
+  final String username;
   final String name;
   final String email;
   final String phone;
@@ -57,14 +57,14 @@ class PressButtonUpdateEvent extends MembersEvent {
   final BuildContext context;
   final UpdateMemberStream updateMemberStream;
   PressButtonUpdateEvent(
-      {@required this.name,
+      {@required this.username,@required this.name,
       @required this.email,
       @required this.phone,
       @required this.admin,
       @required this.context,
       this.updateMemberStream});
   @override
-  List<Object> get props => [name, email, phone, admin, updateMemberStream];
+  List<Object> get props => [username, name, email, phone, admin];
 }
 
 class ShowPasswordOldEvent extends MembersEvent {

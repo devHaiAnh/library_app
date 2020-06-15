@@ -45,8 +45,23 @@ class PressButtonQREvent extends BooksEvent {
 // add cart
 class PressButtonAddCartEvent extends BooksEvent {
   final Book book;
+  final int count;
+  final double cost;
   final BuildContext context;
-  PressButtonAddCartEvent({@required this.book, @required this.context});
+  PressButtonAddCartEvent(
+      {@required this.book,
+      @required this.count,
+      @required this.cost,
+      @required this.context});
+  @override
+  List<Object> get props => [book, count, cost];
+}
+
+// delete cart
+class PressButtonDelCartEvent extends BooksEvent {
+  final Book book;
+  final BuildContext context;
+  PressButtonDelCartEvent({@required this.book, @required this.context});
   @override
   List<Object> get props => [book];
 }

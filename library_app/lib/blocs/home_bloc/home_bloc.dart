@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:library_app/data/api/book/getBook_api.dart';
 import 'package:library_app/data/model/books_model.dart';
 import 'package:library_app/data/model/login_model.dart';
 import 'package:library_app/screens/book/bookScreen.dart';
@@ -13,7 +12,6 @@ import 'package:library_app/screens/home/categoryListHome.dart';
 import 'package:library_app/screens/login_register_forgot/signinScreen.dart';
 import 'package:library_app/screens/member/changePasswordScreen.dart';
 import 'package:library_app/screens/member/editMemberScreen.dart';
-import 'package:library_app/screens/payment_order/paymentHistoryScreen.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -123,12 +121,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         //                         ),),);
       }
       if (event is PressBtnMoveMyBookAllEvent) {
-        Navigator.push(
-          event.context,
-          MaterialPageRoute(
-            builder: (context) => PaymentHistoryPage(),
-          ),
-        );
+        // Navigator.push(
+        //   event.context,
+        //   MaterialPageRoute(
+        //     builder: (context) => PaymentHistoryPage(),
+        //   ),
+        // );
       }
       // // Read
       // if (event is LoadBookEvent) {

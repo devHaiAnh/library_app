@@ -219,191 +219,28 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
             ],
           ),
           SizedBox(height: screenHeight * 0.005),
-          buyBookButton(context, screenHeight, screenWidth),
+          addCartButton(context, screenHeight, screenWidth),
         ],
       ),
     );
   }
 
-  Widget buyBookButton(
+  Widget addCartButton(
       BuildContext context, double screenHeight, double screenWidth) {
     return InkWell(
       onTap: () {
-        // BlocProvider.of<BooksBloc>(bookKey.currentContext).add();
-        // showDialog(
-        //   context: context,
-        //   builder: (BuildContext context) {
-        //     return Dialog(
-        //       shape: RoundedRectangleBorder(
-        //         borderRadius: BorderRadius.circular(24),
-        //       ), //this right here
-        //       child: Container(
-        //         height: screenHeight * 0.45,
-        //         padding: EdgeInsets.symmetric(
-        //             horizontal: screenWidth * 0.05,
-        //             vertical: screenHeight * 0.03),
-        //         child: Column(
-        //           mainAxisAlignment: MainAxisAlignment.center,
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: [
-        //             Expanded(
-        //               flex: 1,
-        //               child: Align(
-        //                 alignment: Alignment.centerLeft,
-        //                 child: InkWell(
-        //                   onTap: () {
-        //                     BlocProvider.of<BooksBloc>(bookKey.currentContext)
-        //                         .add(PressButtonBackEvent(context: context));
-        //                   },
-        //                   child: Icon(Icons.close),
-        //                 ),
-        //               ),
-        //             ),
-        //             Expanded(
-        //               flex: 9,
-        //               child: Column(
-        //                 crossAxisAlignment: CrossAxisAlignment.start,
-        //                 children: <Widget>[
-        //                   Expanded(
-        //                     flex: 9,
-        //                     child: Column(
-        //                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //                       crossAxisAlignment: CrossAxisAlignment.start,
-        //                       children: <Widget>[
-        //                         Container(
-        //                             height: screenHeight * 0.05,
-        //                             child: Row(
-        //                               mainAxisAlignment:
-        //                                   MainAxisAlignment.spaceBetween,
-        //                               children: <Widget>[
-        //                                 countBook(screenWidth),
-        //                                 Text(
-        //                                   "\$ ${(cost * count).toStringAsFixed(2)}",
-        //                                   style: TextStyle(
-        //                                       fontSize: 18,
-        //                                       color: Colors.purple,
-        //                                       fontWeight: FontWeight.bold),
-        //                                 )
-        //                               ],
-        //                             )),
-        //                         Container(
-        //                             height: screenHeight * 0.05,
-        //                             width: screenWidth,
-        //                             child: Row(
-        //                               mainAxisAlignment:
-        //                                   MainAxisAlignment.spaceBetween,
-        //                               children: <Widget>[
-        //                                 Text(
-        //                                   "Transport Fee:",
-        //                                   style: TextStyle(
-        //                                       fontSize: 15,
-        //                                       color: Colors.purple[300]),
-        //                                 ),
-        //                                 Text(
-        //                                   "\$ 5",
-        //                                   style: TextStyle(
-        //                                       fontSize: 20,
-        //                                       color: Colors.purple,
-        //                                       fontWeight: FontWeight.bold),
-        //                                 )
-        //                               ],
-        //                             )),
-        //                         Container(
-        //                             height: screenHeight * 0.05,
-        //                             width: screenWidth,
-        //                             child: Row(
-        //                               mainAxisAlignment:
-        //                                   MainAxisAlignment.spaceBetween,
-        //                               children: <Widget>[
-        //                                 Text(
-        //                                   "VAT (10%): ",
-        //                                   style: TextStyle(
-        //                                       fontSize: 15,
-        //                                       color: Colors.purple[300]),
-        //                                 ),
-        //                                 Text(
-        //                                   "\$ ${(cost * count * 10 / 100).toStringAsFixed(2)}",
-        //                                   style: TextStyle(
-        //                                       fontSize: 20,
-        //                                       color: Colors.purple,
-        //                                       fontWeight: FontWeight.bold),
-        //                                 )
-        //                               ],
-        //                             )),
-        //                         Divider(thickness: 1),
-        //                         Container(
-        //                             height: screenHeight * 0.05,
-        //                             width: screenWidth,
-        //                             child: Row(
-        //                               mainAxisAlignment:
-        //                                   MainAxisAlignment.spaceBetween,
-        //                               children: <Widget>[
-        //                                 Text(
-        //                                   "Total: ",
-        //                                   style: TextStyle(
-        //                                       fontSize: 15,
-        //                                       color: Colors.purple[300]),
-        //                                 ),
-        //                                 Text(
-        //                                   "\$ 200",
-        //                                   style: TextStyle(
-        //                                       fontSize: 20,
-        //                                       color: Colors.purple,
-        //                                       fontWeight: FontWeight.bold),
-        //                                 )
-        //                               ],
-        //                             )),
-        //                       ],
-        //                     ),
-        //                   ),
-        //                   // button
-        //                   Expanded(
-        //                     flex: 2,
-        //                     child: InkWell(
-        //                       onTap: () {
-        //                         BlocProvider.of<BooksBloc>(
-        //                                 bookKey.currentContext)
-        //                             .add(PressButtonQREvent(
-        //                                 context: context,
-        //                                 data: widget.book.name +
-        //                                     widget.book.author +
-        //                                     "Buy Book",
-        //                                 registed: false));
-        //                       },
-        //                       child: Container(
-        //                         decoration: BoxDecoration(
-        //                             color: Colors.purple[400],
-        //                             boxShadow: [
-        //                               BoxShadow(
-        //                                 color: Colors.grey.withOpacity(0.5),
-        //                                 spreadRadius: 1,
-        //                                 blurRadius: 6,
-        //                                 offset: Offset(
-        //                                     0, 3), // changes position of shadow
-        //                               ),
-        //                             ],
-        //                             borderRadius: BorderRadius.circular(24)),
-        //                         child: Center(
-        //                           child: Text(
-        //                             "Confirm",
-        //                             style: TextStyle(
-        //                                 fontSize: 15,
-        //                                 color: Colors.white,
-        //                                 fontWeight: FontWeight.bold),
-        //                           ),
-        //                         ),
-        //                       ),
-        //                     ),
-        //                   )
-        //                 ],
-        //               ),
-        //             )
-        //           ],
-        //         ),
-        //       ),
-        //     );
-        //   },
-        // );
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    24,
+                  ),
+                ), //this right here
+                child: DialogCart(book: widget.book));
+          },
+        );
       },
       child: Container(
         height: screenHeight * 0.065,
@@ -419,21 +256,12 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
               ),
             ],
             borderRadius: BorderRadius.circular(24)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "Buy Book",
-              style: TextStyle(fontSize: 15, color: Colors.white),
-            ),
-            Text(
-              "\$ ${widget.book.cost}",
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
-            ),
-          ],
+        child: Center(
+          child: Text(
+            "Add Your Cart",
+            style: TextStyle(
+                fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
     );
@@ -881,62 +709,6 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget countBook(double screenWidth) {
-    return Container(
-      width: screenWidth * 0.25,
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.purple),
-          borderRadius: BorderRadius.circular(24)),
-      child: Row(
-        children: <Widget>[
-          InkWell(
-            onTap: () {
-              setState(() {
-                if (count > 1) {
-                  count--;
-                  // widget.list[widget.argument].amount = amount;
-                }
-              });
-            },
-            child: Expanded(
-              flex: 1,
-              child: Container(
-                child: Icon(Icons.remove, color: Colors.purple[300]),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Container(
-              child: Center(
-                child: Text(
-                  count.toString(),
-                  style: TextStyle(fontSize: 14, color: Colors.purple[300]),
-                ),
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              setState(() {
-                if (count < 99) {
-                  count++;
-                  // widget.list[widget.argument].amount = amount;
-                }
-              });
-            },
-            child: Expanded(
-              flex: 1,
-              child: Container(
-                child: Icon(Icons.add, color: Colors.purple[300]),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget bookMark() {
     return Expanded(
       flex: 2,
@@ -1140,6 +912,188 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
             },
           )
         ],
+      ),
+    );
+  }
+}
+
+class DialogCart extends StatefulWidget {
+  final Book book;
+  DialogCart({@required this.book});
+  @override
+  _DialogCartState createState() => _DialogCartState();
+}
+
+class _DialogCartState extends State<DialogCart> {
+  int count = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    return BlocProvider(
+      create: (context) => BooksBloc(),
+      child: BlocListener<BooksBloc, BooksState>(
+        listener: (context, state) {},
+        child: BlocBuilder<BooksBloc, BooksState>(
+          builder: (context, state) {
+            return Container(
+              height: screenHeight * 0.3,
+              padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.05,
+                  vertical: screenHeight * 0.03),
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: InkWell(
+                        onTap: () {
+                          BlocProvider.of<BooksBloc>(context)
+                              .add(PressButtonBackEvent(context: context));
+                        },
+                        child: Icon(Icons.close),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              countCart(screenHeight, screenWidth),
+                              Text(
+                                "\$ ${(widget.book.cost * count).toStringAsFixed(2)}",
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.purple,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // button
+                        Expanded(
+                          flex: 2,
+                          child: Row(
+                            children: <Widget>[
+                              // button sure
+                              Expanded(
+                                flex: 1,
+                                child: InkWell(
+                                  onTap: () {
+                                    BlocProvider.of<BooksBloc>(context).add(
+                                        PressButtonAddCartEvent(
+                                            book: widget.book,
+                                            count: count,
+                                            cost: widget.book.cost * count,
+                                            context: context));
+                                    BlocProvider.of<BooksBloc>(context).add(
+                                        PressButtonBackEvent(context: context));
+                                  },
+                                  child: Container(
+                                    height: screenHeight * 0.065,
+                                    margin: EdgeInsets.only(
+                                        right: screenWidth * 0.01),
+                                    decoration: BoxDecoration(
+                                        color: Colors.red[400],
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 1,
+                                            blurRadius: 6,
+                                            offset: Offset(0,
+                                                3), // changes position of shadow
+                                          ),
+                                        ],
+                                        borderRadius:
+                                            BorderRadius.circular(24)),
+                                    child: Center(
+                                      child: Text(
+                                        "Confirm",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget countCart(double screenHeight, double screenWidth) {
+    return Container(
+      height: screenHeight * 0.05,
+      width: screenWidth * 0.25,
+      child: Container(
+        width: screenWidth * 0.25,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.purple),
+            borderRadius: BorderRadius.circular(24)),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    if (count > 1) {
+                      count--;
+                    }
+                  });
+                },
+                child: Container(
+                  child: Icon(Icons.navigate_before, color: Colors.purple[300]),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                child: Center(
+                  child: Text(
+                    count.toString(),
+                    style: TextStyle(fontSize: 14, color: Colors.purple[300]),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    if (count < 99) {
+                      count++;
+                    }
+                  });
+                },
+                child: Container(
+                  child: Icon(Icons.navigate_next, color: Colors.purple[300]),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

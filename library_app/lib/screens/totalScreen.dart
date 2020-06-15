@@ -5,7 +5,7 @@ import 'package:library_app/screens/bookmark/bookMarkScreen.dart';
 import 'package:library_app/screens/cart/cartScreen.dart';
 import 'package:library_app/screens/home/homeScreen.dart';
 import 'package:library_app/screens/member/memberListScreen.dart';
-import 'package:library_app/screens/payment_order/orderListScreen.dart';
+import 'package:library_app/screens/payment/paymentHistoryScreen.dart';
 
 class TotalPage extends StatefulWidget {
   final Member member;
@@ -24,7 +24,7 @@ class _TotalPageState extends State<TotalPage> {
   BookMarkPage _bookMarkPage;
   CartPage _cartPage;
   MemberListPage _memberListPage;
-  OrderListPage _orderListPage;
+  PaymentHistoryPage _paymentListPage;
 
   Widget _home;
 
@@ -35,7 +35,7 @@ class _TotalPageState extends State<TotalPage> {
     _bookMarkPage = BookMarkPage();
     _cartPage = CartPage();
     _memberListPage = MemberListPage();
-    _orderListPage = OrderListPage();
+    _paymentListPage = PaymentHistoryPage();
     _home = HomePage(model: widget.member);
     super.initState();
   }
@@ -76,7 +76,7 @@ class _TotalPageState extends State<TotalPage> {
         return _cartPage;
         break;
       case 4:
-        return _orderListPage;
+        return _paymentListPage;
         break;
       default:
         return Container(

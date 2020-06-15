@@ -82,22 +82,34 @@ class BookmarkModel(db.Model):
     image = db.Column(db.String(255))
     name = db.Column(db.String(255))
     author = db.Column(db.String(255))
+    imageAuthor = db.Column(db.String(255))
+    writingGenre = db.Column(db.String(255))
+    achievements = db.Column(db.String(255))
+    evaluateAuthor = db.Column(db.Float)
     evaluateBook = db.Column(db.Float)
     description = db.Column(db.String(255))
-    registrationDate = db.Column(db.Integer)
-    expirationDate = db.Column(db.Integer)
-    status = db.Column(db.Integer)
+    category = db.Column(db.String(255))
+    pages = db.Column(db.Integer)
+    cover = db.Column(db.String(255))
+    language = db.Column(db.String(255))
+    cost = db.Column(db.Float)
     username = db.Column(db.String(255))
 
-    def __init__(self, image, name, author, evaluateBook, description, registrationDate, expirationDate, status, username):
+    def __init__(self, image, name, author, imageAuthor, writingGenre, achievements, evaluateAuthor, evaluateBook, description, category, pages, cover, language, cost, username):
         self.image = image
         self.name = name
         self.author = author
+        self.imageAuthor = imageAuthor
+        self.writingGenre = writingGenre
+        self.achievements = achievements
+        self.evaluateAuthor = evaluateAuthor
         self.evaluateBook = evaluateBook
         self.description = description
-        self.registrationDate = registrationDate
-        self.expirationDate = expirationDate
-        self.status = status
+        self.category = category
+        self.pages = pages
+        self.cover = cover
+        self.language = language
+        self.cost = cost
         self.username = username
 
     def __repr__(self):
@@ -113,15 +125,17 @@ class CartModel(db.Model):
     name = db.Column(db.String(255))
     author = db.Column(db.String(255))
     evaluateBook = db.Column(db.Float)
+    description = db.Column(db.String(255))
     count = db.Column(db.Integer)
-    cost = db.Column(db.Integer)
+    cost = db.Column(db.Float)
     username = db.Column(db.String(255))
 
-    def __init__(self, image, name, author, evaluateBook, count, cost, username):
+    def __init__(self, image, name, author, evaluateBook, description, count, cost, username):
         self.image = image
         self.name = name
         self.author = author
         self.evaluateBook = evaluateBook
+        self.description = description
         self.count = count
         self.cost = cost
         self.username = username
@@ -132,17 +146,17 @@ class CartModel(db.Model):
 # payment history - order list
 
 
-class OrderModel(db.Model):
-    __tablename__ = 'orders'
-    orderId = db.Column(db.Integer, primary_key=True)
+class PaymentModel(db.Model):
+    __tablename__ = 'payments'
+    paymentId = db.Column(db.Integer, primary_key=True)
     image = db.Column(db.String(255))
     name = db.Column(db.String(255))
     author = db.Column(db.String(255))
     evaluateBook = db.Column(db.Float)
-    registrationDate = db.Column(db.Integer)
-    expirationDate = db.Column(db.Integer)
+    registrationDate = db.Column(db.BigInteger)
+    expirationDate = db.Column(db.BigInteger)
     count = db.Column(db.Integer)
-    cost = db.Column(db.Integer)
+    cost = db.Column(db.Float)
     status = db.Column(db.Integer)
     username = db.Column(db.String(255))
 
@@ -159,7 +173,7 @@ class OrderModel(db.Model):
         self.username = username
 
     def __repr__(self):
-        return f"<Order {self.name}>"
+        return f"<payment {self.name}>"
 
 
 @app.route('/')
@@ -349,7 +363,8 @@ def handle_bookmarks():
         try:
             data = request.get_json()
             get_bookmark = BookmarkModel(image=data['image'], name=data['name'], author=data['author'],
-                                         evaluateBook=data['evaluateBook'], description=data['description'], registrationDate=data['registrationDate'],
+                                         evaluateBook=data['evaluateBook'], description=data[
+                                             'description'], registrationDate=data['registrationDate'],
                                          expirationDate=data['expirationDate'], status=data['status'], username=data['username'])
 
             bookmarks = BookmarkModel.query.filter_by(
@@ -379,7 +394,8 @@ def handle_bookmarks_add():
         try:
             data = request.get_json()
             new_bookmark = BookmarkModel(image=data['image'], name=data['name'], author=data['author'],
-                                         evaluateBook=data['evaluateBook'], description=data['description'], registrationDate=data['registrationDate'],
+                                         evaluateBook=data['evaluateBook'], description=data[
+                                             'description'], registrationDate=data['registrationDate'],
                                          expirationDate=data['expirationDate'], status=data['status'], username=data['username'])
             db.session.add(new_bookmark)
             db.session.commit()
@@ -456,6 +472,26 @@ def handle_carts_add():
         return {"message": "add cart fail"}
 
 
+@app.route('/carts/update', methods=['POST'])
+def handle_carts_update():
+    if request.is_json:
+        try:
+            data = request.get_json()
+            update_cart = CartModel(image=data['image'], name=data['name'], author=data['author'],
+                                    evaluateBook=data['evaluateBook'], description=data['description'],
+                                    count=data['count'], cost=data['cost'], username=data['username'])
+            update = CartModel.query.filter_by(
+                name=update_cart.name, username=update_cart.username).first()
+            update.count = update_cart.count
+            update.cost = update_cart.cost
+            db.session.commit()
+            return {"message": "update cart success"}
+        except:
+            return {"message": "update cart error"}
+    else:
+        return {"message": "update cart fail"}
+
+
 @app.route('/carts/delete', methods=['POST'])
 def handle_carts_delete():
     if request.is_json:
@@ -473,96 +509,99 @@ def handle_carts_delete():
     else:
         return {"message": "delete cart fail"}
 
-# order
+# payment
 
+@app.route('/payments', methods=['GET'])
+def handle_payments():
+    try:
+        payments = PaymentModel.query.all()
+        results = [
+            {
+                "image": payment.image,
+                "name": payment.name,
+                "author": payment.author,
+                "evaluateBook": payment.evaluateBook,
+                "registrationDate": payment.registrationDate,
+                "expirationDate": payment.expirationDate,
+                "count": payment.count,
+                "cost": payment.cost,
+                "status": payment.status,
+                "username": payment.username
+            } for payment in payments]
+        return {"payments": results, "message": "get payment success"}
+    except:
+        return {"message": "get payment error"}
 
-@app.route('/orders', methods=['POST', 'GET'])
-def handle_orders():
-    if request.method == 'POST':
-        if request.is_json:
-            try:
-                data = request.get_json()
-                new_order = OrderModel(image=data['image'], name=data['name'], author=data['author'],
-                                       evaluate=data['evaluate'],
-                                       registrationDate=data['registrationDate'], expirationDate=data['expirationDate'],
-                                       count=data['count'], cost=data['cost'],
-                                       status=data['status'], username=data['username'])
-                db.session.add(new_order)
-                db.session.commit()
-                return {"message": "add order success"}
-            except:
-                return {"message": "add order error"}
-        else:
-            return {"message": "add order fail"}
-    elif request.method == 'GET':
-        try:
-            orders = OrderModel.query.all()
-            results = [
-                {
-                    "image": order.image,
-                    "name": order.name,
-                    "author": order.author,
-                    "evaluate": order.evaluate,
-                    "registrationDate": order.registrationDate,
-                    "expirationDate": order.expirationDate,
-                    "count": order.count,
-                    "cost": order.cost,
-                    "status": order.status,
-                    "username": order.username
-                } for order in orders]
-            return {"orders": results, "message": "get order success"}
-        except:
-            return {"message": "get order fail"}
-
-
-@app.route('/orders/get', methods=['POST'])
-def handle_order_member():
+@app.route('/payments', methods=['POST'])
+def handle_payments_member():
     if request.is_json:
         try:
             data = request.get_json()
-            get_order = MemberModel(username=data['username'], password=data['password'],
-                                    name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
-            orders = OrderModel.query.filter_by(
-                username=get_order.username)
+            get_payment = PaymentModel(image=data['image'], name=data['name'], author=data['author'],
+                                       evaluateBook=data['evaluateBook'], registrationDate=data[
+                                       'registrationDate'], expirationDate=data['expirationDate'],
+                                       count=data['count'], cost=data['cost'], status=data['status'],
+                                       username=data['username'])
+            payments = PaymentModel.query.filter_by(
+                username=get_payment.username)
             results = [
                 {
-                    "image": order.image,
-                    "name": order.name,
-                    "author": order.author,
-                    "evaluate": order.evaluate,
-                    "registrationDate": order.registrationDate,
-                    "expirationDate": order.expirationDate,
-                    "count": order.count,
-                    "cost": order.cost,
-                    "status": order.status,
-                    "username": order.username
-                } for order in orders]
-
-            return {"orders": results, "message": "get order success"}
+                    "image": payment.image,
+                    "name": payment.name,
+                    "author": payment.author,
+                    "evaluateBook": payment.evaluateBook,
+                    "registrationDate": payment.registrationDate,
+                    "expirationDate": payment.expirationDate,
+                    "count": payment.count,
+                    "cost": payment.cost,
+                    "status": payment.status,
+                    "username": payment.username
+                } for payment in payments]
+            return {"payments": results, "message": "get payment success"}
         except:
-            return {"message": "get order error"}
+            return {"message": "get payment error"}
     else:
-        return {"message": "add order fail"}
+        return {"message": "get payment fail"}
 
-
-@app.route('/orders/delete', methods=['POST'])
-def handle_orders_delete():
+@app.route('/payments/add', methods=['POST'])
+def handle_payments_add():
     if request.is_json:
         try:
             data = request.get_json()
-            delete_order = OrderModel(image=data['image'], name=data['name'], author=data['author'],
-                                      evaluate=data['evaluate'],
-                                      registrationDate=data['registrationDate'], expirationDate=data['expirationDate'],
-                                      count=data['count'], cost=data['cost'],
-                                      status=data['status'], username=data['username'])
-            OrderModel.query.filter_by(
-                name=delete_order.name, username=delete_order.username).delete()
+            new_payment = PaymentModel(image=data['image'], name=data['name'], author=data['author'],
+                                       evaluateBook=data['evaluateBook'], registrationDate=data[
+                                       'registrationDate'], expirationDate=data['expirationDate'],
+                                       count=data['count'], cost=data['cost'], status=data['status'],
+                                       username=data['username'])
+            db.session.add(new_payment)
+            CartModel.query.filter_by(
+                name=new_payment.name, username=new_payment.username).delete()
             db.session.commit()
-            return {"message": "delete order success"}
+            return {"message": "add payment success"}
         except:
-            return {"message": "delete order fail"}
+            return {"message": "add payment error"}
     else:
-        return {"message": "delete order fail"}
+        return {"message": "add payment fail"}
+
+
+@app.route('/payments/delete', methods=['POST'])
+def handle_payments_delete():
+    if request.is_json:
+        try:
+            data = request.get_json()
+            delete_payment = PaymentModel(image=data['image'], name=data['name'], author=data['author'],
+                                       evaluateBook=data['evaluateBook'], registrationDate=data[
+                                       'registrationDate'], expirationDate=data['expirationDate'],
+                                       count=data['count'], cost=data['cost'], status=data['status'],
+                                       username=data['username'])
+            PaymentModel.query.filter_by(
+                name=delete_payment.name, username=delete_payment.username).delete()
+            db.session.commit()
+            return {"message": "delete payment success"}
+        except:
+            return {"message": "delete payment error"}
+    else:
+        return {"message": "delete payment fail"}
 
 # book
 
@@ -609,16 +648,17 @@ def handle_books_add():
         except:
             return {"message": "get order fail"}
 
+
 @app.route('/books/update', methods=['POST'])
 def handle_books_update():
     if request.is_json:
         try:
             data = request.get_json()
             update_book = BookModel(image=data['image'], name=data['name'], author=data['author'], imageAuthor=data['imageAuthor'],
-                                     writingGenre=data['writingGenre'], achievements=data['achievements'],
-                                     evaluateAuthor=data['evaluateAuthor'], evaluateBook=data['evaluateBook'],
-                                     description=data['description'], category=data['category'], pages=data['pages'],
-                                     cover=data['cover'], language=data['language'], cost=data['cost'])
+                                    writingGenre=data['writingGenre'], achievements=data['achievements'],
+                                    evaluateAuthor=data['evaluateAuthor'], evaluateBook=data['evaluateBook'],
+                                    description=data['description'], category=data['category'], pages=data['pages'],
+                                    cover=data['cover'], language=data['language'], cost=data['cost'])
             update = BookModel.query.filter_by(
                 name=update_book.name).first()
             update.image = update_book.image
@@ -641,16 +681,17 @@ def handle_books_update():
     else:
         return {"message": "update book fail"}
 
+
 @app.route('/books/delete', methods=['POST'])
 def handle_books_delete():
     if request.is_json:
         try:
             data = request.get_json()
             delete_book = BookModel(image=data['image'], name=data['name'], author=data['author'], imageAuthor=data['imageAuthor'],
-                                     writingGenre=data['writingGenre'], achievements=data['achievements'],
-                                     evaluateAuthor=data['evaluateAuthor'], evaluateBook=data['evaluateBook'],
-                                     description=data['description'], category=data['category'], pages=data['pages'],
-                                     cover=data['cover'], language=data['language'], cost=data['cost'])
+                                    writingGenre=data['writingGenre'], achievements=data['achievements'],
+                                    evaluateAuthor=data['evaluateAuthor'], evaluateBook=data['evaluateBook'],
+                                    description=data['description'], category=data['category'], pages=data['pages'],
+                                    cover=data['cover'], language=data['language'], cost=data['cost'])
             BookModel.query.filter_by(
                 name=delete_book.name).delete()
             db.session.commit()

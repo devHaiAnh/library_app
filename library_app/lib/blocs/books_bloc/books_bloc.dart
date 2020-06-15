@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:library_app/configs/configsApp.dart';
 import 'package:library_app/data/api/book/getBook_api.dart';
 import 'package:library_app/data/api/bookmark/addBookmark_api.dart';
 import 'package:library_app/data/api/bookmark/delBookmark_api.dart';
+import 'package:library_app/data/api/cart/addCart_api.dart';
+import 'package:library_app/data/api/cart/delCart_api.dart';
 import 'package:library_app/data/model/books_model.dart';
 import 'package:library_app/screens/book/bookScreen.dart';
 import 'package:library_app/screens/widget/qrScreen.dart';
@@ -59,24 +62,37 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
       }
       // Add Cart
       if (event is PressButtonAddCartEvent) {
-        // yield LoadingState();
-        // final result = await postAddCart(
-        //     username: event.username,
-        //     password: event.password,
-        //     name: event.name,
-        //     email: event.email,
-        //     phone: event.phone,
-        //     admin: event.admin);
-        // if (result == 1) {
-        //   yield SuccessState(
-        //       title: "Congratulations", message: "Add Member Success");
-        // } else if (result == 2) {
-        //   yield ErrorState(
-        //       errorTitle: "Warning!!!", errorMessage: "Member already exists");
-        // } else {
-        //   yield ErrorState(
-        //       errorTitle: "Warning!!!", errorMessage: "Error Sever");
-        // }
+        yield LoadingState();
+          final result = await postAddCart(
+              image: event.book.image,
+              name: event.book.name,
+              author: event.book.author,
+              evaluateBook: event.book.evaluateBook,
+              description: event.book.description,
+              count: event.count,
+              cost: event.cost,
+              username: ConfigsApp.userName);
+          if (result == 1) {
+            yield SuccessState(
+                title: "Congratulations", message: "Add Cart Success");
+          } else {
+            yield ErrorState(
+                errorTitle: "Warning!!!", errorMessage: "Error Sever");
+          }
+      }
+      // Delete Cart
+      if (event is PressButtonDelCartEvent) {
+        yield LoadingState();
+          final result = await postDelCart(
+              name: event.book.name,
+              username: ConfigsApp.userName);
+          if (result == 1) {
+            yield SuccessState(
+                title: "Congratulations", message: "Delete Cart Success");
+          } else {
+            yield ErrorState(
+                errorTitle: "Warning!!!", errorMessage: "Error Sever");
+          }
       }
       // Add Bookmark
       if (event is PressBookmarkEvent) {

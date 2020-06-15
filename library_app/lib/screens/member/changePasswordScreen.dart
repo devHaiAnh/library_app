@@ -195,6 +195,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   }
 
   Widget containPage(double screenHeight, double screenWidth) {
+    final image =
+        "https://cdn.pixabay.com/photo/2017/08/26/20/19/library-2684238_960_720.jpg";
     return Container(
       height: screenHeight * 0.88,
       padding: EdgeInsets.all(screenWidth * 0.05),
@@ -215,7 +217,22 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[data(screenWidth, screenHeight)],
+        children: <Widget>[
+          Expanded(
+            flex: 4,
+            child: Container(
+              color: Colors.red,
+              child: Image.network(
+                image,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 6,
+            child: data(screenWidth, screenHeight),
+          ),
+        ],
       ),
     );
   }

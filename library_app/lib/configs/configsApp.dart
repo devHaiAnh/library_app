@@ -11,6 +11,7 @@ class ConfigsApp {
   static String bookUrl = "/books";
   static String bookmarkUrl = "/bookmarks";
   static String cartUrl = "/carts";
+  static String paymentUrl = "/payments";
   static String orderUrl = "/orders";
 
   static String addUrl = "/add";

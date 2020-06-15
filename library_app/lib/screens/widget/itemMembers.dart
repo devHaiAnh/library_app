@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:library_app/data/model/members_model.dart';
-import 'package:library_app/screens/payment_order/paymentHistoryScreen.dart';
+import 'package:library_app/screens/payment/paymentHistoryMemberScreen.dart';
+import 'package:library_app/screens/payment/paymentHistoryScreen.dart';
 
 class ItemMembers extends StatefulWidget {
   final double width, height;
@@ -97,7 +98,9 @@ class _ItemMembersState extends State<ItemMembers> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          PaymentHistoryPage()));
+                                          PaymentHistoryMemberPage(
+                                              username:
+                                                  widget.itemMember.username)));
                             },
                             child: Container(
                               width: widget.width * 0.07,

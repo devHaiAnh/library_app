@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/data/model/order.dart';
+import 'package:library_app/data/model/payments_model.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ItemBookHistory extends StatefulWidget {
   final double width, height;
-  final Order itemBook;
+  final Payment itemBook;
   ItemBookHistory({Key key, this.width, this.height, this.itemBook})
       : super(key: key);
   @override
@@ -72,7 +72,7 @@ class _ItemBookHistoryState extends State<ItemBookHistory> {
           Container(
             height: widget.height * 0.02,
             child: SmoothStarRating(
-              rating: widget.itemBook.star,
+              rating: widget.itemBook.evaluateBook,
               size: 15,
               filledIconData: Icons.star,
               halfFilledIconData: Icons.star_half,
@@ -96,7 +96,7 @@ class _ItemBookHistoryState extends State<ItemBookHistory> {
                     style: TextStyle(color: Colors.black, fontSize: 13),
                   ),
                   TextSpan(
-                    text: widget.itemBook.registrationDate,
+                    text: "widget.itemBook.registrationDate",
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w600,
@@ -118,7 +118,7 @@ class _ItemBookHistoryState extends State<ItemBookHistory> {
                     style: TextStyle(color: Colors.black, fontSize: 13),
                   ),
                   TextSpan(
-                    text: widget.itemBook.expirationDate,
+                    text: "widget.itemBook.expirationDate",
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w600,
@@ -130,32 +130,32 @@ class _ItemBookHistoryState extends State<ItemBookHistory> {
           ),
           SizedBox(height: widget.height * 0.01),
           // Status
-          Container(
-            height: widget.height * 0.03,
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: "Status: ",
-                    style: TextStyle(color: Colors.black, fontSize: 13),
-                  ),
-                  TextSpan(
-                    text: widget.itemBook.status == 0
-                        ? "Reading"
-                        : widget.itemBook.status == 1 ? "Hiring" : "Bought",
-                    style: TextStyle(
-                        color: widget.itemBook.status == 0
-                            ? Colors.green
-                            : widget.itemBook.status == 1
-                                ? Colors.blue
-                                : Colors.purple[400],
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13),
-                  )
-                ],
-              ),
-            ),
-          ),
+          // Container(
+          //   height: widget.height * 0.03,
+          //   child: RichText(
+          //     text: TextSpan(
+          //       children: [
+          //         TextSpan(
+          //           text: "Status: ",
+          //           style: TextStyle(color: Colors.black, fontSize: 13),
+          //         ),
+          //         TextSpan(
+          //           text: widget.itemBook.status == 0
+          //               ? "Reading"
+          //               : widget.itemBook.status == 1 ? "Hiring" : "Bought",
+          //           style: TextStyle(
+          //               color: widget.itemBook.status == 0
+          //                   ? Colors.green
+          //                   : widget.itemBook.status == 1
+          //                       ? Colors.blue
+          //                       : Colors.purple[400],
+          //               fontWeight: FontWeight.w600,
+          //               fontSize: 13),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

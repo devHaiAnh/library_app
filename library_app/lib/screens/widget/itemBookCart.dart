@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:library_app/data/model/cart.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:library_app/blocs/cart_bloc/cart_bloc.dart';
+import 'package:library_app/data/model/carts_model.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ItemBookCart extends StatefulWidget {
@@ -12,38 +14,51 @@ class ItemBookCart extends StatefulWidget {
 }
 
 class _ItemBookCartState extends State<ItemBookCart> {
+  GlobalKey itemCartKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: widget.height * 0.25,
-      padding: EdgeInsets.all(widget.width * 0.025),
-      margin: EdgeInsets.all(widget.width * 0.02),
-      width: widget.width * 0.7,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 6,
-            offset: Offset(0, 3), // changes position of shadow
-          ),
-        ],
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Row(
-        children: <Widget>[
-          // image
-          Expanded(
-            flex: 3,
-            child: image(),
-          ),
-          // contain
-          Expanded(
-            flex: 7,
-            child: containPage(),
-          ),
-        ],
+    return BlocProvider(
+      create: (context) => CartBloc(),
+      child: BlocListener<CartBloc, CartState>(
+        listener: (context, state) {},
+        child: BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            return Container(
+              key: itemCartKey,
+              height: widget.height * 0.25,
+              padding: EdgeInsets.all(widget.width * 0.025),
+              margin: EdgeInsets.all(widget.width * 0.02),
+              width: widget.width * 0.7,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 1,
+                    blurRadius: 6,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Row(
+                children: <Widget>[
+                  // image
+                  Expanded(
+                    flex: 3,
+                    child: image(),
+                  ),
+                  // contain
+                  Expanded(
+                    flex: 7,
+                    child: containPage(),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -53,6 +68,14 @@ class _ItemBookCartState extends State<ItemBookCart> {
       width: widget.width,
       height: widget.height,
       decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 6,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
         image: DecorationImage(
             image: NetworkImage(widget.itemCart.image), fit: BoxFit.cover),
       ),
@@ -72,7 +95,7 @@ class _ItemBookCartState extends State<ItemBookCart> {
           Container(
             height: widget.height * 0.02,
             child: SmoothStarRating(
-              rating: widget.itemCart.star,
+              rating: widget.itemCart.evaluateBook,
               size: 15,
               filledIconData: Icons.star,
               halfFilledIconData: Icons.star_half,
@@ -99,9 +122,11 @@ class _ItemBookCartState extends State<ItemBookCart> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  // count
                   countBook(),
+                  // cost
                   Text(
-                    "\$ 77",
+                    "\$ ${widget.itemCart.cost.toStringAsFixed(2)}",
                     style: TextStyle(
                         fontSize: 18,
                         color: Colors.purple,
@@ -117,24 +142,15 @@ class _ItemBookCartState extends State<ItemBookCart> {
 
   Widget countBook() {
     return Container(
-      width: widget.width * 0.25,
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.purple),
-          borderRadius: BorderRadius.circular(24)),
+      width: widget.width * 0.2,
       child: Row(
         children: <Widget>[
           Expanded(
             flex: 1,
             child: Container(
-              child: Icon(Icons.navigate_before, color: Colors.purple[300]),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Container(
               child: Center(
                 child: Text(
-                  "3",
+                  "Count: ",
                   style: TextStyle(fontSize: 14, color: Colors.purple[300]),
                 ),
               ),
@@ -143,7 +159,15 @@ class _ItemBookCartState extends State<ItemBookCart> {
           Expanded(
             flex: 1,
             child: Container(
-              child: Icon(Icons.navigate_next, color: Colors.purple[300]),
+              child: Center(
+                child: Text(
+                  widget.itemCart.count.toString(),
+                  style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.purple,
+                        fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
           ),
         ],
@@ -176,7 +200,9 @@ class _ItemBookCartState extends State<ItemBookCart> {
           ),
           InkWell(
             onTap: () {
-              
+              BlocProvider.of<CartBloc>(itemCartKey.currentContext).add(
+                  PressButtonDelCartEvent(
+                      context: context, name: widget.itemCart.name));
             },
             child: Container(
               width: widget.width * 0.07,

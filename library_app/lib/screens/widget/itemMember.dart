@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:library_app/data/model/login_model.dart';
-import 'package:library_app/screens/payment_order/paymentHistoryScreen.dart';
+import 'package:library_app/screens/payment/paymentHistoryMemberScreen.dart';
+import 'package:library_app/screens/payment/paymentHistoryScreen.dart';
 
 class ItemMember extends StatefulWidget {
   final double width, height;
@@ -87,20 +88,12 @@ class _ItemMemberState extends State<ItemMember> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          PaymentHistoryPage()));
+                                      builder: (context) => PaymentHistoryMemberPage(
+                                          username: widget.itemMember.username)));
                             },
                             child: Container(
                               width: widget.width * 0.07,
                               height: widget.width * 0.07,
-                              // decoration: BoxDecoration(
-                              //     border: Border.all(
-                              //         color:
-                              //             Colors.red),
-                              //     borderRadius:
-                              //         BorderRadius
-                              //             .circular(
-                              //                 24)),
                               child: Center(
                                 child: FaIcon(FontAwesomeIcons.cartArrowDown,
                                     color: Colors.purple[300], size: 20),

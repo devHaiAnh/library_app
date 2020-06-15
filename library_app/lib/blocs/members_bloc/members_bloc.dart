@@ -72,6 +72,7 @@ class MembersBloc extends Bloc<MembersEvent, MembersState> {
         // if (event.updateMemberStream.isValidInfo(
         //     name: event.name, email: event.email, phone: event.phone)) {
         final result = await postUpdateMembers(
+            username: event.username,
             name: event.name,
             phone: event.phone,
             email: event.email,

@@ -82,6 +82,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                       child: Container(
                         height: screenHeight * 0.08,
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             InkWell(
                               onTap: () {
@@ -108,7 +109,32 @@ class _EditMemberPageState extends State<EditMemberPage> {
                                     size: 18,
                                   )),
                             ),
-                            Spacer(),
+                            Container(
+                              height: screenHeight * 0.06,
+                              width: screenWidth * 0.4,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 1,
+                                    blurRadius: 6,
+                                    offset: Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Edit Member",
+                                  style: TextStyle(
+                                      color: Colors.purple,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
                             InkWell(
                               onTap: () {
                                 BlocProvider.of<MemberBloc>(
@@ -155,23 +181,23 @@ class _EditMemberPageState extends State<EditMemberPage> {
                     child: containPage(screenHeight, screenWidth),
                   ),
                   // image book
-                  Positioned(
-                    top: screenHeight * 0.1,
-                    left: screenWidth * 0.35,
-                    right: screenWidth * 0.35,
-                    child: Container(
-                      height: screenHeight * 0.25,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        image: DecorationImage(
-                          image: AssetImage(widget.member.admin
-                              ? "assets/img/admin.png"
-                              : "assets/img/member.png"),
-                          // fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  )
+                  // Positioned(
+                  //   top: screenHeight * 0.1,
+                  //   left: screenWidth * 0.35,
+                  //   right: screenWidth * 0.35,
+                  //   child: Container(
+                  //     height: screenHeight * 0.25,
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.white,
+                  //       image: DecorationImage(
+                  //         image: AssetImage(widget.member.admin
+                  //             ? "assets/img/admin.png"
+                  //             : "assets/img/member.png"),
+                  //         // fit: BoxFit.cover,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             );
@@ -182,8 +208,9 @@ class _EditMemberPageState extends State<EditMemberPage> {
   }
 
   Widget containPage(double screenHeight, double screenWidth) {
+    final image = "https://cdn.pixabay.com/photo/2014/10/14/20/14/library-488681_960_720.jpg";
     return Container(
-      height: screenHeight * 0.8,
+      height: screenHeight * 0.88,
       padding: EdgeInsets.all(screenWidth * 0.05),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -203,16 +230,23 @@ class _EditMemberPageState extends State<EditMemberPage> {
       child: Column(
         children: <Widget>[
           Expanded(
-            flex: 2,
-            child: Container(),
+            flex: 4,
+            child: Container(
+              color: Colors.red,
+              child: Image.network(
+                image,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
           Expanded(
-            flex: 9,
+            flex: 6,
             child: Container(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   // username
+                  SizedBox(height: screenHeight * 0.04),
                   username(screenWidth),
                   SizedBox(height: screenHeight * 0.01),
                   Divider(thickness: 1),

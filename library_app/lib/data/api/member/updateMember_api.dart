@@ -8,7 +8,7 @@ Future<int> postUpdateMember(
   try {
     Map<String, dynamic> body = {
       "username": ConfigsApp.userName,
-      "password": "null",
+      "password": ConfigsApp.passWord,
       "name": name,
       "email": email,
       "phone": phone,
