@@ -77,7 +77,9 @@ class _CategoryListHomePageState extends State<CategoryListHomePage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CategoryBookHomePage()));
+                      builder: (context) => CategoryBookHomePage(
+                            category: categoryList[index].name,
+                          )));
             },
             child: itemCategory(screenHeight, screenWidth, index),
           );
@@ -116,10 +118,10 @@ class _CategoryListHomePageState extends State<CategoryListHomePage> {
             categoryList[index].name,
             style: TextStyle(color: Colors.purple, fontSize: 15),
           ),
-          Text(
-            "${categoryList[index].count} books",
-            style: TextStyle(color: Colors.purple, fontSize: 10),
-          )
+          // Text(
+          //   "${categoryList[index].count} books",
+          //   style: TextStyle(color: Colors.purple, fontSize: 10),
+          // )
         ],
       ),
     );

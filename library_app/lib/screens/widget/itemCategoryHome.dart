@@ -42,10 +42,10 @@ class _ItemCategoryHomeState extends State<ItemCategoryHome> {
             widget.itemCategoryBook.name,
             style: TextStyle(color: Colors.purple, fontSize: 15),
           ),
-          Text(
-            "${widget.itemCategoryBook.count} books",
-            style: TextStyle(color: Colors.purple, fontSize: 10),
-          )
+          // Text(
+          //   "${widget.itemCategoryBook.count} books",
+          //   style: TextStyle(color: Colors.purple, fontSize: 10),
+          // )
         ],
       ),
     );

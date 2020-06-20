@@ -20,8 +20,8 @@ Future<int> postRegister({
     var finalBody = json.encode(body);
     Response response = await post(
         ConfigsApp.isDebugMode
-            ? ConfigsApp.baseUrl + ConfigsApp.memberUrl
-            : ConfigsApp.baseUrl + ConfigsApp.memberUrl,
+            ? ConfigsApp.baseUrl + ConfigsApp.membersUrl
+            : ConfigsApp.baseUrl + ConfigsApp.membersUrl,
         body: finalBody,
         headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:library_app/blocs/payment_bloc/payment_bloc.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
 import 'package:library_app/screens/widget/itemBookPayment.dart';
-
+import 'package:library_app/screens/widget/qrScreen.dart';
 
 class PaymentHistoryPage extends StatefulWidget {
   @override
@@ -25,12 +25,13 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return BlocProvider(
-      create: (context) => _paymentBloc
-        ..add(LoadPaymentEvent()),
+      create: (context) => _paymentBloc..add(LoadPaymentEvent()),
       child: BlocListener<PaymentBloc, PaymentState>(
-        listener: (context, state) {if (state is ErrorState) {
+        listener: (context, state) {
+          if (state is ErrorState) {
             _showDialog(context, state.errorTitle, state.errorMessage);
-          }},
+          }
+        },
         child: BlocBuilder<PaymentBloc, PaymentState>(
           builder: (context, state) {
             return Scaffold(
@@ -56,7 +57,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                         width: screenWidth,
                         height: screenHeight,
                         buttonBack: 1,
-                        title: "Payment History All",
+                        title: "All Payment List",
                       )),
                   // contain
                   Positioned(
@@ -77,7 +78,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
 
   Widget containPage(
       double screenHeight, double screenWidth, PaymentState state) {
-    if (state is LoadedState) {
+    if (state is LoadedPaymentState) {
       return Container(
         height: screenHeight * 0.88,
         padding: EdgeInsets.all(screenWidth * 0.05),
@@ -101,13 +102,14 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
               onTap: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => QRPage(
-                //               data: "data",
-                //               registed: true,
-                //             )));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => QRPage(
+                              data: state.paymentList[index].name +
+                                  state.paymentList[index].username,
+                              registed: true,
+                            )));
               },
               child: ItemBookPayment(
                   height: screenHeight,
@@ -139,6 +141,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
       );
     }
   }
+
   _showDialog(BuildContext mainContext, String title, String message) async {
     await showDialog(
       context: mainContext,

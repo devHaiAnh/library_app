@@ -3,18 +3,23 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:library_app/configs/configsApp.dart';
 
-Future<int> postDelBookmark(
-    {String name}) async {
+Future<int> postDelBookmark({String name}) async {
   try {
     Map<String, dynamic> body = {
-      "image": "null",
+      "image": "image",
       "name": name,
-      "author": "null",
-      "evaluateBook": 0,
-      "description": "null",
-      "registrationDate": 0,
-      "expirationDate": 0,
-      "status": 0,
+      "author": "author",
+      "imageAuthor": "imageAuthor",
+      "writingGenre": "writingGenre",
+      "achievements": "achievements",
+      "evaluateAuthor": 5.0,
+      "evaluateBook": 5.0,
+      "description": "description",
+      "category": "category",
+      "pages": 1,
+      "cover": "cover",
+      "language": "language",
+      "cost": 11.11,
       "username": ConfigsApp.userName
     };
     var finalBody = json.encode(body);

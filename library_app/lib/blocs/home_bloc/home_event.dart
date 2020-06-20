@@ -37,46 +37,16 @@ class PressBtnMoveChangePassEvent extends HomeEvent {
 
 // category
 class PressBtnMoveCategoryEvent extends HomeEvent {
+  final String category;
   final BuildContext context;
-  PressBtnMoveCategoryEvent({@required this.context});
+  PressBtnMoveCategoryEvent({@required this.context, @required this.category});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [category];
 }
 
 class PressBtnMoveCategoryAllEvent extends HomeEvent {
   final BuildContext context;
   PressBtnMoveCategoryAllEvent({@required this.context});
-  @override
-  List<Object> get props => [];
-}
-
-// trending
-class PressBtnMoveTrendingEvent extends HomeEvent {
-  final BuildContext context;
-  PressBtnMoveTrendingEvent({@required this.context});
-  @override
-  List<Object> get props => [];
-}
-
-class PressBtnMoveTrendingAllEvent extends HomeEvent {
-  final BuildContext context;
-  PressBtnMoveTrendingAllEvent({@required this.context});
-  @override
-  List<Object> get props => [];
-}
-
-// new book
-class PressBtnMoveNewBookEvent extends HomeEvent {
-  final Book book;
-  final BuildContext context;
-  PressBtnMoveNewBookEvent({@required this.book, @required this.context});
-  @override
-  List<Object> get props => [book];
-}
-
-class PressBtnMoveNewBookAllEvent extends HomeEvent {
-  final BuildContext context;
-  PressBtnMoveNewBookAllEvent({@required this.context});
   @override
   List<Object> get props => [];
 }

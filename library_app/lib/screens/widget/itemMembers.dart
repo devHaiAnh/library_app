@@ -8,7 +8,14 @@ class ItemMembers extends StatefulWidget {
   final double width, height;
   final Member itemMember;
   final bool state;
-  ItemMembers({Key key, this.width, this.height, this.itemMember, this.state})
+  final Function function;
+  ItemMembers(
+      {Key key,
+      this.width,
+      this.height,
+      this.itemMember,
+      this.state,
+      this.function})
       : super(key: key);
   @override
   _ItemMembersState createState() => _ItemMembersState();
@@ -127,11 +134,7 @@ class _ItemMembersState extends State<ItemMembers> {
                                 flex: 2,
                                 child: InkWell(
                                   onTap: () {
-                                    // BlocProvider.of<MemberBloc>(context).add(
-                                    //     PressButtonDeleteEvent(
-                                    //         username:
-                                    //             widget.itemMember.username,
-                                    //         context: context));
+                                    widget.function(false);
                                   },
                                   child: Container(
                                     width: widget.width * 0.07,

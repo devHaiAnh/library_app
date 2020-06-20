@@ -4,7 +4,12 @@ class AppBarApp extends StatefulWidget {
   final String title;
   final int buttonBack;
   final double width, height;
-  AppBarApp({Key key, this.buttonBack, this.width, this.height, this.title})
+  AppBarApp(
+      {Key key,
+      this.buttonBack,
+      this.width,
+      this.height,
+      this.title})
       : super(key: key);
   @override
   _AppBarAppState createState() => _AppBarAppState();

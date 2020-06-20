@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -5,6 +6,8 @@ import 'package:library_app/blocs/members_bloc/members_bloc.dart';
 import 'package:library_app/streams/addMember_stream.dart';
 
 class AddMemberPage extends StatefulWidget {
+  final Function function;
+  AddMemberPage({this.function});
   @override
   _AddMemberPageState createState() => _AddMemberPageState();
 }
@@ -115,6 +118,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
           InkWell(
             onTap: () {
               Navigator.pop(context);
+              widget.function(true);
             },
             child: Container(
                 width: screenWidth * 0.08,
@@ -200,6 +204,8 @@ class _AddMemberPageState extends State<AddMemberPage> {
   }
 
   Widget containPage(double screenHeight, double screenWidth) {
+    final image =
+        "https://cdn.pixabay.com/photo/2013/01/05/20/47/library-74038_960_720.jpg";
     return Container(
       height: screenHeight * 0.88,
       padding: EdgeInsets.all(screenWidth * 0.05),
@@ -219,8 +225,30 @@ class _AddMemberPageState extends State<AddMemberPage> {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[data(screenWidth, screenHeight)],
+        children: <Widget>[
+          Expanded(
+            flex: 3,
+            child: Container(
+              color: Colors.red,
+              child: CachedNetworkImage(
+                imageUrl: image,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 7,
+            child: data(screenWidth, screenHeight),
+          ),
+        ],
       ),
     );
   }
@@ -231,7 +259,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: screenHeight * 0.1),
+          SizedBox(height: screenHeight * 0.01),
           StreamBuilder(
             stream: addMemberStream.nameStream,
             builder: (context, snapshot) => TextField(

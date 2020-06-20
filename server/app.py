@@ -347,6 +347,12 @@ def handle_members_delete():
                                         name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
             MemberModel.query.filter_by(
                 username=delete_member.username).delete()
+            BookmarkModel.query.filter_by(
+                username=delete_member.username).delete()
+            CartModel.query.filter_by(
+                username=delete_member.username).delete()
+            PaymentModel.query.filter_by(
+                username=delete_member.username).delete()
             db.session.commit()
             return {"message": "delete member success"}
         except:
@@ -362,10 +368,11 @@ def handle_bookmarks():
     if request.is_json:
         try:
             data = request.get_json()
-            get_bookmark = BookmarkModel(image=data['image'], name=data['name'], author=data['author'],
-                                         evaluateBook=data['evaluateBook'], description=data[
-                                             'description'], registrationDate=data['registrationDate'],
-                                         expirationDate=data['expirationDate'], status=data['status'], username=data['username'])
+            get_bookmark = BookmarkModel(image=data['image'], name=data['name'], author=data['author'], imageAuthor=data['imageAuthor'],
+                                         writingGenre=data['writingGenre'], achievements=data['achievements'],
+                                         evaluateAuthor=data['evaluateAuthor'], evaluateBook=data['evaluateBook'],
+                                         description=data['description'], category=data['category'], pages=data['pages'],
+                                         cover=data['cover'], language=data['language'], cost=data['cost'], username=data['username'])
 
             bookmarks = BookmarkModel.query.filter_by(
                 username=get_bookmark.username)
@@ -374,11 +381,17 @@ def handle_bookmarks():
                     "image": bookmark.image,
                     "name": bookmark.name,
                     "author": bookmark.author,
+                    "imageAuthor": bookmark.imageAuthor,
+                    "writingGenre": bookmark.writingGenre,
+                    "achievements": bookmark.achievements,
+                    "evaluateAuthor": bookmark.evaluateAuthor,
                     "evaluateBook": bookmark.evaluateBook,
                     "description": bookmark.description,
-                    "registrationDate": bookmark.registrationDate,
-                    "expirationDate": bookmark.expirationDate,
-                    "status": bookmark.status,
+                    "category": bookmark.category,
+                    "pages": bookmark.pages,
+                    "cover": bookmark.cover,
+                    "language": bookmark.language,
+                    "cost": bookmark.cost,
                     "username": bookmark.username
                 } for bookmark in bookmarks]
             return {"bookmarks": results, "message": "get bookmark success"}
@@ -393,10 +406,11 @@ def handle_bookmarks_add():
     if request.is_json:
         try:
             data = request.get_json()
-            new_bookmark = BookmarkModel(image=data['image'], name=data['name'], author=data['author'],
-                                         evaluateBook=data['evaluateBook'], description=data[
-                                             'description'], registrationDate=data['registrationDate'],
-                                         expirationDate=data['expirationDate'], status=data['status'], username=data['username'])
+            new_bookmark = BookmarkModel(image=data['image'], name=data['name'], author=data['author'], imageAuthor=data['imageAuthor'],
+                                         writingGenre=data['writingGenre'], achievements=data['achievements'],
+                                         evaluateAuthor=data['evaluateAuthor'], evaluateBook=data['evaluateBook'],
+                                         description=data['description'], category=data['category'], pages=data['pages'],
+                                         cover=data['cover'], language=data['language'], cost=data['cost'], username=data['username'])
             db.session.add(new_bookmark)
             db.session.commit()
             return {"message": "add bookmark success"}
@@ -411,10 +425,11 @@ def handle_bookmarks_delete():
     if request.is_json:
         try:
             data = request.get_json()
-            delete_bookmark = BookmarkModel(image=data['image'], name=data['name'], author=data['author'],
-                                            evaluateBook=data['evaluateBook'], description=data[
-                                                'description'], registrationDate=data['registrationDate'],
-                                            expirationDate=data['expirationDate'], status=data['status'], username=data['username'])
+            delete_bookmark = BookmarkModel(image=data['image'], name=data['name'], author=data['author'], imageAuthor=data['imageAuthor'],
+                                            writingGenre=data['writingGenre'], achievements=data['achievements'],
+                                            evaluateAuthor=data['evaluateAuthor'], evaluateBook=data['evaluateBook'],
+                                            description=data['description'], category=data['category'], pages=data['pages'],
+                                            cover=data['cover'], language=data['language'], cost=data['cost'], username=data['username'])
             BookmarkModel.query.filter_by(
                 name=delete_bookmark.name, username=delete_bookmark.username).delete()
             db.session.commit()
@@ -511,6 +526,7 @@ def handle_carts_delete():
 
 # payment
 
+
 @app.route('/payments', methods=['GET'])
 def handle_payments():
     try:
@@ -531,6 +547,7 @@ def handle_payments():
         return {"payments": results, "message": "get payment success"}
     except:
         return {"message": "get payment error"}
+
 
 @app.route('/payments', methods=['POST'])
 def handle_payments_member():
@@ -563,6 +580,7 @@ def handle_payments_member():
     else:
         return {"message": "get payment fail"}
 
+
 @app.route('/payments/add', methods=['POST'])
 def handle_payments_add():
     if request.is_json:
@@ -590,10 +608,10 @@ def handle_payments_delete():
         try:
             data = request.get_json()
             delete_payment = PaymentModel(image=data['image'], name=data['name'], author=data['author'],
-                                       evaluateBook=data['evaluateBook'], registrationDate=data[
-                                       'registrationDate'], expirationDate=data['expirationDate'],
-                                       count=data['count'], cost=data['cost'], status=data['status'],
-                                       username=data['username'])
+                                          evaluateBook=data['evaluateBook'], registrationDate=data[
+                'registrationDate'], expirationDate=data['expirationDate'],
+                count=data['count'], cost=data['cost'], status=data['status'],
+                username=data['username'])
             PaymentModel.query.filter_by(
                 name=delete_payment.name, username=delete_payment.username).delete()
             db.session.commit()
@@ -606,27 +624,45 @@ def handle_payments_delete():
 # book
 
 
-@app.route('/books', methods=['POST', 'GET'])
-def handle_books_add():
-    if request.method == 'POST':
-        if request.is_json:
-            try:
-                data = request.get_json()
-                new_book = BookModel(image=data['image'], name=data['name'], author=data['author'], imageAuthor=data['imageAuthor'],
-                                     writingGenre=data['writingGenre'], achievements=data['achievements'],
-                                     evaluateAuthor=data['evaluateAuthor'], evaluateBook=data['evaluateBook'],
-                                     description=data['description'], category=data['category'], pages=data['pages'],
-                                     cover=data['cover'], language=data['language'], cost=data['cost'])
-                db.session.add(new_book)
-                db.session.commit()
-                return {"message": "add book success"}
-            except:
-                return {"message": "add book error"}
-        else:
-            return {"message": "add book fail"}
-    elif request.method == 'GET':
+@app.route('/books', methods=['GET'])
+def handle_books():
+    try:
+        books = BookModel.query.all()
+        results = [
+            {
+                "image": book.image,
+                "name": book.name,
+                "author": book.author,
+                "imageAuthor": book.imageAuthor,
+                "writingGenre": book.writingGenre,
+                "achievements": book.achievements,
+                "evaluateAuthor": book.evaluateAuthor,
+                "evaluateBook": book.evaluateBook,
+                "description": book.description,
+                "category": book.category,
+                "pages": book.pages,
+                "cover": book.cover,
+                "language": book.language,
+                "cost": book.cost
+            } for book in books]
+        return {"books": results, "message": "get book success"}
+    except:
+        return {"message": "get order fail"}
+
+
+@app.route('/books', methods=['POST'])
+def handle_books_category():
+    if request.is_json:
         try:
-            books = BookModel.query.all()
+            data = request.get_json()
+            get_book = BookModel(image=data['image'], name=data['name'], author=data['author'], imageAuthor=data['imageAuthor'],
+                                 writingGenre=data['writingGenre'], achievements=data['achievements'],
+                                 evaluateAuthor=data['evaluateAuthor'], evaluateBook=data['evaluateBook'],
+                                 description=data['description'], category=data['category'], pages=data['pages'],
+                                 cover=data['cover'], language=data['language'], cost=data['cost'])
+
+            books = BookModel.query.filter_by(
+                category=get_book.category)
             results = [
                 {
                     "image": book.image,
@@ -647,6 +683,8 @@ def handle_books_add():
             return {"books": results, "message": "get book success"}
         except:
             return {"message": "get order fail"}
+    else:
+        return {"message": "get bookmark fail"}
 
 
 @app.route('/books/update', methods=['POST'])

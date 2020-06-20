@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:library_app/configs/configsApp.dart';
 import 'package:library_app/data/model/books_model.dart';
 import 'package:library_app/data/model/login_model.dart';
 import 'package:library_app/screens/book/bookScreen.dart';
@@ -12,6 +13,8 @@ import 'package:library_app/screens/home/categoryListHome.dart';
 import 'package:library_app/screens/login_register_forgot/signinScreen.dart';
 import 'package:library_app/screens/member/changePasswordScreen.dart';
 import 'package:library_app/screens/member/editMemberScreen.dart';
+import 'package:library_app/screens/payment/paymentHistoryMemberScreen.dart';
+import 'package:library_app/screens/widget/qrScreen.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -58,76 +61,45 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         );
       }
       // category
-      if (event is PressBtnMoveCategoryEvent) {
-        Navigator.push(
-          event.context,
-          MaterialPageRoute(
-            builder: (context) => CategoryBookHomePage(),
-          ),
-        );
-      }
-      if (event is PressBtnMoveCategoryAllEvent) {
-        Navigator.push(
-          event.context,
-          MaterialPageRoute(
-            builder: (context) => CategoryListHomePage(),
-          ),
-        );
-      }
-      // trending
-      if (event is PressBtnMoveTrendingEvent) {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => BookPage(
-        //               book: bookList[index],
-        //             )));
-      }
-      if (event is PressBtnMoveTrendingAllEvent) {
-        Navigator.push(
-          event.context,
-          MaterialPageRoute(
-            builder: (context) => BookListHomePage(title: "Trending"),
-          ),
-        );
-      }
-      // new book
-      if (event is PressBtnMoveNewBookEvent) {
-        Navigator.push(
-          event.context,
-          MaterialPageRoute(
-            builder: (context) => BookPage(
-              book: event.book,
-            ),
-          ),
-        );
-      }
-      if (event is PressBtnMoveNewBookAllEvent) {
-        Navigator.push(
-          event.context,
-          MaterialPageRoute(
-            builder: (context) => BookListHomePage(title: "New"),
-          ),
-        );
-      }
+      // if (event is PressBtnMoveCategoryEvent) {
+      //   Navigator.push(
+      //     event.context,
+      //     MaterialPageRoute(
+      //       builder: (context) =>
+      //           CategoryBookHomePage(category: event.category),
+      //     ),
+      //   );
+      // }
+      // if (event is PressBtnMoveCategoryAllEvent) {
+      //   Navigator.push(
+      //     event.context,
+      //     MaterialPageRoute(
+      //       builder: (context) => CategoryListHomePage(),
+      //     ),
+      //   );
+      // }
       // my book
-      if (event is PressBtnMoveMyBookEvent) {
-        // Navigator.push(
-        //                 event.context,
-        //                 MaterialPageRoute(
-        //                     builder: (context) => QRPage(
-        //                           data: "data",
-        //                           registed: true,
-        //                         ),),);
-      }
-      if (event is PressBtnMoveMyBookAllEvent) {
-        // Navigator.push(
-        //   event.context,
-        //   MaterialPageRoute(
-        //     builder: (context) => PaymentHistoryPage(),
-        //   ),
-        // );
-      }
+      // if (event is PressBtnMoveMyBookEvent) {
+      //   Navigator.push(
+      //     event.context,
+      //     MaterialPageRoute(
+      //       builder: (context) => QRPage(
+      //         data: "data",
+      //         registed: true,
+      //       ),
+      //     ),
+      //   );
+      // }
+      // if (event is PressBtnMoveMyBookAllEvent) {
+      //   Navigator.push(
+      //     event.context,
+      //     MaterialPageRoute(
+      //       builder: (context) => PaymentHistoryMemberPage(
+      //         username: ConfigsApp.userName,
+      //       ),
+      //     ),
+      //   );
+      // }
       // // Read
       // if (event is LoadBookEvent) {
       //   yield LoadingState();

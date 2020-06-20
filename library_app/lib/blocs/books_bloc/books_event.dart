@@ -10,6 +10,13 @@ class LoadBookEvent extends BooksEvent {
   List<Object> get props => [];
 }
 
+class LoadBookCategoryEvent extends BooksEvent {
+  final String category;
+  LoadBookCategoryEvent({@required this.category});
+  @override
+  List<Object> get props => [category];
+}
+
 class OnReFreshBookEvent extends BooksEvent {
   @override
   List<Object> get props => [];
@@ -42,6 +49,17 @@ class PressButtonQREvent extends BooksEvent {
   List<Object> get props => [data, registed];
 }
 
+// add payment
+class PressButtonAddPaymentEvent extends BooksEvent {
+  final Book book;
+  final int status;
+  final BuildContext context;
+  PressButtonAddPaymentEvent(
+      {@required this.book, @required this.status, @required this.context});
+  @override
+  List<Object> get props => [book, status];
+}
+
 // add cart
 class PressButtonAddCartEvent extends BooksEvent {
   final Book book;
@@ -69,10 +87,9 @@ class PressButtonDelCartEvent extends BooksEvent {
 // add bookmark
 class PressBookmarkEvent extends BooksEvent {
   final Book book;
-  final bool bookmark;
   final BuildContext context;
   PressBookmarkEvent(
-      {@required this.book, @required this.bookmark, @required this.context});
+      {@required this.book, @required this.context});
   @override
-  List<Object> get props => [book, bookmark];
+  List<Object> get props => [book];
 }

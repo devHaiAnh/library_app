@@ -1,5 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:library_app/blocs/main_bloc/main_bloc.dart';
 import 'package:library_app/screens/login_register_forgot/signinScreen.dart';
 import 'package:library_app/screens/login_register_forgot/signupScreen.dart';
@@ -36,9 +36,17 @@ class _FirstPageState extends State<FirstPage> {
             left: 0,
             right: 0,
             bottom: 0,
-            child: Image.network(
-              background,
-              fit: BoxFit.cover,
+            child: CachedNetworkImage(
+              imageUrl: background,
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
           ),
           // appbar

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -208,7 +209,8 @@ class _EditMemberPageState extends State<EditMemberPage> {
   }
 
   Widget containPage(double screenHeight, double screenWidth) {
-    final image = "https://cdn.pixabay.com/photo/2014/10/14/20/14/library-488681_960_720.jpg";
+    final image =
+        "https://cdn.pixabay.com/photo/2014/10/14/20/14/library-488681_960_720.jpg";
     return Container(
       height: screenHeight * 0.88,
       padding: EdgeInsets.all(screenWidth * 0.05),
@@ -233,9 +235,17 @@ class _EditMemberPageState extends State<EditMemberPage> {
             flex: 4,
             child: Container(
               color: Colors.red,
-              child: Image.network(
-                image,
-                fit: BoxFit.cover,
+              child: CachedNetworkImage(
+                imageUrl: image,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
             ),
           ),

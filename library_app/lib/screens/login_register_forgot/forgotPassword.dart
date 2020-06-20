@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -77,9 +78,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     right: 0,
                     child: Container(
                       height: screenHeight * 0.5,
-                      child: Image.network(
-                        background,
-                        fit: BoxFit.cover,
+                      child: CachedNetworkImage(
+                        imageUrl: background,
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
                     ),
                   ),
@@ -250,7 +259,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               ),
             ),
           ),
-          SizedBox(height: screenHeight * 0.05),
+          SizedBox(height: screenHeight * 0.03),
           InkWell(
             onTap: () {
               BlocProvider.of<ForgotPassBloc>(_forgotKey.currentContext).add(

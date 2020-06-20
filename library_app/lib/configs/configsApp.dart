@@ -1,6 +1,6 @@
 class ConfigsApp {
   static bool isDebugMode = false;
-  static String baseUrl = "http://10.0.2.2:5000";
+  static String baseUrl = "http://10.0.2.2:44582";
 
   static String loginUrl = "/login";
   static String forgotPassUrl = "/forgot";

@@ -8,9 +8,23 @@ class BookmarkInitial extends BookmarkState {
   @override
   List<Object> get props => [];
 }
+
+// load listview
 class LoadingState extends BookmarkState {
   @override
   List<Object> get props => [];
+}
+
+class RefreshState extends BookmarkState {
+  @override
+  List<Object> get props => [];
+}
+
+class LoadedBookmarkState extends BookmarkState {
+  final List<Bookmark> bookmarkList;
+  LoadedBookmarkState({@required this.bookmarkList});
+  @override
+  List<Object> get props => [bookmarkList];
 }
 
 class SuccessState extends BookmarkState {
@@ -28,4 +42,5 @@ class ErrorState extends BookmarkState {
   @override
   List<Object> get props => [errorTitle, errorMessage];
 }
+
 

@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final booksModel = booksModelFromJson(jsonString);
-
 import 'dart:convert';
 
 class BooksModel {
@@ -49,7 +45,6 @@ class Book {
   int pages;
   String writingGenre;
   bool bookmark;
-  bool cart;
 
   Book({
     this.achievements,
@@ -66,8 +61,7 @@ class Book {
     this.name,
     this.pages,
     this.writingGenre,
-    this.bookmark,
-    this.cart
+    this.bookmark
   });
 
   factory Book.fromRawJson(String str) => Book.fromJson(json.decode(str));

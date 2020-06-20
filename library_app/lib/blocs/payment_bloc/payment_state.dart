@@ -20,9 +20,9 @@ class RefreshState extends PaymentState {
   List<Object> get props => [];
 }
 
-class LoadedState extends PaymentState {
+class LoadedPaymentState extends PaymentState {
   final List<Payment> paymentList;
-  LoadedState({@required this.paymentList});
+  LoadedPaymentState({@required this.paymentList});
   @override
   List<Object> get props => [paymentList];
 }

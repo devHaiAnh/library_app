@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:library_app/data/model/payments_model.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -52,9 +53,29 @@ class _ItemBookHistoryState extends State<ItemBookHistory> {
     return Container(
       width: widget.width,
       height: widget.height,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: NetworkImage(widget.itemBook.image), fit: BoxFit.cover),
+      // decoration: BoxDecoration(
+      //   image: DecorationImage(
+      //       image: NetworkImage(widget.itemBook.image), fit: BoxFit.cover),
+      // ),
+      child: CachedNetworkImage(
+        imageUrl: widget.itemBook.image,
+        imageBuilder: (context, imageProvider) => Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 1,
+                blurRadius: 6,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+          ),
+        ),
+        errorWidget: (context, url, error) => Icon(Icons.error),
       ),
     );
   }

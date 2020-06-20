@@ -19,6 +19,7 @@ dependencies:
   badges: ^1.1.1
   flutter_spinkit: ^4.1.2+1
   intl: ^0.16.1
+  cached_network_image: ^2.2.0+1
   # Qr
   qr_flutter: 3.2.0
   # bottom navigator

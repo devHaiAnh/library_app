@@ -4,8 +4,9 @@ import 'package:library_app/blocs/books_bloc/books_bloc.dart';
 import 'package:library_app/data/model/books_model.dart';
 
 class BookPage extends StatefulWidget {
-  BookPage({Key key, this.book}) : super(key: key);
+  BookPage({Key key, @required this.book, this.function}) : super(key: key);
   final Book book;
+  final Function function;
 
   @override
   _BookPageState createState() => _BookPageState();
@@ -14,7 +15,6 @@ class BookPage extends StatefulWidget {
 class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
   TabController _controller;
   int count = 1;
-  bool bookmark;
 
   GlobalKey bookKey = GlobalKey();
   @override
@@ -41,7 +41,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
           if (state is ErrorState) {
             _showDialog(context, state.errorTitle, state.errorMessage);
           } else if (state is PressBookmarkState) {
-            bookmark = state.bookmark;
+            widget.book.bookmark = state.bookmark;
           }
         },
         child: BlocBuilder<BooksBloc, BooksState>(
@@ -369,12 +369,17 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                                     onTap: () {
                                       BlocProvider.of<BooksBloc>(
                                               bookKey.currentContext)
-                                          .add(PressButtonQREvent(
-                                              context: context,
-                                              data: widget.book.name +
-                                                  widget.book.author +
-                                                  "Read Rental",
-                                              registed: false));
+                                          .add(
+                                        PressButtonAddPaymentEvent(
+                                          book: widget.book,
+                                          status: 2,
+                                          context: context,
+                                        ),
+                                      );
+                                      BlocProvider.of<BooksBloc>(
+                                              bookKey.currentContext)
+                                          .add(PressButtonBackEvent(
+                                              context: context));
                                     },
                                     child: Container(
                                       height: screenHeight * 0.065,
@@ -441,7 +446,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
               style: TextStyle(fontSize: 15, color: Colors.white),
             ),
             Text(
-              "\$ 2/day",
+              "\$ 2/week",
               style: TextStyle(
                   fontSize: 18,
                   color: Colors.white,
@@ -555,12 +560,17 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                                     onTap: () {
                                       BlocProvider.of<BooksBloc>(
                                               bookKey.currentContext)
-                                          .add(PressButtonQREvent(
-                                              context: context,
-                                              data: widget.book.name +
-                                                  widget.book.author +
-                                                  "Read Directly",
-                                              registed: false));
+                                          .add(
+                                        PressButtonAddPaymentEvent(
+                                          book: widget.book,
+                                          status: 1,
+                                          context: context,
+                                        ),
+                                      );
+                                      BlocProvider.of<BooksBloc>(
+                                              bookKey.currentContext)
+                                          .add(PressButtonBackEvent(
+                                              context: context));
                                     },
                                     child: Container(
                                       height: screenHeight * 0.065,
@@ -718,15 +728,17 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
         children: <Widget>[
           InkWell(
             onTap: () {
-              // setState(() {
-              //   widget.book.bookMark = !widget.book.bookMark;
-              // });
+              setState(() {
+                widget.book.bookmark = !widget.book.bookmark;
+                widget.function(widget.book.bookmark);
+                BlocProvider.of<BooksBloc>(bookKey.currentContext).add(
+                    PressBookmarkEvent(book: widget.book, context: context));
+              });
             },
             child: Container(
-                // child: Icon(
-                //     widget.book.bookMark ? Icons.bookmark : Icons.bookmark_border,
-                //     color: widget.book.bookMark ? Colors.amber : Colors.grey),
-                ),
+              child: Icon(Icons.bookmark,
+                  color: widget.book.bookmark ? Colors.amber : Colors.grey),
+            ),
           ),
         ],
       ),
@@ -798,10 +810,10 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
             ],
           ),
         ),
-        SizedBox(height: screenHeight * 0.025),
+        SizedBox(height: screenHeight * 0.01),
         // description
         Container(
-          height: screenHeight * 0.115,
+          height: screenHeight * 0.125,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -809,7 +821,7 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                 "Description",
                 style: TextStyle(color: Colors.black54),
               ),
-              SizedBox(height: screenHeight * 0.01),
+              SizedBox(height: screenHeight * 0.005),
               Text(widget.book.description)
             ],
           ),

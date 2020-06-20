@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:library_app/blocs/cart_bloc/cart_bloc.dart';
@@ -63,21 +64,41 @@ class _ItemBookCartState extends State<ItemBookCart> {
     );
   }
 
-  Container image() {
+  Widget image() {
     return Container(
       width: widget.width,
       height: widget.height,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 6,
-            offset: Offset(0, 3), // changes position of shadow
+      // decoration: BoxDecoration(
+      //   image: DecorationImage(
+      //       image: NetworkImage(widget.itemBook.image), fit: BoxFit.cover),
+      //   boxShadow: [
+      //     BoxShadow(
+      //       color: Colors.grey.withOpacity(0.5),
+      //       spreadRadius: 1,
+      //       blurRadius: 6,
+      //       offset: Offset(0, 3), // changes position of shadow
+      //     ),
+      //   ],
+      // ),
+      child: CachedNetworkImage(
+        imageUrl: widget.itemCart.image,
+        imageBuilder: (context, imageProvider) => Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 1,
+                blurRadius: 6,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
           ),
-        ],
-        image: DecorationImage(
-            image: NetworkImage(widget.itemCart.image), fit: BoxFit.cover),
+        ),
+        errorWidget: (context, url, error) => Icon(Icons.error),
       ),
     );
   }

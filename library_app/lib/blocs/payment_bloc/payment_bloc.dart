@@ -26,7 +26,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         yield LoadingState();
         PaymentsModel paymentModel = await getPayment();
         if (paymentModel?.payments != null) {
-          yield LoadedState(paymentList: paymentModel.payments);
+          yield LoadedPaymentState(paymentList: paymentModel.payments);
         } else {
           yield ErrorState(
               errorTitle: "Warning!!!", errorMessage: "Error Sever");
@@ -37,7 +37,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         yield LoadingState();
         PaymentsModel paymentModel = await getPaymentMember(username: event.username);
         if (paymentModel?.payments != null) {
-          yield LoadedState(paymentList: paymentModel.payments);
+          yield LoadedPaymentState(paymentList: paymentModel.payments);
         } else {
           yield ErrorState(
               errorTitle: "Warning!!!", errorMessage: "Error Sever");

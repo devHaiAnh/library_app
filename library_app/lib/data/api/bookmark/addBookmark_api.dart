@@ -7,18 +7,34 @@ Future<int> postAddBookmark(
     {String image,
     String name,
     String author,
+    String imageAuthor,
+    String writingGenre,
+    String achievements,
+    double evaluateAuthor,
     double evaluateBook,
-    String description}) async {
+    String description,
+    String category,
+    int pages,
+    String cover,
+    String language,
+    double cost,
+    }) async {
   try {
     Map<String, dynamic> body = {
       "image": image,
       "name": name,
       "author": author,
+      "imageAuthor": imageAuthor,
+      "writingGenre": writingGenre,
+      "achievements": achievements,
+      "evaluateAuthor": evaluateAuthor,
       "evaluateBook": evaluateBook,
       "description": description,
-      "registrationDate": 0,
-      "expirationDate": 0,
-      "status": 0,
+      "category": category,
+      "pages": pages,
+      "cover": cover,
+      "language": language,
+      "cost": cost,
       "username": ConfigsApp.userName
     };
     var finalBody = json.encode(body);

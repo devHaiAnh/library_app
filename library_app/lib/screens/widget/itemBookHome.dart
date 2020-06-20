@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:library_app/data/model/books_model.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -5,13 +6,22 @@ import 'package:smooth_star_rating/smooth_star_rating.dart';
 class ItemBookHome extends StatefulWidget {
   final double height, width;
   final Book itemBook;
-  ItemBookHome({Key key, this.height, this.width, this.itemBook})
+  final Function function;
+  ItemBookHome({Key key, this.height, this.width, this.itemBook, this.function})
       : super(key: key);
   @override
   _ItemBookHomeState createState() => _ItemBookHomeState();
 }
 
 class _ItemBookHomeState extends State<ItemBookHome> {
+  @override
+  void initState() {
+    super.initState();
+    widget.itemBook.bookmark == null
+        ? widget.itemBook.bookmark = false
+        : print("object");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -27,21 +37,42 @@ class _ItemBookHomeState extends State<ItemBookHome> {
               Container(
                 height: widget.height * 0.18,
                 width: widget.width,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: NetworkImage(
-                          widget.itemBook.image,
-                        ),
-                        fit: BoxFit.cover),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 6,
-                        offset: Offset(0, 3), // changes position of shadow
+                // decoration: BoxDecoration(
+                //     image: DecorationImage(
+                //         image: NetworkImage(
+                //           widget.itemBook.image,
+                //         ),
+                //         fit: BoxFit.cover),
+                //     boxShadow: [
+                //       BoxShadow(
+                //         color: Colors.grey.withOpacity(0.5),
+                //         spreadRadius: 1,
+                //         blurRadius: 6,
+                //         offset: Offset(0, 3), // changes position of shadow
+                //       ),
+                //     ],
+                //     borderRadius: BorderRadius.circular(16)),
+                child: CachedNetworkImage(
+                  imageUrl: widget.itemBook.image,
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
                       ),
-                    ],
-                    borderRadius: BorderRadius.circular(16)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 6,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(16)
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
               ),
               SizedBox(height: widget.height * 0.01),
               // name
@@ -76,17 +107,15 @@ class _ItemBookHomeState extends State<ItemBookHome> {
           right: 10,
           child: InkWell(
             onTap: () {
-              // setState(() {
-              //   widget.itemBook.bookMark = !widget.itemBook.bookMark;
-              // });
+              setState(() {
+                widget.itemBook.bookmark = !widget.itemBook.bookmark;
+                widget.function(widget.itemBook.bookmark);
+              });
             },
             child: Container(
-              color: Colors.white.withOpacity(0.3),
-              // child: Icon(
-              //     widget.itemBook.bookMark
-              //         ? Icons.bookmark
-              //         : Icons.bookmark_border,
-              //     color: widget.itemBook.bookMark ? Colors.amber : Colors.grey),
+              // color: Colors.white.withOpacity(0.8),
+              child: Icon(Icons.bookmark,
+                  color: widget.itemBook.bookmark ? Colors.amber : Colors.grey),
             ),
           ),
         )

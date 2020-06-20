@@ -89,7 +89,7 @@ class _ItemMemberState extends State<ItemMember> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => PaymentHistoryMemberPage(
-                                          username: widget.itemMember.username)));
+                                          username: widget.itemMember.username,)));
                             },
                             child: Container(
                               width: widget.width * 0.07,

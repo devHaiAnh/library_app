@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -237,17 +238,24 @@ class _EditMembersPageState extends State<EditMembersPage> {
         child: Column(
           children: <Widget>[
             Expanded(
-              flex: 4,
+              flex: 3,
               child: Container(
-                color: Colors.red,
-                child: Image.network(
-                  image,
-                  fit: BoxFit.cover,
+                child: CachedNetworkImage(
+                  imageUrl: image,
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),
             ),
             Expanded(
-              flex: 6,
+              flex: 7,
               child: Container(
                 child: Column(
                   // mainAxisAlignment: MainAxisAlignment.start,

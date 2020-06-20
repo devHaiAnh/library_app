@@ -64,10 +64,10 @@ class _TotalPageState extends State<TotalPage> {
   Widget _showChooserAdmin(int page) {
     switch (page) {
       case 0:
-        return _bookMarkPage;
+        return _memberListPage;
         break;
       case 1:
-        return _memberListPage;
+        return _bookMarkPage; 
         break;
       case 2:
         return _homePage;
@@ -122,8 +122,8 @@ class _TotalPageState extends State<TotalPage> {
   ];
 
   List<Widget> adminBottomIcon = [
-    Icon(Icons.bookmark, size: 20, color: Colors.purple[400]),
     Icon(Icons.person, size: 20, color: Colors.purple[400]),
+    Icon(Icons.bookmark, size: 20, color: Colors.purple[400]),
     Icon(Icons.home, size: 20, color: Colors.purple[400]),
     Icon(Icons.shopping_cart, size: 20, color: Colors.purple[400]),
     Icon(Icons.local_atm, size: 20, color: Colors.purple[400]),

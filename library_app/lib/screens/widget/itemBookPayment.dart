@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:library_app/data/model/payments_model.dart';
@@ -62,17 +63,37 @@ class _ItemBookPaymentState extends State<ItemBookPayment> {
     return Container(
       width: widget.width,
       height: widget.height,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 6,
-            offset: Offset(0, 3), // changes position of shadow
+      // decoration: BoxDecoration(
+      //   boxShadow: [
+      //     BoxShadow(
+      //       color: Colors.grey.withOpacity(0.5),
+      //       spreadRadius: 1,
+      //       blurRadius: 6,
+      //       offset: Offset(0, 3), // changes position of shadow
+      //     ),
+      //   ],
+      //   image: DecorationImage(
+      //       image: NetworkImage(widget.itemPayment.image), fit: BoxFit.cover),
+      // ),
+      child: CachedNetworkImage(
+        imageUrl: widget.itemPayment.image,
+        imageBuilder: (context, imageProvider) => Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 1,
+                blurRadius: 6,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
           ),
-        ],
-        image: DecorationImage(
-            image: NetworkImage(widget.itemPayment.image), fit: BoxFit.cover),
+        ),
+        errorWidget: (context, url, error) => Icon(Icons.error),
       ),
     );
   }
@@ -105,35 +126,71 @@ class _ItemBookPaymentState extends State<ItemBookPayment> {
           SizedBox(height: widget.height * 0.01),
           // description
           Container(
-            height: widget.height * 0.05,
-            child: Row(
+            height: widget.height * 0.07,
+            child: Column(
               children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    child: Center(
-                      child: Text(
-                        "Date of purchase: ",
-                        style: TextStyle(color: Colors.black, fontSize: 13),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      child: Center(
+                        child: Text(
+                          widget.itemPayment.status == 3
+                              ? "Date of purchase: "
+                              : widget.itemPayment.status == 2
+                                  ? "Registration Date: "
+                                  : "Start Reading Date: ",
+                          style: TextStyle(color: Colors.black, fontSize: 13),
+                        ),
                       ),
                     ),
-                  ),
+                    Container(
+                      child: Center(
+                        child: Text(
+                          dayFormat.format(
+                              new DateTime.fromMillisecondsSinceEpoch(
+                                  widget.itemPayment.registrationDate)),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    child: Center(
-                      child: Text(
-                        dayFormat.format(
-                            new DateTime.fromMillisecondsSinceEpoch(
-                                widget.itemPayment.registrationDate)),
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15),
+                SizedBox(height: widget.height * 0.01),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      child: Center(
+                        child: Text(
+                          widget.itemPayment.status == 3
+                              ? "Count: "
+                              : widget.itemPayment.status == 2
+                                  ? "Expiration Date: "
+                                  : "Final Date: ",
+                          style: TextStyle(color: Colors.black, fontSize: 13),
+                        ),
                       ),
                     ),
-                  ),
+                    Container(
+                      child: Center(
+                        child: Text(
+                          widget.itemPayment.status == 3
+                              ? widget.itemPayment.count.toString()
+                              : dayFormat.format(
+                                  new DateTime.fromMillisecondsSinceEpoch(
+                                      widget.itemPayment.expirationDate)),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -145,11 +202,36 @@ class _ItemBookPaymentState extends State<ItemBookPayment> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  // count
-                  countBook(),
+                  // member
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        child: Center(
+                          child: Text(
+                            "Member: ",
+                            style: TextStyle(color: Colors.black, fontSize: 13),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: Center(
+                          child: Text(
+                            widget.itemPayment.username,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   // cost
                   Text(
-                    "\$ ${widget.itemPayment.cost.toStringAsFixed(2)}",
+                    widget.itemPayment.status == 3
+                        ? "\$ ${widget.itemPayment.cost.toStringAsFixed(2)}"
+                        : widget.itemPayment.status == 2 ? "\$ 2/week" : "Free",
                     style: TextStyle(
                         fontSize: 18,
                         color: Colors.purple,
@@ -158,41 +240,6 @@ class _ItemBookPaymentState extends State<ItemBookPayment> {
                 ],
               )),
           SizedBox(height: widget.height * 0.005),
-        ],
-      ),
-    );
-  }
-
-  Widget countBook() {
-    return Container(
-      width: widget.width * 0.2,
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Container(
-              child: Center(
-                child: Text(
-                  "Count: ",
-                  style: TextStyle(color: Colors.black, fontSize: 13),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              child: Center(
-                child: Text(
-                  widget.itemPayment.count.toString(),
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -221,7 +268,33 @@ class _ItemBookPaymentState extends State<ItemBookPayment> {
               ],
             ),
           ),
-          Container()
+          Container(
+            width: widget.width * 0.1,
+            // height: widget.width * 0.2,
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: widget.itemPayment.status == 3
+                        ? Colors.purple
+                        : widget.itemPayment.status == 2
+                            ? Colors.blue
+                            : Colors.green),
+                borderRadius: BorderRadius.circular(32)),
+            child: Center(
+              child: Text(
+                widget.itemPayment.status == 3
+                    ? "Bought"
+                    : widget.itemPayment.status == 2 ? "Lending" : "Reading",
+                style: TextStyle(
+                    fontSize: 9.5,
+                    fontWeight: FontWeight.bold,
+                    color: widget.itemPayment.status == 3
+                        ? Colors.purple
+                        : widget.itemPayment.status == 2
+                            ? Colors.blue
+                            : Colors.green),
+              ),
+            ),
+          )
           // InkWell(
           //   onTap: () {
           //     // BlocProvider.of<CartBloc>(itemPaymentKey.currentContext).add(

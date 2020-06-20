@@ -20,9 +20,9 @@ class RefreshState extends BooksState {
   List<Object> get props => [];
 }
 
-class LoadedState extends BooksState {
+class LoadedBookState extends BooksState {
   final List<Book> bookList;
-  LoadedState({@required this.bookList});
+  LoadedBookState({@required this.bookList});
   @override
   List<Object> get props => [bookList];
 }

@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:library_app/blocs/books_bloc/books_bloc.dart';
-import 'package:library_app/screens/widget/appbarApp.dart';
+import 'package:library_app/screens/book/bookScreen.dart';
 import 'package:library_app/screens/widget/itemBook.dart';
 
 class BookListHomePage extends StatefulWidget {
-  BookListHomePage({Key key, this.title}) : super(key: key);
+  BookListHomePage({Key key, this.title, this.function}) : super(key: key);
 
   final String title;
+  final Function function;
   @override
   _BookListHomePageState createState() => _BookListHomePageState();
 }
 
 class _BookListHomePageState extends State<BookListHomePage> {
-  bool bookMark = false;
 
   final _bookBloc = BooksBloc();
   GlobalKey bookListKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    widget.function(true);
+  }
 
   @override
   void dispose() {
@@ -37,7 +43,6 @@ class _BookListHomePageState extends State<BookListHomePage> {
             return Scaffold(
               key: bookListKey,
               body: Stack(
-                key: bookListKey,
                 children: <Widget>[
                   // background
                   Positioned(
@@ -51,15 +56,83 @@ class _BookListHomePageState extends State<BookListHomePage> {
                   ),
                   // appbar
                   Positioned(
-                      top: 0,
-                      left: screenWidth * 0.05,
-                      right: screenWidth * 0.05,
-                      child: AppBarApp(
-                        buttonBack: 1,
-                        width: screenWidth,
-                        height: screenHeight,
-                        title: "${widget.title} Book",
-                      )),
+                    top: 0,
+                    left: screenWidth * 0.05,
+                    right: screenWidth * 0.05,
+                    child: SafeArea(
+                      top: true,
+                      left: true,
+                      right: true,
+                      child: Stack(
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  width: screenWidth * 0.08,
+                                  height: screenWidth * 0.08,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 1,
+                                        blurRadius: 6,
+                                        offset: Offset(
+                                            0, 3), // changes position of shadow
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.arrow_back_ios,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          // Spacer(),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              height: screenHeight * 0.06,
+                              width: screenWidth * 0.4,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 1,
+                                    blurRadius: 6,
+                                    offset: Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "${widget.title} Book",
+                                  style: TextStyle(
+                                      color: Colors.purple,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Spacer(),
+                        ],
+                      ),
+                    ),
+                  ),
                   // contain
                   Positioned(
                     bottom: 0,
@@ -78,7 +151,7 @@ class _BookListHomePageState extends State<BookListHomePage> {
 
   Widget containPage(
       double screenHeight, double screenWidth, BooksState state) {
-    if (state is LoadedState) {
+    if (state is LoadedBookState) {
       return Container(
         height: screenHeight * 0.88,
         padding: EdgeInsets.all(screenWidth * 0.05),
@@ -103,27 +176,36 @@ class _BookListHomePageState extends State<BookListHomePage> {
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     onTap: () {
-                      BlocProvider.of<BooksBloc>(bookListKey.currentContext)
-                          .add(PressBtnMoveBookEvent(
-                              context: context, book: state.bookList[index]));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BookPage(
+                            book: state.bookList[index],
+                            function: (v) {
+                              setState(() {
+                                state.bookList[index].bookmark = v;
+                              });
+                            },
+                          ),
+                        ),
+                      );
                     },
                     child: Stack(
                       fit: StackFit.passthrough,
                       children: <Widget>[
                         // item object
                         ItemBook(
-                          height: screenHeight,
-                          width: screenWidth,
-                          itemBook: state.bookList[index],
-                        ),
+                            height: screenHeight,
+                            width: screenWidth,
+                            itemBook: state.bookList[index]),
                         // star
                         widget.title == "Trending"
                             ? Positioned(
                                 top: screenHeight * 0.015,
-                                left: screenWidth * 0.25,
+                                left: screenWidth * 0.003,
                                 child: Container(
-                                  width: screenWidth * 0.075,
-                                  height: screenWidth * 0.075,
+                                  width: screenWidth * 0.09,
+                                  height: screenWidth * 0.09,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       image: AssetImage("assets/img/star.png"),
@@ -133,7 +215,10 @@ class _BookListHomePageState extends State<BookListHomePage> {
                                   child: Center(
                                       child: Text(
                                     "${index + 1}",
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
                                   )),
                                 ),
                               )
@@ -143,13 +228,27 @@ class _BookListHomePageState extends State<BookListHomePage> {
                   );
                 },
               )
-            : Container(
-                child: Center(),
-              ),
+            : Container(),
       );
     } else {
-      return Scaffold(
-        body: Container(),
+      return Container(
+        height: screenHeight * 0.88,
+        padding: EdgeInsets.all(screenWidth * 0.05),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 6,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ],
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
+          ),
+        ),
       );
     }
   }
