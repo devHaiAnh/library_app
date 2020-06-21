@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:library_app/data/model/members_model.dart';
 import 'package:library_app/screens/payment/paymentHistoryMemberScreen.dart';
-import 'package:library_app/screens/payment/paymentHistoryScreen.dart';
 
 class ItemMembers extends StatefulWidget {
   final double width, height;
@@ -134,7 +133,7 @@ class _ItemMembersState extends State<ItemMembers> {
                                 flex: 2,
                                 child: InkWell(
                                   onTap: () {
-                                    widget.function(false);
+                                    widget.function(true);
                                   },
                                   child: Container(
                                     width: widget.width * 0.07,
@@ -198,11 +197,11 @@ class _ItemMembersState extends State<ItemMembers> {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: "Phone: ",
+                            text: "Address: ",
                             style: TextStyle(color: Colors.black, fontSize: 13),
                           ),
                           TextSpan(
-                            text: widget.itemMember.phone,
+                            text: widget.itemMember.address,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600,

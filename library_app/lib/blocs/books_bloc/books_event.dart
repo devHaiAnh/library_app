@@ -88,8 +88,21 @@ class PressButtonDelCartEvent extends BooksEvent {
 class PressBookmarkEvent extends BooksEvent {
   final Book book;
   final BuildContext context;
-  PressBookmarkEvent(
-      {@required this.book, @required this.context});
+  PressBookmarkEvent({@required this.book, @required this.context});
+  @override
+  List<Object> get props => [book];
+}
+
+class MoveAllBookEvent extends BooksEvent {
+  final String title;
+  MoveAllBookEvent({this.title});
+  @override
+  List<Object> get props => [title];
+}
+
+class MoveBookEvent extends BooksEvent {
+  final Book book;
+  MoveBookEvent({this.book});
   @override
   List<Object> get props => [book];
 }

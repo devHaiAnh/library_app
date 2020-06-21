@@ -14,6 +14,7 @@ class NewBook extends StatefulWidget {
 
 class _NewBookState extends State<NewBook> {
   final _bookBloc = BooksBloc();
+  final String category = "Life skills";
   @override
   void dispose() {
     _bookBloc.close();
@@ -24,9 +25,31 @@ class _NewBookState extends State<NewBook> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          _bookBloc..add(LoadBookCategoryEvent(category: "Life skills")),
+          _bookBloc..add(LoadBookCategoryEvent(category: category)),
       child: BlocListener<BooksBloc, BooksState>(
-        listener: (context, state) {},
+        listener: (context, state) async {
+          if (state is SuccessState) {
+            BlocProvider.of<BooksBloc>(context)
+                .add(LoadBookCategoryEvent(category: category));
+          } else if (state is ErrorState) {
+            _showDialog(context, state.errorTitle, state.errorMessage);
+          } else if (state is MoveAllBookState) {
+            await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            BookListCategory(title: "New", category: category)))
+                .then((value) => BlocProvider.of<BooksBloc>(context)
+                    .add(LoadBookCategoryEvent(category: category)));
+          } else if (state is MoveBookState) {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BookPage(book: state.book)),
+            ).then((value) => BlocProvider.of<BooksBloc>(context)
+                .add(LoadBookCategoryEvent(category: category)));
+          }
+        },
         child: BlocBuilder<BooksBloc, BooksState>(
           builder: (context, state) {
             if (state is LoadedBookState) {
@@ -51,25 +74,8 @@ class _NewBookState extends State<NewBook> {
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => BookListCategory(
-                                          title: "New",
-                                          category: "Life skills",
-                                          function: (v) {
-                                            v
-                                                ? BlocProvider.of<BooksBloc>(
-                                                        context)
-                                                    .add(LoadBookCategoryEvent(
-                                                        category:
-                                                            "Life skills"))
-                                                : BlocProvider.of<BooksBloc>(
-                                                        context)
-                                                    .add(LoadBookCategoryEvent(
-                                                        category:
-                                                            "Life skills"));
-                                          })));
+                              BlocProvider.of<BooksBloc>(context)
+                                  .add(MoveAllBookEvent(title: "New"));
                             },
                             child: Text(
                               "See all",
@@ -112,37 +118,19 @@ class _NewBookState extends State<NewBook> {
                               itemBuilder: (BuildContext context, int index) {
                                 return InkWell(
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => BookPage(
-                                            book: state.bookList[index],
-                                            function: (v) {
-                                              setState(() {
-                                                state.bookList[index].bookmark =
-                                                    v;
-                                              });
-                                            }),
-                                      ),
-                                    );
+                                    BlocProvider.of<BooksBloc>(context).add(
+                                        MoveBookEvent(
+                                            book: state.bookList[index]));
                                   },
                                   child: ItemBookHome(
                                     width: widget.width,
                                     height: widget.height,
                                     itemBook: state.bookList[index],
                                     function: (v) {
-                                      v
-                                          ? BlocProvider.of<BooksBloc>(context)
-                                              .add(PressBookmarkEvent(
-                                                  book: state.bookList[index],
-                                                  context: context))
-                                          : BlocProvider.of<BooksBloc>(context)
-                                              .add(PressBookmarkEvent(
-                                                  book: state.bookList[index],
-                                                  context: context));
                                       BlocProvider.of<BooksBloc>(context).add(
-                                          LoadBookCategoryEvent(
-                                              category: "Life skills"));
+                                          PressBookmarkEvent(
+                                              book: state.bookList[index],
+                                              context: context));
                                     },
                                   ),
                                 );
@@ -177,25 +165,8 @@ class _NewBookState extends State<NewBook> {
                           ),
                           InkWell(
                             onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => BookListHomePage(
-                              //             title: "New",
-                              //             bookList: state.,
-                              //             function: (v) {
-                              //               v
-                              //                   ? BlocProvider.of<BooksBloc>(
-                              //                           context)
-                              //                       .add(LoadBookCategoryEvent(
-                              //                           category:
-                              //                               "Life skills"))
-                              //                   : BlocProvider.of<BooksBloc>(
-                              //                           context)
-                              //                       .add(LoadBookCategoryEvent(
-                              //                           category:
-                              //                               "Life skills"));
-                              //             })));
+                              BlocProvider.of<BooksBloc>(context)
+                                  .add(MoveAllBookEvent(title: "New"));
                             },
                             child: Text(
                               "See all",
@@ -244,6 +215,24 @@ class _NewBookState extends State<NewBook> {
             }
           },
         ),
+      ),
+    );
+  }
+
+  _showDialog(BuildContext mainContext, String title, String message) async {
+    await showDialog(
+      context: mainContext,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
       ),
     );
   }

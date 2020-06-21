@@ -29,7 +29,7 @@ class Member {
     String email;
     String name;
     String password;
-    String phone;
+    String address;
     String username;
 
     Member({
@@ -37,7 +37,7 @@ class Member {
         this.email,
         this.name,
         this.password,
-        this.phone,
+        this.address,
         this.username,
     });
 
@@ -50,7 +50,7 @@ class Member {
         email: json["email"] == null ? null : json["email"],
         name: json["name"] == null ? null : json["name"],
         password: json["password"] == null ? null : json["password"],
-        phone: json["phone"] == null ? null : json["phone"],
+        address: json["address"] == null ? null : json["address"],
         username: json["username"] == null ? null : json["username"],
     );
 
@@ -59,7 +59,7 @@ class Member {
         "email": email == null ? null : email,
         "name": name == null ? null : name,
         "password": password == null ? null : password,
-        "phone": phone == null ? null : phone,
+        "address": address == null ? null : address,
         "username": username == null ? null : username,
     };
 }

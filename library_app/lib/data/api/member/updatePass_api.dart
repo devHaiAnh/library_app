@@ -11,7 +11,7 @@ Future<int> postUpdatePass(
       "password": password,
       "name": "null",
       "email": "null",
-      "phone": "null",
+      "address": "null",
       "admin": false
     };
     var finalBody = json.encode(body);

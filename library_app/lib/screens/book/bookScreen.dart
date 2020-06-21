@@ -1,12 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:library_app/blocs/books_bloc/books_bloc.dart';
 import 'package:library_app/data/model/books_model.dart';
 
 class BookPage extends StatefulWidget {
-  BookPage({Key key, @required this.book, this.function}) : super(key: key);
+  BookPage({Key key, @required this.book}) : super(key: key);
   final Book book;
-  final Function function;
 
   @override
   _BookPageState createState() => _BookPageState();
@@ -120,19 +120,40 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
                     right: screenWidth * 0.35,
                     child: Container(
                       height: screenHeight * 0.25,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(widget.book.image),
-                          fit: BoxFit.cover,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 1,
-                            blurRadius: 6,
-                            offset: Offset(0, 3), // changes position of shadow
+                      // decoration: BoxDecoration(
+                      //   image: DecorationImage(
+                      //     image: NetworkImage(widget.book.image),
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      //   boxShadow: [
+                      //     BoxShadow(
+                      //       color: Colors.grey.withOpacity(0.5),
+                      //       spreadRadius: 1,
+                      //       blurRadius: 6,
+                      //       offset: Offset(0, 3), // changes position of shadow
+                      //     ),
+                      //   ],
+                      // ),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.book.image,
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 6,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
                     ),
                   )
@@ -730,7 +751,6 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
             onTap: () {
               setState(() {
                 widget.book.bookmark = !widget.book.bookmark;
-                widget.function(widget.book.bookmark);
                 BlocProvider.of<BooksBloc>(bookKey.currentContext).add(
                     PressBookmarkEvent(book: widget.book, context: context));
               });
@@ -836,17 +856,37 @@ class _BookPageState extends State<BookPage> with TickerProviderStateMixin {
         Expanded(
           flex: 3,
           child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: NetworkImage(image), fit: BoxFit.cover),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 6,
-                  offset: Offset(0, 3), // changes position of shadow
+            // decoration: BoxDecoration(
+            //   image: DecorationImage(
+            //       image: NetworkImage(image), fit: BoxFit.cover),
+            //   boxShadow: [
+            //     BoxShadow(
+            //       color: Colors.grey.withOpacity(0.5),
+            //       spreadRadius: 1,
+            //       blurRadius: 6,
+            //       offset: Offset(0, 3), // changes position of shadow
+            //     ),
+            //   ],
+            // ),
+            child: CachedNetworkImage(
+              imageUrl: image,
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 6,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
                 ),
-              ],
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
           ),
         ),

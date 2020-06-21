@@ -42,3 +42,11 @@ class ErrorState extends PaymentState {
   @override
   List<Object> get props => [errorTitle, errorMessage];
 }
+
+class MovePaymentState extends PaymentState {
+  final String data;
+  final bool registed;
+  MovePaymentState({this.data, this.registed});
+  @override
+  List<Object> get props => [data,registed];
+}

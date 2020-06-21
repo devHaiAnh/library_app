@@ -18,7 +18,7 @@ class _EditMembersPageState extends State<EditMembersPage> {
   bool typeAdmin = false;
   TextEditingController _name;
   TextEditingController _email;
-  TextEditingController _phone;
+  TextEditingController _address;
 
   GlobalKey editMemberKey = GlobalKey();
   UpdateMemberStream updateMemberStream;
@@ -26,7 +26,7 @@ class _EditMembersPageState extends State<EditMembersPage> {
   void initState() {
     _name = TextEditingController(text: widget.member.name);
     _email = TextEditingController(text: widget.member.email);
-    _phone = TextEditingController(text: widget.member.phone);
+    _address = TextEditingController(text: widget.member.address);
     typeAdmin = widget.member.admin;
     updateMemberStream = UpdateMemberStream();
     super.initState();
@@ -36,7 +36,7 @@ class _EditMembersPageState extends State<EditMembersPage> {
   void dispose() {
     _name.dispose();
     _email.dispose();
-    _phone.dispose();
+    _address.dispose();
     updateMemberStream.dispose();
     super.dispose();
   }
@@ -148,7 +148,7 @@ class _EditMembersPageState extends State<EditMembersPage> {
                                         username: widget.member.username,
                                         name: _name.text.trim(),
                                         email: _email.text.trim(),
-                                        phone: _phone.text.trim(),
+                                        address: _address.text.trim(),
                                         admin: typeAdmin,
                                         context: context));
                               },
@@ -324,17 +324,17 @@ class _EditMembersPageState extends State<EditMembersPage> {
           ),
           SizedBox(height: screenHeight * 0.01),
           StreamBuilder(
-            stream: updateMemberStream.phoneStream,
+            stream: updateMemberStream.addressStream,
             builder: (context, snapshot) => TextField(
-              controller: _phone,
+              controller: _address,
               onChanged: (a) {
-                updateMemberStream.phoneChange(a.trim());
+                updateMemberStream.addressChange(a.trim());
               },
-              keyboardType: TextInputType.phone,
+              keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                labelText: "Phone",
+                labelText: "Address",
                 errorText: snapshot.hasError ? snapshot.error : null,
-                prefixIcon: Icon(Icons.phone),
+                prefixIcon: Icon(Icons.home),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.purple),
                 ),

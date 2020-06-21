@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:library_app/blocs/member_bloc/member_bloc.dart';
 import 'package:library_app/blocs/members_bloc/members_bloc.dart';
 import 'package:library_app/configs/configsApp.dart';
 import 'package:library_app/screens/member/addMemberScreen.dart';
@@ -30,7 +29,29 @@ class _MemberListPageState extends State<MemberListPage> {
     return BlocProvider(
       create: (context) => _memberBloc..add(LoadMemberEvent()),
       child: BlocListener<MembersBloc, MembersState>(
-        listener: (context, state) {},
+        listener: (context, state) async {
+          if (state is SuccessState) {
+            BlocProvider.of<MembersBloc>(context).add(LoadMemberEvent());
+          } else if (state is ErrorState) {
+            _showDialog(context, state.errorTitle, state.errorMessage);
+          } else if (state is MoveMemberState) {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditMembersPage(
+                  member: state.member,
+                ),
+              ),
+            ).then((value) =>
+                {BlocProvider.of<MembersBloc>(context).add(LoadMemberEvent())});
+          } else if (state is MoveAddMemberState) {
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddMemberPage())).then((value) =>
+                {BlocProvider.of<MembersBloc>(context).add(LoadMemberEvent())});
+          }
+        },
         child: BlocBuilder<MembersBloc, MembersState>(
           builder: (context, state) {
             return Scaffold(
@@ -103,14 +124,10 @@ class _MemberListPageState extends State<MemberListPage> {
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditMembersPage(
-                                  member: state.memberList[index],
-                                ),
-                              ),
-                            );
+                            BlocProvider.of<MembersBloc>(
+                                    memberListKey.currentContext)
+                                .add(MoveMemberEvent(
+                                    member: state.memberList[index]));
                           },
                           child: ItemMembers(
                             width: screenWidth,
@@ -121,17 +138,14 @@ class _MemberListPageState extends State<MemberListPage> {
                                 ? true
                                 : false,
                             function: (v) {
-                              v
-                                  ? print("object")
-                                  : BlocProvider.of<MembersBloc>(
-                                          memberListKey.currentContext)
-                                      .add(PressButtonDeleteEvent(
-                                          context: context,
-                                          username: state
-                                              .memberList[index].username));
-                              BlocProvider.of<MembersBloc>(
-                                      memberListKey.currentContext)
-                                  .add(LoadMemberEvent());
+                              if (v) {
+                                BlocProvider.of<MembersBloc>(
+                                        memberListKey.currentContext)
+                                    .add(PressButtonDeleteEvent(
+                                        context: context,
+                                        username:
+                                            state.memberList[index].username));
+                              }
                             },
                           ),
                         );
@@ -158,18 +172,8 @@ class _MemberListPageState extends State<MemberListPage> {
               flex: 1,
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AddMemberPage(
-                                function: (v) {
-                                  v
-                                      ? BlocProvider.of<MembersBloc>(
-                                              memberListKey.currentContext)
-                                          .add(LoadMemberEvent())
-                                      : print("object");
-                                },
-                              )));
+                  BlocProvider.of<MembersBloc>(memberListKey.currentContext)
+                      .add(MoveAddMemberEvent());
                 },
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.045),
@@ -215,5 +219,23 @@ class _MemberListPageState extends State<MemberListPage> {
             borderRadius: BorderRadius.circular(40)),
       );
     }
+  }
+
+  _showDialog(BuildContext mainContext, String title, String message) async {
+    await showDialog(
+      context: mainContext,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
   }
 }

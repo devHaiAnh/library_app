@@ -8,7 +8,7 @@ Future<int> postAddMember(
     String password,
     String name,
     String email,
-    String phone,
+    String address,
     bool admin}) async {
   try {
     Map<String, dynamic> body = {
@@ -16,7 +16,7 @@ Future<int> postAddMember(
       "password": password,
       "name": name,
       "email": email,
-      "phone": phone,
+      "address": address,
       "admin": admin
     };
     var finalBody = json.encode(body);

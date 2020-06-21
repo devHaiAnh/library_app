@@ -38,3 +38,11 @@ class PressButtonBackEvent extends PaymentEvent {
   @override
   List<Object> get props => [];
 }
+
+class MovePaymentEvent extends PaymentEvent {
+  final String data;
+  final bool registed;
+  MovePaymentEvent({this.data, this.registed});
+  @override
+  List<Object> get props => [data, registed];
+}

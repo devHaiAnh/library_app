@@ -42,13 +42,13 @@ class MembersBloc extends Bloc<MembersEvent, MembersState> {
         //     password: event.password,
         //     name: event.name,
         //     email: event.email,
-        //     phone: event.phone)) {
+        //     address: event.address)) {
         final result = await postAddMember(
             username: event.username,
             password: event.password,
             name: event.name,
             email: event.email,
-            phone: event.phone,
+            address: event.address,
             admin: event.admin);
         if (result == 1) {
           yield SuccessState(
@@ -70,11 +70,11 @@ class MembersBloc extends Bloc<MembersEvent, MembersState> {
       if (event is PressButtonUpdateEvent) {
         yield LoadingState();
         // if (event.updateMemberStream.isValidInfo(
-        //     name: event.name, email: event.email, phone: event.phone)) {
+        //     name: event.name, email: event.email, address: event.address)) {
         final result = await postUpdateMembers(
             username: event.username,
             name: event.name,
-            phone: event.phone,
+            address: event.address,
             email: event.email,
             admin: event.admin);
         if (result == 1) {
@@ -108,6 +108,13 @@ class MembersBloc extends Bloc<MembersEvent, MembersState> {
           yield ErrorState(
               errorTitle: "Warning!!!", errorMessage: "Error Sever");
         }
+      }
+      // Button
+      if (event is MoveMemberEvent) {
+        yield MoveMemberState(member: event.member);
+      }
+      if (event is MoveAddMemberEvent) {
+        yield MoveAddMemberState();
       }
     } catch (e) {
       print("error: ${e.toString()}");

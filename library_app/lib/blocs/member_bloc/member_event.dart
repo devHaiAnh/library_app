@@ -7,19 +7,19 @@ abstract class MemberEvent extends Equatable {
 class PressButtonUpdateMemberEvent extends MemberEvent {
   final String name;
   final String email;
-  final String phone;
+  final String address;
   final BuildContext context;
   final Member member;
   final UpdateMemberStream updateMemberStream;
   PressButtonUpdateMemberEvent(
       {@required this.name,
       @required this.email,
-      @required this.phone,
+      @required this.address,
       @required this.context,
       @required this.member,
       this.updateMemberStream});
   @override
-  List<Object> get props => [name, email, phone, member, updateMemberStream];
+  List<Object> get props => [name, email, address, member, updateMemberStream];
 }
 
 class ChangePasswordEvent extends MemberEvent {

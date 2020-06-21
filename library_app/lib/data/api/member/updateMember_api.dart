@@ -4,14 +4,14 @@ import 'package:http/http.dart';
 import 'package:library_app/configs/configsApp.dart';
 
 Future<int> postUpdateMember(
-    {String name, String email, String phone}) async {
+    {String name, String email, String address}) async {
   try {
     Map<String, dynamic> body = {
       "username": ConfigsApp.userName,
       "password": ConfigsApp.passWord,
       "name": name,
       "email": email,
-      "phone": phone,
+      "address": address,
       "admin": false
     };
     var finalBody = json.encode(body);

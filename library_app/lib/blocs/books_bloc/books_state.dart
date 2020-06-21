@@ -53,3 +53,17 @@ class ErrorState extends BooksState {
   @override
   List<Object> get props => [errorTitle, errorTitle];
 }
+
+class MoveAllBookState extends BooksState {
+  final String title;
+  MoveAllBookState({this.title});
+  @override
+  List<Object> get props => [title];
+}
+
+class MoveBookState extends BooksState {
+  final Book book;
+  MoveBookState({this.book});
+  @override
+  List<Object> get props => [book];
+}

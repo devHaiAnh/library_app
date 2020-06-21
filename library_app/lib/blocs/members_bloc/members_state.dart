@@ -9,7 +9,6 @@ class MembersInitial extends MembersState {
   List<Object> get props => [];
 }
 
-
 class MemberInitial extends MembersState {
   @override
   List<Object> get props => [];
@@ -60,4 +59,16 @@ class ErrorState extends MembersState {
   ErrorState({@required this.errorTitle, @required this.errorMessage});
   @override
   List<Object> get props => [errorTitle, errorTitle];
+}
+
+class MoveMemberState extends MembersState {
+  final Member member;
+  MoveMemberState({@required this.member});
+  @override
+  List<Object> get props => [member];
+}
+
+class MoveAddMemberState extends MembersState {
+  @override
+  List<Object> get props => [];
 }

@@ -25,14 +25,14 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
       if (event is PressButtonUpdateMemberEvent) {
         yield LoadingState();
         // if (event.updateMemberStream.isValidInfo(
-        //     name: event.name, email: event.email, phone: event.phone)) {
+        //     name: event.name, email: event.email, address: event.address)) {
         final result = await postUpdateMember(
-            name: event.name, phone: event.phone, email: event.email);
+            name: event.name, address: event.address, email: event.email);
         if (result == 1) {
           yield SuccessState(
               title: "Congratulations", message: "Update Member Success");
           event.member.name = event.name;
-          event.member.phone = event.phone;
+          event.member.address = event.address;
           event.member.email = event.email;
           Navigator.push(
               event.context,
@@ -69,6 +69,7 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
         //       errorMessage: "The data entered is not in the correct format");
         // }
       }
+      
       if (event is ShowPasswordOldEvent) {
         yield ShowPasswordOldState(showPass: !event.showPass);
       }

@@ -6,8 +6,6 @@ import 'package:library_app/blocs/members_bloc/members_bloc.dart';
 import 'package:library_app/streams/addMember_stream.dart';
 
 class AddMemberPage extends StatefulWidget {
-  final Function function;
-  AddMemberPage({this.function});
   @override
   _AddMemberPageState createState() => _AddMemberPageState();
 }
@@ -17,7 +15,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
   bool hidePass = true;
   TextEditingController _name;
   TextEditingController _email;
-  TextEditingController _phone;
   TextEditingController _username;
   TextEditingController _password;
 
@@ -27,7 +24,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
   void initState() {
     _name = TextEditingController();
     _email = TextEditingController();
-    _phone = TextEditingController();
     _username = TextEditingController();
     _password = TextEditingController();
     addMemberStream = AddMemberStream();
@@ -38,7 +34,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
   void dispose() {
     _name.dispose();
     _email.dispose();
-    _phone.dispose();
     _username.dispose();
     _password.dispose();
     addMemberStream.dispose();
@@ -118,7 +113,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
           InkWell(
             onTap: () {
               Navigator.pop(context);
-              widget.function(true);
             },
             child: Container(
                 width: screenWidth * 0.08,
@@ -173,7 +167,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                       password: _password.text.trim(),
                       name: _name.text.trim(),
                       email: _email.text.trim(),
-                      phone: _phone.text.trim(),
+                      address: "",
                       admin: typeAdmin,
                       context: context));
             },
@@ -280,17 +274,17 @@ class _AddMemberPageState extends State<AddMemberPage> {
           ),
           SizedBox(height: screenHeight * 0.01),
           StreamBuilder(
-            stream: addMemberStream.phoneStream,
+            stream: addMemberStream.emailStream,
             builder: (context, snapshot) => TextField(
-              controller: _phone,
+              controller: _email,
               onChanged: (a) {
-                addMemberStream.phoneChange(a.trim());
+                addMemberStream.emailChange(a.trim());
               },
-              keyboardType: TextInputType.phone,
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                labelText: "Phone",
+                labelText: "Email",
                 errorText: snapshot.hasError ? snapshot.error : null,
-                prefixIcon: Icon(Icons.phone),
+                prefixIcon: Icon(Icons.email),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.purple),
                 ),
@@ -305,7 +299,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
               onChanged: (a) {
                 addMemberStream.userChange(a.trim());
               },
-              keyboardType: TextInputType.phone,
+              keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 labelText: "Username",
                 errorText: snapshot.hasError ? snapshot.error : null,

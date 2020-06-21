@@ -212,7 +212,7 @@ class ItemBookmark extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              function(false);
+              function(true);
             },
             child: Container(
               child: Icon(Icons.bookmark, color: Colors.amber),

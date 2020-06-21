@@ -27,9 +27,17 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
     return BlocProvider(
       create: (context) => _paymentBloc..add(LoadPaymentEvent()),
       child: BlocListener<PaymentBloc, PaymentState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is ErrorState) {
             _showDialog(context, state.errorTitle, state.errorMessage);
+          } else if (state is MovePaymentState) {
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => QRPage(
+                        data: state.data,
+                        registed: state.registed))).then((value) =>
+                BlocProvider.of<PaymentBloc>(context).add(LoadPaymentEvent()));
           }
         },
         child: BlocBuilder<PaymentBloc, PaymentState>(
@@ -56,7 +64,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                       child: AppBarApp(
                         width: screenWidth,
                         height: screenHeight,
-                        buttonBack: 1,
+                        buttonBack: 0,
                         title: "All Payment List",
                       )),
                   // contain
@@ -102,14 +110,11 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => QRPage(
-                              data: state.paymentList[index].name +
-                                  state.paymentList[index].username,
-                              registed: true,
-                            )));
+                BlocProvider.of<PaymentBloc>(paymentKey.currentContext).add(
+                    MovePaymentEvent(
+                        data: state.paymentList[index].name +
+                            state.paymentList[index].username,
+                        registed: true));
               },
               child: ItemBookPayment(
                   height: screenHeight,

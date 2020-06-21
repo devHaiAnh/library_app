@@ -153,11 +153,11 @@ class _ItemMemberState extends State<ItemMember> {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: "Phone: ",
+                            text: "Address: ",
                             style: TextStyle(color: Colors.black, fontSize: 13),
                           ),
                           TextSpan(
-                            text: widget.itemMember.phone,
+                            text: widget.itemMember.address,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600,

@@ -35,7 +35,8 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       // Read Member
       if (event is LoadPaymentMemberEvent) {
         yield LoadingState();
-        PaymentsModel paymentModel = await getPaymentMember(username: event.username);
+        PaymentsModel paymentModel =
+            await getPaymentMember(username: event.username);
         if (paymentModel?.payments != null) {
           yield LoadedPaymentState(paymentList: paymentModel.payments);
         } else {
@@ -46,8 +47,8 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       // Delete Cart
       if (event is PressButtonDelPaymentEvent) {
         yield LoadingState();
-        final result =
-            await postDelPayment(name: event.name, username: ConfigsApp.userName);
+        final result = await postDelPayment(
+            name: event.name, username: ConfigsApp.userName);
         if (result == 1) {
           yield SuccessState(
               title: "Congratulations", message: "Delete Cart Success");
@@ -59,6 +60,9 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       // Button Back
       if (event is PressButtonBackEvent) {
         Navigator.pop(event.context);
+      }
+      if (event is MovePaymentEvent) {
+        yield MovePaymentState(data: event.data, registed: event.registed);
       }
     } catch (e) {
       print("error: ${e.toString()}");

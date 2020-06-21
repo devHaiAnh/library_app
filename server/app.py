@@ -19,15 +19,15 @@ class MemberModel(db.Model):
     password = db.Column(db.String(255))
     name = db.Column(db.String(255))
     email = db.Column(db.String(255))
-    phone = db.Column(db.String(255))
+    address = db.Column(db.String(255))
     admin = db.Column(db.Boolean)
 
-    def __init__(self, username, password, name, email, phone, admin):
+    def __init__(self, username, password, name, email, address, admin):
         self.username = username
         self.password = password
         self.name = name
         self.email = email
-        self.phone = phone
+        self.address = address
         self.admin = admin
 
     def __repr__(self):
@@ -189,7 +189,7 @@ def handle_login():
         try:
             data = request.get_json()
             login_member = MemberModel(username=data['username'], password=data['password'],
-                                       name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
+                                       name=data['name'], email=data['email'], address=data['address'], admin=data['admin'])
             member = MemberModel.query.filter_by(
                 username=login_member.username).first()
             results = {
@@ -197,7 +197,7 @@ def handle_login():
                 "password": member.password,
                 "name": member.name,
                 "email": member.email,
-                "phone": member.phone,
+                "address": member.address,
                 "admin": member.admin
             }
             if member.password == login_member.password:
@@ -218,7 +218,7 @@ def handle_forgot_password():
         try:
             data = request.get_json()
             forgot_password = MemberModel(username=data['username'], password=data['password'],
-                                          name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
+                                          name=data['name'], email=data['email'], address=data['address'], admin=data['admin'])
             update = MemberModel.query.filter_by(
                 username=forgot_password.username).first()
             if update.email == forgot_password.email:
@@ -242,7 +242,7 @@ def handle_members():
             try:
                 data = request.get_json()
                 new_member = MemberModel(username=data['username'], password=data['password'],
-                                         name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
+                                         name=data['name'], email=data['email'], address=data['address'], admin=data['admin'])
                 check_member = MemberModel.query.filter_by(
                     username=new_member.username).first()
                 results = [
@@ -251,7 +251,7 @@ def handle_members():
                         "password": check_member.password,
                         "name": check_member.name,
                         "email": check_member.email,
-                        "phone": check_member.phone,
+                        "address": check_member.address,
                         "admin": check_member.admin
                     }]
                 return {"message": "member already exists"}
@@ -270,7 +270,7 @@ def handle_members():
                     "password": member.password,
                     "name": member.name,
                     "email": member.email,
-                    "phone": member.phone,
+                    "address": member.address,
                     "admin": member.admin
                 } for member in members]
 
@@ -285,12 +285,12 @@ def handle_members_update():
         try:
             data = request.get_json()
             update_member = MemberModel(username=data['username'], password=data['password'],
-                                        name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
+                                        name=data['name'], email=data['email'], address=data['address'], admin=data['admin'])
             update = MemberModel.query.filter_by(
                 username=update_member.username).first()
             update.name = update_member.name
             update.email = update_member.email
-            update.phone = update_member.phone
+            update.address = update_member.address
             update.admin = update_member.admin
             db.session.commit()
             return {"message": "update member success"}
@@ -306,12 +306,12 @@ def handle_member_update():
         try:
             data = request.get_json()
             update_member = MemberModel(username=data['username'], password=data['password'],
-                                        name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
+                                        name=data['name'], email=data['email'], address=data['address'], admin=data['admin'])
             update = MemberModel.query.filter_by(
                 username=update_member.username).first()
             update.name = update_member.name
             update.email = update_member.email
-            update.phone = update_member.phone
+            update.address = update_member.address
             db.session.commit()
             return {"message": "update member success"}
         except:
@@ -326,7 +326,7 @@ def handle_members_update_password():
         try:
             data = request.get_json()
             update_password = MemberModel(username=data['username'], password=data['password'],
-                                          name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
+                                          name=data['name'], email=data['email'], address=data['address'], admin=data['admin'])
             update = MemberModel.query.filter_by(
                 username=update_password.username).first()
             update.password = update_password.password
@@ -344,7 +344,7 @@ def handle_members_delete():
         try:
             data = request.get_json()
             delete_member = MemberModel(username=data['username'], password=data['password'],
-                                        name=data['name'], email=data['email'], phone=data['phone'], admin=data['admin'])
+                                        name=data['name'], email=data['email'], address=data['address'], admin=data['admin'])
             MemberModel.query.filter_by(
                 username=delete_member.username).delete()
             BookmarkModel.query.filter_by(

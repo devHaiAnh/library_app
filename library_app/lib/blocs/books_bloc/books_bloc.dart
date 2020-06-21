@@ -161,6 +161,8 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
               language: event.book.language,
               pages: event.book.pages);
           if (result == 1) {
+            yield SuccessState(
+                title: "Congratulations", message: "Add Bookmark Success");
           } else {
             yield ErrorState(
                 errorTitle: "Warning!!!", errorMessage: "Error Sever");
@@ -168,6 +170,8 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
         } else {
           final result = await postDelBookmark(name: event.book.name);
           if (result == 1) {
+            yield SuccessState(
+                title: "Congratulations", message: "Del Bookmark Success");
           } else {
             yield ErrorState(
                 errorTitle: "Warning!!!", errorMessage: "Error Sever");
@@ -175,6 +179,13 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
         }
         yield PressBookmarkState(
             bookmark: event.book.bookmark, context: event.context);
+      }
+      // Button
+      if (event is MoveAllBookEvent) {
+        yield MoveAllBookState(title: event.title);
+      }
+      if (event is MoveBookEvent) {
+        yield MoveBookState(book: event.book);
       }
     } catch (e) {
       print("error: ${e.toString()}");

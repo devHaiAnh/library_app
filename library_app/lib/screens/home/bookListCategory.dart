@@ -7,8 +7,7 @@ import 'package:library_app/screens/widget/itemBook.dart';
 class BookListCategory extends StatefulWidget {
   final String title;
   final String category;
-  final Function function;
-  BookListCategory({this.title, this.category, this.function});
+  BookListCategory({this.title, this.category});
   @override
   _BookListCategoryState createState() => _BookListCategoryState();
 }
@@ -16,12 +15,6 @@ class BookListCategory extends StatefulWidget {
 class _BookListCategoryState extends State<BookListCategory> {
   final _bookBloc = BooksBloc();
   GlobalKey bookListKey = GlobalKey();
-
-  @override
-  void initState() {
-    super.initState();
-    widget.function(true);
-  }
 
   @override
   void dispose() {
@@ -37,7 +30,21 @@ class _BookListCategoryState extends State<BookListCategory> {
       create: (context) =>
           _bookBloc..add(LoadBookCategoryEvent(category: widget.category)),
       child: BlocListener<BooksBloc, BooksState>(
-        listener: (context, state) {},
+        listener: (context, state) async {
+          if (state is SuccessState) {
+            BlocProvider.of(context)
+                .add(LoadBookCategoryEvent(category: widget.category));
+          } else if (state is ErrorState) {
+            _showDialog(context, state.errorTitle, state.errorMessage);
+          } else if (state is MoveBookState) {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BookPage(book: state.book)),
+            ).then((value) => BlocProvider.of<BooksBloc>(context)
+                .add(LoadBookCategoryEvent(category: widget.category)));
+          }
+        },
         child: BlocBuilder<BooksBloc, BooksState>(
           builder: (context, state) {
             return Scaffold(
@@ -176,19 +183,8 @@ class _BookListCategoryState extends State<BookListCategory> {
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BookPage(
-                            book: state.bookList[index],
-                            function: (v) {
-                              setState(() {
-                                state.bookList[index].bookmark = v;
-                              });
-                            },
-                          ),
-                        ),
-                      );
+                      BlocProvider.of<BooksBloc>(context)
+                          .add(MoveBookEvent(book: state.bookList[index]));
                     },
                     child: Stack(
                       fit: StackFit.passthrough,
@@ -251,5 +247,23 @@ class _BookListCategoryState extends State<BookListCategory> {
         ),
       );
     }
+  }
+
+  _showDialog(BuildContext mainContext, String title, String message) async {
+    await showDialog(
+      context: mainContext,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
   }
 }

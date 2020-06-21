@@ -25,7 +25,13 @@ class _BookMarkPageState extends State<BookMarkPage> {
     return BlocProvider(
       create: (context) => _bookmarkBloc..add(LoadBookmarkEvent()),
       child: BlocListener<BookmarkBloc, BookmarkState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is SuccessState) {
+            BlocProvider.of<BookmarkBloc>(context).add(LoadBookmarkEvent());
+          } else if (state is ErrorState) {
+            _showDialog(context, state.errorTitle, state.errorMessage);
+          }
+        },
         child: BlocBuilder<BookmarkBloc, BookmarkState>(
           builder: (context, state) {
             return Scaffold(
@@ -105,16 +111,12 @@ class _BookMarkPageState extends State<BookMarkPage> {
                 width: screenWidth,
                 itemBook: state.bookmarkList[index],
                 function: (v) {
-                  v
-                      ? print("object")
-                      : BlocProvider.of<BookmarkBloc>(context).add(
-                          PressButtonDelBookmarkEvent(
-                              bookmark: state.bookmarkList[index],
-                              context: context),
-                        );
-                  BlocProvider.of<BookmarkBloc>(context).add(
-                    LoadBookmarkEvent(),
-                  );
+                  if (v) {
+                    BlocProvider.of<BookmarkBloc>(context).add(
+                        PressButtonDelBookmarkEvent(
+                            bookmark: state.bookmarkList[index],
+                            context: context));
+                  }
                 },
               ),
             );
@@ -138,5 +140,23 @@ class _BookMarkPageState extends State<BookMarkPage> {
             borderRadius: BorderRadius.circular(40)),
       );
     }
+  }
+
+  _showDialog(BuildContext mainContext, String title, String message) async {
+    await showDialog(
+      context: mainContext,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
   }
 }

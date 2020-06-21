@@ -5,10 +5,10 @@ import 'package:library_app/validations/validations.dart';
 class UpdateMemberStream {
   StreamController _nameController = StreamController.broadcast();
   StreamController _emailController = StreamController.broadcast();
-  StreamController _phoneController = StreamController.broadcast();
+  StreamController _addressController = StreamController.broadcast();
   Stream get nameStream => _nameController.stream;
   Stream get emailStream => _emailController.stream;
-  Stream get phoneStream => _phoneController.stream;
+  Stream get addressStream => _addressController.stream;
 
   void nameChange(String name) {
     if (!Validations.isValidText(name)) {
@@ -26,15 +26,15 @@ class UpdateMemberStream {
     }
   }
 
-  void phoneChange(String phone) {
-    if (!Validations.isValidPhoneNumber(phone)) {
-      _phoneController.sink.addError("This phone number is not valid");
+  void addressChange(String address) {
+    if (!Validations.isValidText(address)) {
+      _addressController.sink.addError("This address is not valid");
     } else {
-      _phoneController.sink.add("ok");
+      _addressController.sink.add("ok");
     }
   }
 
-  bool isValidInfo({String name, String email, String phone}) {
+  bool isValidInfo({String name, String email, String address}) {
     bool status = true;
 
     if (!Validations.isValidText(name)) {
@@ -49,11 +49,11 @@ class UpdateMemberStream {
     } else {
       _emailController.sink.add("ok");
     }
-    if (!Validations.isValidPhoneNumber(phone)) {
-      _phoneController.sink.addError("This phone number is not valid");
+    if (!Validations.isValidText(address)) {
+      _addressController.sink.addError("This address is not valid");
       status = false;
     } else {
-      _phoneController.sink.add("ok");
+      _addressController.sink.add("ok");
     }
     return status;
   }
@@ -61,6 +61,6 @@ class UpdateMemberStream {
   void dispose() {
     _nameController.close();
     _emailController.close();
-    _phoneController.close();
+    _addressController.close();
   }
 }

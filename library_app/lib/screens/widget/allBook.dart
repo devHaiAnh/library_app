@@ -25,7 +25,28 @@ class _AllBookState extends State<AllBook> {
     return BlocProvider(
       create: (context) => _bookBloc..add(LoadBookEvent()),
       child: BlocListener<BooksBloc, BooksState>(
-        listener: (context, state) {},
+        listener: (context, state) async {
+          if (state is SuccessState) {
+            BlocProvider.of<BooksBloc>(context).add(LoadBookEvent());
+          } else if (state is ErrorState) {
+            _showDialog(context, state.errorTitle, state.errorMessage);
+          } else if (state is MoveAllBookState) {
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => BookListHomePage(title: "All"))).then(
+                (value) =>
+                    BlocProvider.of<BooksBloc>(context).add(LoadBookEvent()));
+          } else if (state is MoveBookState) {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BookPage(book: state.book),
+              ),
+            ).then((value) =>
+                BlocProvider.of<BooksBloc>(context).add(LoadBookEvent()));
+          }
+        },
         child: BlocBuilder<BooksBloc, BooksState>(builder: (context, state) {
           if (state is LoadedBookState) {
             return Container(
@@ -48,20 +69,8 @@ class _AllBookState extends State<AllBook> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => BookListHomePage(
-                                        title: "All",
-                                        function: (v) {
-                                          v
-                                              ? BlocProvider.of<BooksBloc>(
-                                                      context)
-                                                  .add(LoadBookEvent())
-                                              : BlocProvider.of<BooksBloc>(
-                                                      context)
-                                                  .add(LoadBookEvent());
-                                        })));
+                            BlocProvider.of<BooksBloc>(context)
+                                .add(MoveAllBookEvent(title: "All"));
                           },
                           child: Text(
                             "See all",
@@ -103,36 +112,19 @@ class _AllBookState extends State<AllBook> {
                             itemBuilder: (BuildContext context, int index) {
                               return InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => BookPage(
-                                          book: state.bookList[index],
-                                          function: (v) {
-                                            setState(() {
-                                              state.bookList[index].bookmark =
-                                                  v;
-                                            });
-                                          }),
-                                    ),
-                                  );
+                                  BlocProvider.of<BooksBloc>(context).add(
+                                      MoveBookEvent(
+                                          book: state.bookList[index]));
                                 },
                                 child: ItemBookHome(
                                   width: widget.width,
                                   height: widget.height,
                                   itemBook: state.bookList[index],
                                   function: (v) {
-                                    v
-                                        ? BlocProvider.of<BooksBloc>(context)
-                                            .add(PressBookmarkEvent(
-                                                book: state.bookList[index],
-                                                context: context))
-                                        : BlocProvider.of<BooksBloc>(context)
-                                            .add(PressBookmarkEvent(
-                                                book: state.bookList[index],
-                                                context: context));
-                                    BlocProvider.of<BooksBloc>(context)
-                                        .add(LoadBookEvent());
+                                    BlocProvider.of<BooksBloc>(context).add(
+                                        PressBookmarkEvent(
+                                            book: state.bookList[index],
+                                            context: context));
                                   },
                                 ),
                               );
@@ -145,90 +137,93 @@ class _AllBookState extends State<AllBook> {
                 ],
               ),
             );
-            } else {
-              return Container(
-                height: widget.height * 0.37,
-                width: widget.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(
-                          left: widget.width * 0.05,
-                          right: widget.width * 0.05,
-                          bottom: widget.width * 0.02),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "All Book",
-                            style:
-                                TextStyle(fontSize: 25, color: Colors.purple),
+          } else {
+            return Container(
+              height: widget.height * 0.37,
+              width: widget.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: widget.width * 0.05,
+                        right: widget.width * 0.05,
+                        bottom: widget.width * 0.02),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          "All Book",
+                          style: TextStyle(fontSize: 25, color: Colors.purple),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            BlocProvider.of<BooksBloc>(context)
+                                .add(MoveAllBookEvent(title: "All"));
+                          },
+                          child: Text(
+                            "See all",
+                            style: TextStyle(fontSize: 15, color: Colors.grey),
                           ),
-                          InkWell(
-                            onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => BookListHomePage(
-                              //             title: "All",
-                              //             bookList: state.,
-                              //             function: (v) {
-                              //               v
-                              //                   ? BlocProvider.of<BooksBloc>(
-                              //                           context)
-                              //                       .add(LoadBookEvent())
-                              //                   : BlocProvider.of<BooksBloc>(
-                              //                           context)
-                              //                       .add(LoadBookEvent());
-                              //             })));
-                            },
-                            child: Text(
-                              "See all",
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.grey),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    Container(
-                      height: widget.height * 0.31,
-                      width: widget.width,
-                      padding: EdgeInsets.all(widget.width * 0.02),
-                      margin: EdgeInsets.only(left: widget.width * 0.05),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ],
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(24),
-                            bottomLeft: Radius.circular(24)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            height: widget.height * 0.285,
-                            width: widget.width * 0.92,
-                            // child: Center(
-                            //   child: Text("/* No book */"),
-                            // ),
-                          ),
-                        ],
-                      ),
+                  ),
+                  Container(
+                    height: widget.height * 0.31,
+                    width: widget.width,
+                    padding: EdgeInsets.all(widget.width * 0.02),
+                    margin: EdgeInsets.only(left: widget.width * 0.05),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(24),
+                          bottomLeft: Radius.circular(24)),
                     ),
-                  ],
-                ),
-              );
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          height: widget.height * 0.285,
+                          width: widget.width * 0.92,
+                          // child: Center(
+                          //   child: Text("/* No book */"),
+                          // ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
           }
         }),
+      ),
+    );
+  }
+
+  _showDialog(BuildContext mainContext, String title, String message) async {
+    await showDialog(
+      context: mainContext,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
       ),
     );
   }

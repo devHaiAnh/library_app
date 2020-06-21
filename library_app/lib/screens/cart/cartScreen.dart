@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:library_app/blocs/cart_bloc/cart_bloc.dart';
 import 'package:library_app/data/model/carts_model.dart';
 import 'package:library_app/screens/widget/appbarApp.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:library_app/screens/widget/itemBookCart.dart';
 
 class CartPage extends StatefulWidget {
   @override
@@ -30,6 +30,8 @@ class _CartPageState extends State<CartPage> {
         listener: (context, state) {
           if (state is SuccessState) {
             BlocProvider.of<CartBloc>(context).add(LoadCartEvent());
+          } else if (state is ErrorState) {
+            _showDialog(context, state.errorTitle, state.errorMessage);
           }
         },
         child: BlocBuilder<CartBloc, CartState>(
@@ -103,263 +105,35 @@ class _CartPageState extends State<CartPage> {
                         itemCount: state.cartList?.length ?? 0,
                         itemBuilder: (BuildContext context, int index) {
                           return InkWell(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Dialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            24,
-                                          ),
-                                        ), //this right here
-                                        child: DialogCart(
-                                            cart: state.cartList[index]));
-                                  },
-                                );
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          24,
+                                        ),
+                                      ), //this right here
+                                      child: DialogCart(
+                                          cart: state.cartList[index]));
+                                },
+                              );
+                            },
+                            child: ItemBookCart(
+                              height: screenHeight,
+                              width: screenWidth,
+                              itemCart: state.cartList[index],
+                              function: (v) {
+                                if (v) {
+                                  BlocProvider.of<CartBloc>(context).add(
+                                      PressButtonDelCartEvent(
+                                          name: state.cartList[index].name,
+                                          context: context));
+                                }
                               },
-                              child:
-                                  // ItemBookCart(
-                                  //   height: screenHeight,
-                                  //   width: screenWidth,
-                                  //   itemCart: state.cartList[index],
-                                  // ),
-                                  Container(
-                                height: screenHeight * 0.25,
-                                padding: EdgeInsets.all(screenWidth * 0.025),
-                                margin: EdgeInsets.all(screenWidth * 0.02),
-                                width: screenWidth * 0.7,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 1,
-                                      blurRadius: 6,
-                                      offset: Offset(
-                                          0, 3), // changes position of shadow
-                                    ),
-                                  ],
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                child: Row(
-                                  children: <Widget>[
-                                    // image
-                                    Expanded(
-                                      flex: 3,
-                                      child: Container(
-                                        width: screenWidth,
-                                        height: screenHeight,
-                                        decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.5),
-                                              spreadRadius: 1,
-                                              blurRadius: 6,
-                                              offset: Offset(0,
-                                                  3), // changes position of shadow
-                                            ),
-                                          ],
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                  state.cartList[index].image),
-                                              fit: BoxFit.cover),
-                                        ),
-                                      ),
-                                    ),
-                                    // contain
-                                    Expanded(
-                                      flex: 7,
-                                      child: Container(
-                                        padding: EdgeInsets.only(
-                                            left: screenWidth * 0.025),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            // name / author + bookmark
-                                            Container(
-                                              width: screenWidth,
-                                              height: screenHeight * 0.06,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: <Widget>[
-                                                  Container(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: <Widget>[
-                                                        Text(
-                                                          state.cartList[index]
-                                                              .name,
-                                                          style: TextStyle(
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
-                                                        SizedBox(
-                                                            height:
-                                                                screenHeight *
-                                                                    0.001),
-                                                        Text(
-                                                          state.cartList[index]
-                                                              .author,
-                                                          style: TextStyle(
-                                                              fontSize: 12),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      BlocProvider.of<CartBloc>(
-                                                              cartKey
-                                                                  .currentContext)
-                                                          .add(
-                                                              PressButtonDelCartEvent(
-                                                                  context:
-                                                                      context,
-                                                                  name: state
-                                                                      .cartList[
-                                                                          index]
-                                                                      .name));
-                                                      BlocProvider.of<CartBloc>(
-                                                              cartKey
-                                                                  .currentContext)
-                                                          .add(LoadCartEvent());
-                                                    },
-                                                    child: Container(
-                                                      width: screenWidth * 0.07,
-                                                      height:
-                                                          screenWidth * 0.07,
-                                                      decoration: BoxDecoration(
-                                                          border: Border.all(
-                                                              color:
-                                                                  Colors.red),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      24)),
-                                                      child: Icon(Icons.close,
-                                                          color: Colors.red),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            // star ranking
-                                            Container(
-                                              height: screenHeight * 0.02,
-                                              child: SmoothStarRating(
-                                                rating: state.cartList[index]
-                                                    .evaluateBook,
-                                                size: 15,
-                                                filledIconData: Icons.star,
-                                                halfFilledIconData:
-                                                    Icons.star_half,
-                                                defaultIconData:
-                                                    Icons.star_border,
-                                                starCount: 5,
-                                                allowHalfRating: true,
-                                                spacing: 2.0,
-                                                color: Colors.yellow[600],
-                                                borderColor: Colors.yellow[600],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                                height: screenHeight * 0.01),
-                                            // description
-                                            Container(
-                                                height: screenHeight * 0.06,
-                                                child: Text(
-                                                  state.cartList[index]
-                                                      .description,
-                                                  style:
-                                                      TextStyle(fontSize: 12),
-                                                )),
-                                            SizedBox(
-                                                height: screenHeight * 0.005),
-                                            // button
-                                            Container(
-                                                height: screenHeight * 0.045,
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: <Widget>[
-                                                    // count
-                                                    Container(
-                                                      width: screenWidth * 0.2,
-                                                      child: Row(
-                                                        children: <Widget>[
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Container(
-                                                              child: Center(
-                                                                child: Text(
-                                                                  "Count: ",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          14,
-                                                                      color: Colors
-                                                                              .purple[
-                                                                          300]),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Container(
-                                                              child: Center(
-                                                                child: Text(
-                                                                  state
-                                                                      .cartList[
-                                                                          index]
-                                                                      .count
-                                                                      .toString(),
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          18,
-                                                                      color: Colors
-                                                                          .purple,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    // cost
-                                                    Text(
-                                                      "\$ ${state.cartList[index].cost.toStringAsFixed(2)}",
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          color: Colors.purple,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    )
-                                                  ],
-                                                )),
-                                            SizedBox(
-                                                height: screenHeight * 0.005),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ));
+                            ),
+                          );
                         },
                       )
                     : Container(),
@@ -432,22 +206,20 @@ class _CartPageState extends State<CartPage> {
         ),
       );
     } else {
-      return Scaffold(
-        body: Container(
-          height: screenHeight * 0.88,
-          padding: EdgeInsets.all(screenWidth * 0.05),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 6,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
-              borderRadius: BorderRadius.circular(40)),
-        ),
+      return Container(
+        height: screenHeight * 0.88,
+        padding: EdgeInsets.all(screenWidth * 0.05),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 1,
+                blurRadius: 6,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+            borderRadius: BorderRadius.circular(40)),
       );
     }
   }
@@ -458,6 +230,24 @@ class _CartPageState extends State<CartPage> {
       data += list[i].cost;
     }
     return data;
+  }
+
+  _showDialog(BuildContext mainContext, String title, String message) async {
+    await showDialog(
+      context: mainContext,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
   }
 }
 

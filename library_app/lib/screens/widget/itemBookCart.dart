@@ -1,14 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:library_app/blocs/cart_bloc/cart_bloc.dart';
 import 'package:library_app/data/model/carts_model.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ItemBookCart extends StatefulWidget {
   final double width, height;
   final Cart itemCart;
-  ItemBookCart({Key key, this.width, this.height, this.itemCart})
+  final Function function;
+  ItemBookCart({Key key, this.width, this.height, this.itemCart, this.function})
       : super(key: key);
   @override
   _ItemBookCartState createState() => _ItemBookCartState();
@@ -19,47 +18,37 @@ class _ItemBookCartState extends State<ItemBookCart> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CartBloc(),
-      child: BlocListener<CartBloc, CartState>(
-        listener: (context, state) {},
-        child: BlocBuilder<CartBloc, CartState>(
-          builder: (context, state) {
-            return Container(
-              key: itemCartKey,
-              height: widget.height * 0.25,
-              padding: EdgeInsets.all(widget.width * 0.025),
-              margin: EdgeInsets.all(widget.width * 0.02),
-              width: widget.width * 0.7,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 1,
-                    blurRadius: 6,
-                    offset: Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Row(
-                children: <Widget>[
-                  // image
-                  Expanded(
-                    flex: 3,
-                    child: image(),
-                  ),
-                  // contain
-                  Expanded(
-                    flex: 7,
-                    child: containPage(),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+    return Container(
+      key: itemCartKey,
+      height: widget.height * 0.25,
+      padding: EdgeInsets.all(widget.width * 0.025),
+      margin: EdgeInsets.all(widget.width * 0.02),
+      width: widget.width * 0.7,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 6,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Row(
+        children: <Widget>[
+          // image
+          Expanded(
+            flex: 3,
+            child: image(),
+          ),
+          // contain
+          Expanded(
+            flex: 7,
+            child: containPage(),
+          ),
+        ],
       ),
     );
   }
@@ -184,9 +173,9 @@ class _ItemBookCartState extends State<ItemBookCart> {
                 child: Text(
                   widget.itemCart.count.toString(),
                   style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.purple,
-                        fontWeight: FontWeight.bold),
+                      fontSize: 18,
+                      color: Colors.purple,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -221,9 +210,7 @@ class _ItemBookCartState extends State<ItemBookCart> {
           ),
           InkWell(
             onTap: () {
-              BlocProvider.of<CartBloc>(itemCartKey.currentContext).add(
-                  PressButtonDelCartEvent(
-                      context: context, name: widget.itemCart.name));
+              widget.function(true);
             },
             child: Container(
               width: widget.width * 0.07,

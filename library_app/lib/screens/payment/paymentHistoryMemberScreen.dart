@@ -34,6 +34,12 @@ class _PaymentHistoryMemberPageState extends State<PaymentHistoryMemberPage> {
         listener: (context, state) {
           if (state is ErrorState) {
             _showDialog(context, state.errorTitle, state.errorMessage);
+          } else if (state is MovePaymentState) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        QRPage(data: state.data, registed: state.registed)));
           }
         },
         child: BlocBuilder<PaymentBloc, PaymentState>(
@@ -106,14 +112,10 @@ class _PaymentHistoryMemberPageState extends State<PaymentHistoryMemberPage> {
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => QRPage(
-                              data: state.paymentList[index].name +
-                                  state.paymentList[index].username,
-                              registed: true,
-                            )));
+                BlocProvider.of<PaymentBloc>(context).add(MovePaymentEvent(
+                    data: state.paymentList[index].name +
+                        state.paymentList[index].username,
+                    registed: true));
               },
               child: ItemBookPayment(
                   height: screenHeight,

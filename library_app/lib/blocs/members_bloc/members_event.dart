@@ -21,7 +21,7 @@ class PressButtonAddEvent extends MembersEvent {
   final String password;
   final String name;
   final String email;
-  final String phone;
+  final String address;
   final bool admin;
   final BuildContext context;
   final AddMemberStream addMemberStream;
@@ -31,13 +31,13 @@ class PressButtonAddEvent extends MembersEvent {
       @required this.password,
       @required this.name,
       @required this.email,
-      @required this.phone,
+      @required this.address,
       @required this.admin,
       @required this.context,
       this.addMemberStream});
   @override
   List<Object> get props =>
-      [name, username, password, name, email, phone, admin, addMemberStream];
+      [name, username, password, name, email, address, admin, addMemberStream];
 }
 
 class CheckAdminEvent extends MembersEvent {
@@ -52,19 +52,20 @@ class PressButtonUpdateEvent extends MembersEvent {
   final String username;
   final String name;
   final String email;
-  final String phone;
+  final String address;
   final bool admin;
   final BuildContext context;
   final UpdateMemberStream updateMemberStream;
   PressButtonUpdateEvent(
-      {@required this.username,@required this.name,
+      {@required this.username,
+      @required this.name,
       @required this.email,
-      @required this.phone,
+      @required this.address,
       @required this.admin,
       @required this.context,
       this.updateMemberStream});
   @override
-  List<Object> get props => [username, name, email, phone, admin];
+  List<Object> get props => [username, name, email, address, admin];
 }
 
 class ShowPasswordOldEvent extends MembersEvent {
@@ -81,4 +82,17 @@ class PressButtonDeleteEvent extends MembersEvent {
   PressButtonDeleteEvent({@required this.username, @required this.context});
   @override
   List<Object> get props => [username, context];
+}
+
+// Button
+class MoveMemberEvent extends MembersEvent {
+  final Member member;
+  MoveMemberEvent({@required this.member});
+  @override
+  List<Object> get props => [member];
+}
+
+class MoveAddMemberEvent extends MembersEvent {
+  @override
+  List<Object> get props => [];
 }
