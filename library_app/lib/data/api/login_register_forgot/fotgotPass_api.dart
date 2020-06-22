@@ -14,7 +14,7 @@ Future<int> postForgotPass({
       "password": password,
       "name": "null",
       "email": email,
-      "phone": 0,
+      "address": "",
       "admin": false
     };
     var finalBody = json.encode(body);

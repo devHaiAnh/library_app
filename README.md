@@ -1,28 +1,75 @@
-## IoT Project
+## Ahk Library App Project
 
-This is the Mobile part of my group's Smart Home project at FPT Polytechnic.
+This is a project about managing and ordering books from Ahk Library.
 
 ### Screen shot
 
-#### Splash Screen + Login Screen + Register Screen + Forgot Password Screen + QR Screen 
+#### Login: Hello Screen + Login Screen + Register Screen + Forgot Password Screen
 
-<img src="https://raw.githubusercontent.com/devHaiAnh/iot/master/Screenshots/hello.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/iot/master/Screenshots/login.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/iot/master/Screenshots/register.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/iot/master/Screenshots/forgot password.png" width="200"/><img src="https://raw.githubusercontent.com/devHaiAnh/iot/master/Screenshots/Qrscreen.png" width="200"/>
+<img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/hello.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/login.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/register.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/forogtpass.png" width="200"/>
 
-#### Home Screen
+#### User: Home Screen + Bookmark Screen + Cart Screen
 
-<img src="https://raw.githubusercontent.com/devHaiAnh/iot/master/Screenshots/home1.png" width="200"/><img src="https://raw.githubusercontent.com/devHaiAnh/iot/master/Screenshots/home2.png" width="200"/><img src="https://raw.githubusercontent.com/devHaiAnh/iot/master/Screenshots/home3.png" width="200"/>
+<img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/homemember.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/userhomemember.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/bookmarkmember.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/cartmember.png" width="200"/>
 
-#### Prequisites
+#### Admin: Home Screen + Member List Screen + Bookmark Screen + Cart Screen + Payment List Screen
 
-- speech_to_text_plugins
-- flutter_bloc && bloc
-- firebase_database
-- shimmer
-- after_layout
-- connection_status_bar
-- permission_handler
-- qr_code_scanner
+<img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/home.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/userhome.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/memberlist.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/bookmark.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/cart.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/allpayment.png" width="200"/>
+
+#### Home Screens: Home Screen + Edit Member Screen + Change Password Screen + Payment List Member Screen +  + Trending List Screen + New Book Screen + My Book Screen + Book Screen
+
+<img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/home.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/home2.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/home3.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/userhome.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/editmember.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/changepass.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/paymentmember.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/category.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/bookcategory.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/bookcategory2.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/trendingbook.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/newbook.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/newbook.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/paymentmember.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/book.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/book2.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/book3.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/book4.png" width="200"/>
+
+#### Member Screens: Member List Screen + Edit Member Screen + Add Member Screen + Payment List Member Screen
+
+<img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/memberlist.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/editmember.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/addmember.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/paymentmember.png" width="200"/>
+
+#### Bookmark Screens: Bookmark List Screen + Book Screen
+
+<img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/bookmark.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/bookmark2.png" width="200"/> <img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/book.png" width="200"/>
+
+#### Cart Screens: Cart List Screen
+
+<img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/cart.png" width="200"/> 
+
+#### Payment Screens: All Payment List Screen 
+
+<img src="https://raw.githubusercontent.com/devHaiAnh/library_app/master/Screenshots/allpayment.png" width="200"/> 
+
+### Prequisites
+
+#### Back-end: Python
+
+- python
+- flask
+- psycopg2-binary
+- flask-sqlalchemy
+- Flask-Migrate
+
+#### Front-end: Flutter
+
+- smooth_star_rating
+- font_awesome_flutter
+- badges
+- flutter_spinkit
+- intl
+- cached_network_image
+- qr_flutter
+- curved_navigation_bar
+- bloc & flutter_bloc
 - equatable
+- http
+- shared_preferences
+
+#### Database: Postgresql
+
+- postgresql
+
+### Documenttation style & source
+- https://dribbble.com/shots/10168862-trip-login-and-registration
+- https://dribbble.com/shots/6462515--Bookly
+- https://github.com/newajthevillager/FirebaseUserAuthentication---BLoC
+- https://stackabuse.com/using-sqlalchemy-with-flask-and-postgresql/
 
 ### Contact
 

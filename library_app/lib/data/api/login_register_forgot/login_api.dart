@@ -11,7 +11,7 @@ Future<dynamic> postLogin({String username, String password}) async {
       "password": password,
       "name": "null",
       "email": "null",
-      "phone": 0,
+      "address": "",
       "admin": false
     };
     var finalBody = json.encode(body);
